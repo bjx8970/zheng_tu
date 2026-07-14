@@ -1,0 +1,169 @@
+{
+  "PURCHASABLE_ITEMS": [
+    {
+      "key": "car_basic",
+      "name": "代步轿车",
+      "emoji": "🚗",
+      "price": 150000,
+      "desc": "购买一辆普通代步轿车，出行更便利",
+      "effectDesc": "形象+3，上司好感度+2",
+      "category": "出行",
+      "meritBonus": 0,
+      "bossFavorBonus": 2,
+      "moralBonus": 0
+    },
+    {
+      "key": "car_luxury",
+      "name": "豪华公务座驾",
+      "emoji": "🏎️",
+      "price": 500000,
+      "desc": "高档豪华轿车，彰显身份，提升形象",
+      "effectDesc": "上司好感度+5，政绩+8（慎用，道德-3）",
+      "category": "出行",
+      "meritBonus": 8,
+      "bossFavorBonus": 5,
+      "moralBonus": -3
+    },
+    {
+      "key": "house_commercial",
+      "name": "商品住房",
+      "emoji": "🏠",
+      "price": 1000000,
+      "desc": "购置一套城区商品房作为私产",
+      "effectDesc": "家庭幸福度+15，个人资产增值",
+      "category": "房产",
+      "familyHappiness": 15
+    },
+    {
+      "key": "house_school_district",
+      "name": "学区房",
+      "emoji": "🏫",
+      "price": 2000000,
+      "desc": "顶级学区优质住房，子女教育加成",
+      "effectDesc": "家庭幸福度+20，子女发展加成",
+      "category": "房产",
+      "familyHappiness": 20
+    },
+    {
+      "key": "house_villa",
+      "name": "私人别墅",
+      "emoji": "🏡",
+      "price": 5000000,
+      "desc": "郊区私人别墅，彰显成就与财力",
+      "effectDesc": "家庭幸福度+25，个人声望+10（慎用，道德-5）",
+      "category": "房产",
+      "familyHappiness": 25,
+      "moralBonus": -5,
+      "meritBonus": 10
+    },
+    {
+      "key": "stock_small",
+      "name": "股票投资（小额）",
+      "emoji": "📈",
+      "price": 50000,
+      "desc": "买入小额股票，每月随机产生收益或亏损",
+      "effectDesc": "每月随机±5%~±15%收益（高风险）",
+      "category": "投资",
+      "isMonthlyReturn": true,
+      "monthlyReturnRate": 0.08
+    },
+    {
+      "key": "stock_medium",
+      "name": "股票投资（中额）",
+      "emoji": "📊",
+      "price": 200000,
+      "desc": "中等规模股票组合，分散风险",
+      "effectDesc": "每月随机±3%~±12%收益",
+      "category": "投资",
+      "isMonthlyReturn": true,
+      "monthlyReturnRate": 0.06
+    },
+    {
+      "key": "fund_invest",
+      "name": "基金理财",
+      "emoji": "💹",
+      "price": 100000,
+      "desc": "购买稳健型基金，低风险稳定收益",
+      "effectDesc": "每月约+3%稳定收益（低风险）",
+      "category": "投资",
+      "isMonthlyReturn": true,
+      "monthlyReturnRate": 0.03
+    },
+    {
+      "key": "mba",
+      "name": "MBA进修",
+      "emoji": "🎓",
+      "price": 300000,
+      "desc": "攻读工商管理硕士，提升领导能力",
+      "effectDesc": "能力+8，政绩+12，职业发展加成",
+      "category": "进修",
+      "meritBonus": 12,
+      "abilityBonus": 8
+    },
+    {
+      "key": "overseas_visit",
+      "name": "出国考察学习",
+      "emoji": "✈️",
+      "price": 80000,
+      "desc": "赴海外考察先进治理经验，开阔视野",
+      "effectDesc": "政绩+8，道德+3，能力+3",
+      "category": "进修",
+      "meritBonus": 8,
+      "moralBonus": 3,
+      "abilityBonus": 3
+    },
+    {
+      "key": "family_travel",
+      "name": "家庭旅游",
+      "emoji": "🏖️",
+      "price": 30000,
+      "desc": "带家人出行度假，增进家庭感情",
+      "effectDesc": "家庭幸福度+20，配偶关系+10",
+      "category": "生活",
+      "familyHappiness": 20
+    },
+    {
+      "key": "health_check",
+      "name": "高端体检套餐",
+      "emoji": "🏥",
+      "price": 20000,
+      "desc": "全面高端健康检查，保障身体状况",
+      "effectDesc": "政绩+3，道德+2（健康就是硬实力）",
+      "category": "生活",
+      "meritBonus": 3,
+      "moralBonus": 2
+    },
+    {
+      "key": "gift_boss",
+      "name": "高档礼品（送上司）",
+      "emoji": "🎁",
+      "price": 50000,
+      "desc": "精心准备名贵礼品，加深与上司的私人关系",
+      "effectDesc": "上司好感度+8（道德-4，存在风险）",
+      "category": "礼品",
+      "bossFavorBonus": 8,
+      "moralBonus": -4
+    },
+    {
+      "key": "watch_luxury",
+      "name": "名表收藏",
+      "emoji": "⌚",
+      "price": 200000,
+      "desc": "收藏高档名表，兼具投资与身份展示",
+      "effectDesc": "上司好感度+3，个人形象提升",
+      "category": "生活",
+      "bossFavorBonus": 3
+    },
+    {
+      "key": "charity_donation",
+      "name": "慈善捐款",
+      "emoji": "❤️",
+      "price": 100000,
+      "desc": "向公益事业捐款，树立良好社会形象",
+      "effectDesc": "道德+8，政绩+5，社会声望大幅提升",
+      "category": "生活",
+      "moralBonus": 8,
+      "meritBonus": 5
+    }
+  ]
+}

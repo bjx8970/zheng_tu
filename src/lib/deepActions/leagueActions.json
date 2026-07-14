@@ -1,0 +1,279 @@
+[
+  {
+    "key": "youth_employment",
+    "icon": "💼",
+    "category": "青年服务",
+    "title": "青年就业帮扶",
+    "subtitle": "推动青年就业创业政策落地",
+    "desc": "联合人社部门开展青年就业招聘会，推出创业补贴政策，解决青年就业难题。",
+    "baseCost": 20,
+    "cooldownDays": 45,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 32,
+      "lineKpi": 22,
+      "publicOpinion": 10,
+      "bossFavor": 5,
+      "desc": "本期安置就业青年320人，创业补贴发放88万，社会反响热烈"
+    },
+    "failOutcome": {
+      "merit": 8,
+      "publicOpinion": -5,
+      "desc": "就业帮扶政策落实不到位，青年满意度偏低，引发舆论批评"
+    }
+  },
+  {
+    "key": "youth_volunteer",
+    "icon": "🤝",
+    "category": "青年服务",
+    "title": "志愿服务行动",
+    "subtitle": "组织青年志愿者参与社会服务",
+    "desc": "发动团员青年参与社区服务、敬老助残、环保公益等志愿活动。",
+    "baseCost": 8,
+    "cooldownDays": 21,
+    "successRate": 92,
+    "successOutcome": {
+      "merit": 20,
+      "lineKpi": 14,
+      "publicOpinion": 8,
+      "moralValue": 2,
+      "desc": "志愿服务活动覆盖12个社区，参与青年800余人，媒体广泛报道"
+    },
+    "failOutcome": {
+      "merit": 5,
+      "lineKpi": 4,
+      "desc": "志愿活动组织混乱，参与率低，效果不理想"
+    }
+  },
+  {
+    "key": "youth_innovation",
+    "icon": "🚀",
+    "category": "青年服务",
+    "title": "青年创新创业大赛",
+    "subtitle": "举办青年创新项目竞赛",
+    "desc": "主办青年创新创业大赛，吸引优秀青年项目，推动科技成果转化。",
+    "baseCost": 35,
+    "cooldownDays": 90,
+    "successRate": 80,
+    "successOutcome": {
+      "merit": 50,
+      "lineKpi": 38,
+      "publicOpinion": 12,
+      "bossFavor": 7,
+      "networkValue": 5,
+      "desc": "大赛吸引参赛项目168个，3个获投资落地，全国媒体聚焦报道"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "publicOpinion": -5,
+      "desc": "大赛规模不及预期，质量一般，被指浪费公共资源"
+    }
+  },
+  {
+    "key": "youth_camp",
+    "icon": "⛺",
+    "category": "青年服务",
+    "title": "青年夏令营",
+    "subtitle": "举办主题教育夏令营",
+    "desc": "组织青少年参加爱国主义主题夏令营，开展实践教育和素质拓展。",
+    "baseCost": 18,
+    "cooldownDays": 90,
+    "successRate": 88,
+    "successOutcome": {
+      "merit": 28,
+      "lineKpi": 18,
+      "publicOpinion": 8,
+      "bossFavor": 5,
+      "desc": "夏令营参营青少年500人，社会口碑良好，家长满意度达95%"
+    },
+    "failOutcome": {
+      "merit": 8,
+      "publicOpinion": -10,
+      "lineKpi": 4,
+      "desc": "夏令营安全管理出现问题，家长投诉，舆情发酵，被迫中断"
+    }
+  },
+  {
+    "key": "social_community",
+    "icon": "🏘️",
+    "category": "社会工作",
+    "title": "社区青年工作站",
+    "subtitle": "建立社区青年服务阵地",
+    "desc": "在社区建立青年工作站，提供心理咨询、就业指导、文化活动等综合服务。",
+    "baseCost": 25,
+    "cooldownDays": 60,
+    "successRate": 83,
+    "successOutcome": {
+      "merit": 38,
+      "lineKpi": 26,
+      "publicOpinion": 10,
+      "desc": "建成社区青年工作站8个，月均服务青年1200人，获民政部门表彰"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 8,
+      "desc": "工作站建成但使用率低，被审计发现资金使用不规范"
+    }
+  },
+  {
+    "key": "social_public",
+    "icon": "🌐",
+    "category": "社会工作",
+    "title": "网络公益活动",
+    "subtitle": "策划线上公益传播项目",
+    "desc": "策划网络公益话题活动，借助社交媒体扩大青年工作影响力。",
+    "baseCost": 12,
+    "cooldownDays": 30,
+    "successRate": 78,
+    "successOutcome": {
+      "merit": 22,
+      "lineKpi": 15,
+      "publicOpinion": 12,
+      "networkValue": 4,
+      "desc": "网络公益话题阅读量超500万，引发广泛共鸣，全国团委纷纷转发"
+    },
+    "failOutcome": {
+      "merit": 5,
+      "publicOpinion": -8,
+      "desc": "公益内容被批形式主义，舆论反向发酵，公信力受损"
+    }
+  },
+  {
+    "key": "social_labor",
+    "icon": "🔨",
+    "category": "社会工作",
+    "title": "劳动精神教育",
+    "subtitle": "开展青年劳动教育实践",
+    "desc": "组织青年参与劳动教育实践，培养艰苦奋斗精神，改善社会风气。",
+    "baseCost": 10,
+    "cooldownDays": 30,
+    "successRate": 88,
+    "successOutcome": {
+      "merit": 20,
+      "lineKpi": 13,
+      "moralValue": 3,
+      "publicOpinion": 6,
+      "desc": "劳动教育惠及青少年2000人，受到家长和学校广泛好评"
+    },
+    "failOutcome": {
+      "merit": 6,
+      "lineKpi": 5,
+      "desc": "教育内容枯燥，参与积极性不高，效果打折扣"
+    }
+  },
+  {
+    "key": "talent_program",
+    "icon": "🎓",
+    "category": "人才培养",
+    "title": "青年人才培育计划",
+    "subtitle": "选拔优秀青年干部重点培养",
+    "desc": "遴选优秀青年干部纳入人才培育计划，实施导师制培养和挂职锻炼。",
+    "baseCost": 30,
+    "cooldownDays": 60,
+    "successRate": 82,
+    "successOutcome": {
+      "merit": 48,
+      "lineKpi": 36,
+      "bossFavor": 8,
+      "networkValue": 6,
+      "desc": "培育计划纳入青年干部30人，已有5人提拔重用，上级充分认可"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "lineKpi": 10,
+      "desc": "培育计划执行不力，被培养对象流失严重，效果不佳"
+    }
+  },
+  {
+    "key": "talent_exchange",
+    "icon": "✈️",
+    "category": "人才培养",
+    "title": "国际交流项目",
+    "subtitle": "推动青年国际视野培养",
+    "desc": "组织优秀青年干部参与国际交流访问，拓展国际视野，建立对外联系。",
+    "baseCost": 50,
+    "cooldownDays": 120,
+    "successRate": 76,
+    "successOutcome": {
+      "merit": 65,
+      "lineKpi": 48,
+      "networkValue": 10,
+      "bossFavor": 10,
+      "desc": "国际交流访问圆满完成，参与者均带回先进经验，对外联系大幅拓展"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "lineKpi": 8,
+      "desc": "国际交流被媒体批为公费出游，舆论质疑，被迫提前结束"
+    }
+  },
+  {
+    "key": "talent_skills",
+    "icon": "🛠️",
+    "category": "人才培养",
+    "title": "技能提升工程",
+    "subtitle": "开展青年职业技能培训",
+    "desc": "联合企业和院校开展青年职业技能培训，提升青年就业竞争力。",
+    "baseCost": 22,
+    "cooldownDays": 45,
+    "successRate": 87,
+    "successOutcome": {
+      "merit": 36,
+      "lineKpi": 24,
+      "publicOpinion": 8,
+      "bossFavor": 5,
+      "fundDelta": 30,
+      "desc": "培训青年500人，就业率提升至92%，创业成功率明显提高"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 8,
+      "desc": "培训质量参差不齐，部分项目被指应付了事，效果有限"
+    }
+  },
+  {
+    "key": "org_branch",
+    "icon": "🏫",
+    "category": "团组织建设",
+    "title": "团支部规范化建设",
+    "subtitle": "推进团支部标准化管理",
+    "desc": "指导各基层团支部规范化建设，完善团务会、团日活动等制度。",
+    "baseCost": 10,
+    "cooldownDays": 30,
+    "successRate": 90,
+    "successOutcome": {
+      "merit": 22,
+      "lineKpi": 15,
+      "bossFavor": 4,
+      "desc": "规范化建设覆盖全部128个团支部，全部达到标准，被团省委表扬"
+    },
+    "failOutcome": {
+      "merit": 6,
+      "lineKpi": 5,
+      "desc": "规范化建设流于形式，问题支部未得到有效整改"
+    }
+  },
+  {
+    "key": "org_congress",
+    "icon": "🗳️",
+    "category": "团组织建设",
+    "title": "团代会筹备",
+    "subtitle": "筹备召开基层团代会",
+    "desc": "精心筹备基层团代会，完善民主选举机制，推选优秀代表。",
+    "baseCost": 20,
+    "cooldownDays": 90,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 35,
+      "lineKpi": 25,
+      "bossFavor": 6,
+      "publicOpinion": 5,
+      "desc": "团代会顺利召开，新一届团委班子充满活力，开局良好"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 8,
+      "desc": "团代会筹备仓促，选举过程出现争议，被上级提出整改"
+    }
+  }
+]

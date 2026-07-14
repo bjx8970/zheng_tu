@@ -1,0 +1,1 @@
+ALTER TABLE player_saves ADD COLUMN IF NOT EXISTS exchange_auto_mode TEXT NOT NULL DEFAULT 'manual';

@@ -1,0 +1,291 @@
+[
+  {
+    "key": "patrol_routine",
+    "icon": "🔍",
+    "category": "巡视反腐",
+    "title": "例行巡视",
+    "subtitle": "对下级单位开展常规巡视",
+    "desc": "组织巡视组赴下级单位开展全面巡视，发现问题及时上报，展示纪检工作成效。",
+    "baseCost": 20,
+    "cooldownDays": 60,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 35,
+      "inspectionRisk": -10,
+      "lineKpi": 18,
+      "publicOpinion": 5,
+      "desc": "巡视发现问题线索8条，全部移交处理，廉洁风险降低"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "inspectionRisk": 5,
+      "lineKpi": 0,
+      "desc": "巡视工作流于形式，上级认为力度不足，被通报批评"
+    }
+  },
+  {
+    "key": "patrol_special",
+    "icon": "🎯",
+    "category": "巡视反腐",
+    "title": "专项巡视",
+    "subtitle": "针对重点领域开展专项巡视",
+    "desc": "聚焦土地、工程、采购等腐败高发领域开展专项巡视，形成震慑效果。",
+    "baseCost": 40,
+    "cooldownDays": 90,
+    "successRate": 75,
+    "successOutcome": {
+      "merit": 55,
+      "inspectionRisk": -18,
+      "lineKpi": 28,
+      "bossFavor": 6,
+      "publicOpinion": 8,
+      "desc": "专项巡视发现重大问题2件，移送检察机关，全市震慑效果明显"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "inspectionRisk": 10,
+      "lineKpi": 0,
+      "desc": "专项巡视未发现实质问题，公众质疑其走过场"
+    }
+  },
+  {
+    "key": "patrol_national",
+    "icon": "🏛️",
+    "category": "巡视反腐",
+    "title": "配合中央巡视",
+    "subtitle": "全力配合中央巡视组进驻",
+    "desc": "中央巡视组进驻期间提供完备材料，主动配合，展示本地廉政建设成果。",
+    "baseCost": 60,
+    "cooldownDays": 180,
+    "successRate": 70,
+    "successOutcome": {
+      "merit": 90,
+      "inspectionRisk": -25,
+      "lineKpi": 50,
+      "bossFavor": 12,
+      "publicOpinion": 10,
+      "desc": "中央巡视高度评价本地廉政工作，反馈问题均已整改到位"
+    },
+    "failOutcome": {
+      "merit": 20,
+      "inspectionRisk": 20,
+      "lineKpi": 5,
+      "desc": "巡视发现隐瞒问题，被点名批评，廉洁风险上升"
+    }
+  },
+  {
+    "key": "case_minor",
+    "icon": "📋",
+    "category": "案件查处",
+    "title": "一般违纪处理",
+    "subtitle": "处理轻微违纪违规案件",
+    "desc": "对轻微违纪行为开展调查处理，维护党纪党规的严肃性。",
+    "baseCost": 10,
+    "cooldownDays": 30,
+    "successRate": 90,
+    "successOutcome": {
+      "merit": 20,
+      "inspectionRisk": -5,
+      "lineKpi": 12,
+      "publicOpinion": 3,
+      "desc": "处理一般违纪案件3起，给予通报批评，纪律效果良好"
+    },
+    "failOutcome": {
+      "merit": 5,
+      "lineKpi": 0,
+      "desc": "案件证据不足，调查无法推进，工作效率受质疑"
+    }
+  },
+  {
+    "key": "case_major",
+    "icon": "⚖️",
+    "category": "案件查处",
+    "title": "重大案件查处",
+    "subtitle": "立案调查重大腐败案件",
+    "desc": "对举报线索中的重大腐败嫌疑人展开立案调查，依法依规处置。",
+    "baseCost": 50,
+    "cooldownDays": 90,
+    "successRate": 65,
+    "successOutcome": {
+      "merit": 75,
+      "inspectionRisk": -20,
+      "lineKpi": 45,
+      "bossFavor": 10,
+      "publicOpinion": 12,
+      "desc": "重大案件查处成功，涉案金额逾千万，当事人被双开"
+    },
+    "failOutcome": {
+      "merit": -10,
+      "inspectionRisk": 15,
+      "lineKpi": 0,
+      "publicOpinion": -8,
+      "desc": "案件查处失误，证据链断裂，被调查对象反诉，政治风险上升"
+    }
+  },
+  {
+    "key": "case_network",
+    "icon": "🕸️",
+    "category": "案件查处",
+    "title": "窝串案深挖",
+    "subtitle": "深挖利益链条揭露腐败团伙",
+    "desc": "顺藤摸瓜深入挖掘腐败窝串案，打击有组织腐败犯罪网络。",
+    "baseCost": 80,
+    "cooldownDays": 120,
+    "successRate": 55,
+    "successOutcome": {
+      "merit": 120,
+      "inspectionRisk": -30,
+      "lineKpi": 70,
+      "bossFavor": 15,
+      "networkValue": 8,
+      "desc": "窝串案全链条打击成功，查处涉案人员7名，获中央纪委通报表扬"
+    },
+    "failOutcome": {
+      "merit": -15,
+      "inspectionRisk": 25,
+      "bossFavor": -5,
+      "desc": "深挖打草惊蛇，核心人物逃脱，调查工作功亏一篑"
+    }
+  },
+  {
+    "key": "clean_edu",
+    "icon": "📚",
+    "category": "廉政建设",
+    "title": "廉政教育培训",
+    "subtitle": "开展党员干部廉政教育",
+    "desc": "组织各级干部参加廉政警示教育，观看警示片，强化廉洁自律意识。",
+    "baseCost": 8,
+    "cooldownDays": 365,
+    "successRate": 95,
+    "once": true,
+    "successOutcome": {
+      "merit": 15,
+      "inspectionRisk": -8,
+      "lineKpi": 10,
+      "publicOpinion": 4,
+      "desc": "廉政教育覆盖率达100%，问卷测试合格率98%，党员廉洁意识明显增强"
+    },
+    "failOutcome": {
+      "merit": 5,
+      "lineKpi": 0,
+      "desc": "教育流于形式，参与度不足，效果未达预期"
+    }
+  },
+  {
+    "key": "clean_system",
+    "icon": "📜",
+    "category": "廉政建设",
+    "title": "制度机制完善",
+    "subtitle": "建立健全权力监督制度",
+    "desc": "出台权力运行监督制度，建立\"三重一大\"集体决策机制，推进阳光政务。",
+    "baseCost": 25,
+    "cooldownDays": 60,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 40,
+      "inspectionRisk": -15,
+      "lineKpi": 25,
+      "bossFavor": 5,
+      "desc": "制度体系建立完善，被省纪委作为典型经验推广"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 5,
+      "desc": "制度内容不够系统，执行落实存在漏洞，效果有限"
+    }
+  },
+  {
+    "key": "clean_report",
+    "icon": "📬",
+    "category": "廉政建设",
+    "title": "举报平台建设",
+    "subtitle": "畅通群众监督举报渠道",
+    "desc": "建设举报热线和网络平台，鼓励群众举报腐败，提升监督覆盖面。",
+    "baseCost": 15,
+    "cooldownDays": 45,
+    "successRate": 88,
+    "successOutcome": {
+      "merit": 25,
+      "inspectionRisk": -10,
+      "lineKpi": 15,
+      "publicOpinion": 8,
+      "desc": "举报平台启用后一月内收到有效线索12条，群众满意度大幅提升"
+    },
+    "failOutcome": {
+      "merit": 8,
+      "publicOpinion": -3,
+      "desc": "举报保护机制不完善，举报人信息泄露，引发舆论批评"
+    }
+  },
+  {
+    "key": "campaign_four_winds",
+    "icon": "⚡",
+    "category": "专项整治",
+    "title": "四风问题整治",
+    "subtitle": "整治形式主义官僚主义",
+    "desc": "专项整治形式主义、官僚主义、享乐主义和奢靡之风，推进作风转变。",
+    "baseCost": 18,
+    "cooldownDays": 60,
+    "successRate": 80,
+    "successOutcome": {
+      "merit": 30,
+      "inspectionRisk": -12,
+      "lineKpi": 20,
+      "publicOpinion": 10,
+      "bossFavor": 4,
+      "desc": "\"四风\"专项整治处理违规公务消费56笔，追缴违纪金额20余万"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "publicOpinion": -5,
+      "desc": "整治走形式，上级发现问题未解决，发出专项督查通报"
+    }
+  },
+  {
+    "key": "campaign_procurement",
+    "icon": "🏗️",
+    "category": "专项整治",
+    "title": "工程采购整治",
+    "subtitle": "打击工程领域腐败问题",
+    "desc": "针对政府工程项目招投标领域开展专项整治，严查利益输送行为。",
+    "baseCost": 35,
+    "cooldownDays": 90,
+    "successRate": 70,
+    "successOutcome": {
+      "merit": 50,
+      "inspectionRisk": -18,
+      "lineKpi": 32,
+      "fundDelta": 60,
+      "publicOpinion": 8,
+      "desc": "整治查处串标围标案件4起，追缴违法所得60万，工程管理大幅规范"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "inspectionRisk": 8,
+      "desc": "整治触动利益集团，遭到阻力，进展缓慢"
+    }
+  },
+  {
+    "key": "campaign_finance",
+    "icon": "💰",
+    "category": "专项整治",
+    "title": "财务违规整治",
+    "subtitle": "清查财政资金使用违规",
+    "desc": "对各部门财政资金使用情况开展专项审计，追缴违规挪用资金。",
+    "baseCost": 28,
+    "cooldownDays": 75,
+    "successRate": 78,
+    "successOutcome": {
+      "merit": 45,
+      "inspectionRisk": -15,
+      "lineKpi": 28,
+      "fundDelta": 80,
+      "desc": "专项审计发现违规资金120万，全部追缴归位，财政管理大幅改善"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "lineKpi": 5,
+      "desc": "财务审计发现问题但追缴困难，资金流失未能完全弥补"
+    }
+  }
+]

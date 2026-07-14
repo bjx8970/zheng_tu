@@ -1,0 +1,379 @@
+[
+  {
+    "key": "city_inspection",
+    "icon": "🏛️",
+    "category": "城市治理",
+    "title": "城市体检评估",
+    "subtitle": "对城市运行质量开展全面评估",
+    "desc": "组织专家团队对基础设施、公共服务、生态环境等开展年度综合体检，形成问题整改清单。",
+    "baseCost": 20,
+    "cooldownDays": 60,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 35,
+      "lineKpi": 18,
+      "publicOpinion": 8,
+      "bossFavor": 5,
+      "desc": "城市体检报告获省厅通报表扬，22项问题全部纳入整改台账，城市运行效能显著提升"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 0,
+      "desc": "评估流于形式，上级认为问题梳理不深入，被要求重新组织"
+    }
+  },
+  {
+    "key": "emergency_drill",
+    "icon": "🚨",
+    "category": "城市治理",
+    "title": "应急综合演练",
+    "subtitle": "联合多部门开展突发事件演练",
+    "desc": "联合消防、医疗、安全等部门开展跨部门应急综合演练，检验城市突发事件处置能力。",
+    "baseCost": 35,
+    "cooldownDays": 90,
+    "successRate": 78,
+    "successOutcome": {
+      "merit": 50,
+      "lineKpi": 30,
+      "publicOpinion": 12,
+      "bossFavor": 8,
+      "desc": "演练反应时间全面达标，省应急管理厅专程观摩并推广经验，城市安全指数提升"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "lineKpi": 5,
+      "publicOpinion": -5,
+      "desc": "演练暴露协调漏洞，被省厅点名批评，城市安全评分下降"
+    }
+  },
+  {
+    "key": "debrief_meeting",
+    "icon": "📋",
+    "category": "城市治理",
+    "title": "行政述职大会",
+    "subtitle": "主持政府部门年度述职问责",
+    "desc": "组织市直机关各部门负责人年度述职，梳理施政绩效，对薄弱部门当场提出整改要求，强化行政问责。",
+    "baseCost": 15,
+    "cooldownDays": 365,
+    "once": true,
+    "successRate": 90,
+    "successOutcome": {
+      "merit": 30,
+      "lineKpi": 22,
+      "bossFavor": 6,
+      "desc": "述职大会获省委组织部高度评价，现场问责3个部门，施政效能明显提升"
+    },
+    "failOutcome": {
+      "merit": 8,
+      "lineKpi": 5,
+      "desc": "述职走过场，缺乏实质问责，舆论批评行政效能不足"
+    }
+  },
+  {
+    "key": "livelihood_housing",
+    "icon": "🏘️",
+    "category": "民生工程",
+    "title": "老旧小区改造",
+    "subtitle": "推进城镇老旧小区综合整治",
+    "desc": "统筹改造城区老旧小区，升级水电气暖管网，增设电梯停车位，改善居民居住条件。",
+    "baseCost": 50,
+    "cooldownDays": 90,
+    "successRate": 80,
+    "successOutcome": {
+      "merit": 70,
+      "lineKpi": 42,
+      "publicOpinion": 25,
+      "bossFavor": 10,
+      "desc": "完成改造小区18个，惠及居民3.2万户，满意度调查达94%，获住建部优秀案例"
+    },
+    "failOutcome": {
+      "merit": 20,
+      "lineKpi": 10,
+      "publicOpinion": -8,
+      "desc": "施工质量问题引发居民投诉，整改追加费用，舆情持续发酵"
+    }
+  },
+  {
+    "key": "livelihood_edu",
+    "icon": "📚",
+    "category": "民生工程",
+    "title": "教育资源扩容",
+    "subtitle": "新建扩建学校，增加学位供给",
+    "desc": "新建、改扩建中小学校，补充学位缺口，推进教育资源均衡布局，消除大班额。",
+    "baseCost": 45,
+    "cooldownDays": 90,
+    "successRate": 82,
+    "successOutcome": {
+      "merit": 65,
+      "lineKpi": 38,
+      "publicOpinion": 22,
+      "bossFavor": 8,
+      "desc": "新增学位8000个，大班额全面消除，义务教育质量评估全省排名提升5位"
+    },
+    "failOutcome": {
+      "merit": 18,
+      "lineKpi": 8,
+      "publicOpinion": -6,
+      "desc": "学校建设进度滞后，招生缺口问题未解决，家长联名投诉"
+    }
+  },
+  {
+    "key": "livelihood_medical",
+    "icon": "🏥",
+    "category": "民生工程",
+    "title": "基层医疗强基",
+    "subtitle": "提升社区卫生服务能力",
+    "desc": "向基层卫生院和社区卫生服务中心下沉优质医疗资源，推进家庭医生签约，缓解看病难。",
+    "baseCost": 40,
+    "cooldownDays": 75,
+    "successRate": 75,
+    "successOutcome": {
+      "merit": 60,
+      "lineKpi": 36,
+      "publicOpinion": 20,
+      "bossFavor": 9,
+      "desc": "签约家庭医生达6.8万户，基层首诊率提升12%，获国家卫健委通报表扬"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "lineKpi": 5,
+      "publicOpinion": -4,
+      "desc": "基层医生留不住人，服务质量参差不齐，群众满意度未显著提升"
+    }
+  },
+  {
+    "key": "econ_gdp_sprint",
+    "icon": "📈",
+    "category": "经济发展",
+    "title": "GDP冲刺专项",
+    "subtitle": "集中资源推进重大项目攻坚",
+    "desc": "梳理全市重大项目清单，建立市长直接调度机制，打通审批卡点，全力冲刺经济增长目标。",
+    "baseCost": 60,
+    "cooldownDays": 90,
+    "successRate": 70,
+    "successOutcome": {
+      "merit": 90,
+      "lineKpi": 55,
+      "bossFavor": 14,
+      "desc": "重大项目集中开工12个，年度GDP增速超出省均1.8个百分点，获省政府通报表扬"
+    },
+    "failOutcome": {
+      "merit": 20,
+      "lineKpi": 5,
+      "publicOpinion": -6,
+      "desc": "部分项目推进受阻，年度增速不及目标，省发改委发出预警通报"
+    }
+  },
+  {
+    "key": "econ_investment",
+    "icon": "💼",
+    "category": "经济发展",
+    "title": "高端招商引资",
+    "subtitle": "赴一线城市开展精准招商",
+    "desc": "率队赴头部企业、产业基金密集城市开展精准招商，签署战略合作协议，引进优质项目落地。",
+    "baseCost": 50,
+    "cooldownDays": 75,
+    "successRate": 65,
+    "successOutcome": {
+      "merit": 80,
+      "lineKpi": 48,
+      "fundDelta": 120,
+      "bossFavor": 12,
+      "desc": "成功签约3家百亿级项目意向，落地资金逾120万，年度招商引资排名跃升全省前三"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "lineKpi": 0,
+      "desc": "招商成果寥寥，考察团队预算耗尽，舆论质疑行程成效"
+    }
+  },
+  {
+    "key": "econ_platform",
+    "icon": "🏭",
+    "category": "经济发展",
+    "title": "产业园区提升",
+    "subtitle": "推动产业园区扩区升级",
+    "desc": "整合盘活园区存量土地，引导产业链上下游集聚，推进园区扩区申报，创建省级高新技术产业区。",
+    "baseCost": 80,
+    "cooldownDays": 120,
+    "successRate": 60,
+    "successOutcome": {
+      "merit": 110,
+      "lineKpi": 65,
+      "fundDelta": 200,
+      "bossFavor": 15,
+      "networkValue": 5,
+      "desc": "园区成功升级为省级高新区，入驻企业增至180家，带动就业2万人，省长专程调研"
+    },
+    "failOutcome": {
+      "merit": 20,
+      "lineKpi": 5,
+      "desc": "升级申报未通过，园区建设资金积压，项目进展受阻"
+    }
+  },
+  {
+    "key": "reform_streamline",
+    "icon": "✂️",
+    "category": "政务改革",
+    "title": "行政审批精简",
+    "subtitle": "压缩审批层级与办理时限",
+    "desc": "对标先进城市推进审批制度改革，削减非必要审批事项，压缩办理时限，推进'最多跑一次'。",
+    "baseCost": 25,
+    "cooldownDays": 90,
+    "successRate": 80,
+    "successOutcome": {
+      "merit": 45,
+      "lineKpi": 28,
+      "publicOpinion": 14,
+      "bossFavor": 8,
+      "desc": "审批事项压缩35%，平均办理时限从15天降至4天，营商环境排名全省提升7位"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "lineKpi": 5,
+      "desc": "精简遭部门抵制，执行落地不到位，实际效果大打折扣"
+    }
+  },
+  {
+    "key": "reform_digital",
+    "icon": "🌐",
+    "category": "政务改革",
+    "title": "数字政府建设",
+    "subtitle": "推进政务数据共享与协同",
+    "desc": "建设政务数据共享平台，打通部门数据孤岛，推进移动端政务服务，实现跨部门数据协同。",
+    "baseCost": 40,
+    "cooldownDays": 75,
+    "successRate": 72,
+    "successOutcome": {
+      "merit": 60,
+      "lineKpi": 38,
+      "publicOpinion": 18,
+      "bossFavor": 10,
+      "desc": "数字政府平台上线，整合37个部门数据，'掌上办'使用率达82%，获国务院通报表彰"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "lineKpi": 8,
+      "desc": "平台建设超期超支，部门数据共享阻力重重，媒体曝光烂尾风险"
+    }
+  },
+  {
+    "key": "reform_accountability",
+    "icon": "📊",
+    "category": "政务改革",
+    "title": "绩效考核改革",
+    "subtitle": "建立干部绩效量化考核体系",
+    "desc": "推行以结果为导向的干部绩效考核制度，将任务完成率与干部奖惩直接挂钩，激活行政效能。",
+    "baseCost": 20,
+    "cooldownDays": 365,
+    "once": true,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 40,
+      "lineKpi": 26,
+      "bossFavor": 7,
+      "desc": "绩效改革推行首年，行政效能指数提升18%，省委组织部将该模式列为全省推广典型"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 5,
+      "desc": "考核设计漏洞被钻，干部弄虚作假现象反增，改革口碑受损"
+    }
+  },
+  {
+    "key": "project_infrastructure",
+    "icon": "🚧",
+    "category": "专项工程",
+    "title": "交通基础设施攻坚",
+    "subtitle": "加速推进重大交通工程建设",
+    "desc": "成立重大交通工程指挥部，亲自挂帅督导高速、轨交、国道等重大交通项目，打通瓶颈路段。",
+    "baseCost": 70,
+    "cooldownDays": 120,
+    "successRate": 72,
+    "successOutcome": {
+      "merit": 95,
+      "lineKpi": 58,
+      "publicOpinion": 20,
+      "bossFavor": 12,
+      "desc": "重大交通项目提前3个月竣工，打通4条断头路，日均通行量提升40%，省委专项通报表扬"
+    },
+    "failOutcome": {
+      "merit": 25,
+      "lineKpi": 8,
+      "publicOpinion": -10,
+      "desc": "工程延期且超预算，被省审计厅立项调查，舆情持续负面"
+    }
+  },
+  {
+    "key": "project_ecology",
+    "icon": "🌿",
+    "category": "专项工程",
+    "title": "生态修复专项",
+    "subtitle": "推进山水林田湖草系统治理",
+    "desc": "整合林业、水利、环保等力量开展区域生态修复，治理黑臭水体，恢复湿地面积，建设绿色廊道。",
+    "baseCost": 55,
+    "cooldownDays": 90,
+    "successRate": 75,
+    "successOutcome": {
+      "merit": 75,
+      "lineKpi": 45,
+      "publicOpinion": 22,
+      "bossFavor": 10,
+      "desc": "完成4条黑臭水体整治，恢复湿地2800亩，空气优良天数同比增加20天，生态评级由良升优"
+    },
+    "failOutcome": {
+      "merit": 20,
+      "lineKpi": 8,
+      "publicOpinion": -6,
+      "desc": "生态治理效果不及预期，环保督察发现整改问题，被省环保厅约谈"
+    }
+  },
+  {
+    "key": "project_poverty",
+    "icon": "🎗️",
+    "category": "专项工程",
+    "title": "巩固脱贫攻坚",
+    "subtitle": "防止返贫，推进乡村振兴衔接",
+    "desc": "建立防返贫监测预警机制，加大产业帮扶和就业援助力度，巩固脱贫攻坚成果与乡村振兴有效衔接。",
+    "baseCost": 45,
+    "cooldownDays": 90,
+    "successRate": 80,
+    "successOutcome": {
+      "merit": 65,
+      "lineKpi": 40,
+      "publicOpinion": 18,
+      "bossFavor": 11,
+      "desc": "监测户零返贫，新增就业帮扶岗位1200个，产业帮扶项目收益惠及3600余户，获国务院专项表彰"
+    },
+    "failOutcome": {
+      "merit": 18,
+      "lineKpi": 5,
+      "publicOpinion": -5,
+      "desc": "出现局部返贫情况被媒体曝光，扶贫资金使用效益不佳，省委专项督查"
+    }
+  },
+  {
+    "key": "project_security",
+    "icon": "🔒",
+    "category": "专项工程",
+    "title": "安全生产攻坚",
+    "subtitle": "集中整治重大安全隐患",
+    "desc": "开展安全生产大检查，对重大隐患挂牌督办，建立安全生产'双重预防'机制，遏制重特大事故。",
+    "baseCost": 30,
+    "cooldownDays": 75,
+    "successRate": 78,
+    "successOutcome": {
+      "merit": 55,
+      "lineKpi": 34,
+      "publicOpinion": 14,
+      "bossFavor": 8,
+      "desc": "排查整治隐患点231处，全年重特大事故发生率下降60%，安全生产综合排名全省前5"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "lineKpi": 0,
+      "publicOpinion": -8,
+      "desc": "检查走形式，未能发现重大隐患，事故发生后被省安委会追责"
+    }
+  }
+]

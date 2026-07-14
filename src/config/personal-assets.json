@@ -1,0 +1,145 @@
+{
+  "HOUSES": [
+    {
+      "key": "apt_county",
+      "name": "县城公寓",
+      "city": "县城",
+      "area": 90,
+      "price": 500000,
+      "monthlyRent": 1200,
+      "appreciation": 0.02,
+      "minRank": 2,
+      "riskAdd": 1,
+      "desc": "县城普通住宅，合理置产"
+    },
+    {
+      "key": "apt_city",
+      "name": "市区精装房",
+      "city": "地级市",
+      "area": 120,
+      "price": 1500000,
+      "monthlyRent": 3500,
+      "appreciation": 0.04,
+      "minRank": 5,
+      "riskAdd": 2,
+      "desc": "城市中心地段，投资价值较高"
+    },
+    {
+      "key": "villa_suburb",
+      "name": "郊区别墅",
+      "city": "地级市郊区",
+      "area": 280,
+      "price": 4000000,
+      "monthlyRent": 8000,
+      "appreciation": 0.05,
+      "minRank": 7,
+      "riskAdd": 5,
+      "desc": "独栋别墅，面积大，收益稳健"
+    },
+    {
+      "key": "apt_province",
+      "name": "省会豪宅",
+      "city": "省会城市",
+      "area": 200,
+      "price": 8000000,
+      "monthlyRent": 18000,
+      "appreciation": 0.06,
+      "minRank": 9,
+      "riskAdd": 8,
+      "desc": "省会核心地段，增值空间大"
+    },
+    {
+      "key": "mansion_capital",
+      "name": "首都豪宅",
+      "city": "联邦首都",
+      "area": 350,
+      "price": 25000000,
+      "monthlyRent": 45000,
+      "appreciation": 0.08,
+      "minRank": 12,
+      "riskAdd": 15,
+      "desc": "首都中心区豪宅，顶级资产标志"
+    }
+  ],
+  "STOCKS": [
+    {
+      "key": "state_bond",
+      "name": "国债理财",
+      "type": "固定收益",
+      "invest": 100000,
+      "annualReturn": 0.035,
+      "volatility": 0,
+      "minRank": 1,
+      "riskAdd": 0,
+      "desc": "稳健型国债，无风险"
+    },
+    {
+      "key": "blue_chip",
+      "name": "蓝筹股持仓",
+      "type": "股票市场",
+      "invest": 500000,
+      "annualReturn": 0.08,
+      "volatility": 0.06,
+      "minRank": 4,
+      "riskAdd": 2,
+      "desc": "大型国企股权，回报可观"
+    },
+    {
+      "key": "private_equity",
+      "name": "私募股权",
+      "type": "非上市股权",
+      "invest": 2000000,
+      "annualReturn": 0.15,
+      "volatility": 0.12,
+      "minRank": 7,
+      "riskAdd": 6,
+      "desc": "高端私募基金，收益丰厚但信息不透明"
+    },
+    {
+      "key": "shadow_corp",
+      "name": "亲属代持企业",
+      "type": "间接持股",
+      "invest": 5000000,
+      "annualReturn": 0.20,
+      "volatility": 0.15,
+      "minRank": 9,
+      "riskAdd": 15,
+      "desc": "通过亲属名义持有企业股份，高收益高风险"
+    }
+  ],
+  "OVERSEAS": [
+    {
+      "key": "hk_apt",
+      "name": "港澳投资公寓",
+      "country": "香港/澳门",
+      "cost": 5000000,
+      "annualReturn": 0.06,
+      "minRank": 8,
+      "riskAdd": 12,
+      "desc": "港澳地区房产，合法持有但需申报",
+      "legalWarning": "需向党组织如实申报境外资产"
+    },
+    {
+      "key": "offshore_fund",
+      "name": "离岸基金账户",
+      "country": "开曼群岛",
+      "cost": 10000000,
+      "annualReturn": 0.18,
+      "minRank": 10,
+      "riskAdd": 25,
+      "desc": "离岸金融中心资产，极高收益但涉嫌违规",
+      "legalWarning": "⚠️ 违反党纪规定，一旦被查将面临双规"
+    },
+    {
+      "key": "foreign_real_estate",
+      "name": "境外豪宅",
+      "country": "新加坡/欧洲",
+      "cost": 20000000,
+      "annualReturn": 0.07,
+      "minRank": 12,
+      "riskAdd": 35,
+      "desc": "海外豪华住宅，资产转移的常见手段",
+      "legalWarning": "⚠️ 高度敏感，可触发中央纪委专项调查"
+    }
+  ]
+}

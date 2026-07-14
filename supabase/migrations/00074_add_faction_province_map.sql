@@ -1,0 +1,1 @@
+ALTER TABLE player_saves ADD COLUMN IF NOT EXISTS faction_province_map JSONB DEFAULT '{}'::jsonb;

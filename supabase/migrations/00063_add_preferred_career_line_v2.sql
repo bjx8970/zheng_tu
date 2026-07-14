@@ -1,0 +1,1 @@
+ALTER TABLE player_saves ADD COLUMN IF NOT EXISTS preferred_career_line TEXT DEFAULT '行政线'; ALTER TABLE player_saves ADD COLUMN IF NOT EXISTS line_kpi_score INTEGER DEFAULT 0;

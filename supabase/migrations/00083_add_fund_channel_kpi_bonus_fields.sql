@@ -1,0 +1,6 @@
+
+ALTER TABLE player_saves
+  ADD COLUMN IF NOT EXISTS grant_application_last_year INTEGER NOT NULL DEFAULT -1,
+  ADD COLUMN IF NOT EXISTS performance_reward_last_year INTEGER NOT NULL DEFAULT -1,
+  ADD COLUMN IF NOT EXISTS annual_budget_last_year INTEGER NOT NULL DEFAULT -1,
+  ADD COLUMN IF NOT EXISTS line_kpi_bonus INTEGER NOT NULL DEFAULT 0;

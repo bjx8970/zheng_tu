@@ -1,0 +1,4 @@
+ALTER TABLE player_saves
+  ADD COLUMN IF NOT EXISTS party_congress_axis TEXT NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS party_congress_axis_day INTEGER NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS rank_unlock_notified_level INTEGER NOT NULL DEFAULT 0;

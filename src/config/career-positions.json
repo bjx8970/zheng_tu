@@ -1,0 +1,132 @@
+{
+  "positions": {
+    "4": {
+      "party":      { "name": "县委常委（分管组织/宣传）",  "partyType": "党务",  "bossTitle": "县委书记",        "bossTitle2": "县委党政人事院院长",   "bossTitle3": "市委党政人事院院长" },
+      "government": { "name": "县委常委/副县长",            "partyType": "行政",  "bossTitle": "县长",            "bossTitle2": "县委书记",             "bossTitle3": "市委党政人事院院长" },
+      "discipline": { "name": "县纪委副书记",               "partyType": "纪检",  "bossTitle": "县肃宪院长",      "bossTitle2": "县委书记",             "bossTitle3": "市肃宪院长" },
+      "league":     { "name": "团县委书记",                 "partyType": "团派",  "bossTitle": "县委书记",        "bossTitle2": "团市委书记",           "bossTitle3": "县委党政人事院院长" }
+    },
+    "5": {
+      "party":      { "name": "县委常委（分管组织·资深）",   "partyType": "党务",  "bossTitle": "县委书记",        "bossTitle2": "市委党政人事院院长",   "bossTitle3": "市委书记" },
+      "government": { "name": "县长/区长",                  "partyType": "行政",  "bossTitle": "县委书记",        "bossTitle2": "市长",                 "bossTitle3": "市委书记" },
+      "discipline": { "name": "县纪委书记",                  "partyType": "纪检",  "bossTitle": "县肃宪院长",      "bossTitle2": "市肃宪院长",           "bossTitle3": "县委书记" },
+      "league":     { "name": "挂职副县长/团市委副书记",     "partyType": "团派",  "bossTitle": "团市委书记",      "bossTitle2": "县委书记",             "bossTitle3": "市委党政人事院院长" }
+    },
+    "7": {
+      "party":      { "name": "市委常委（分管组织/宣传/统战）", "partyType": "党务", "bossTitle": "市委书记",       "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "省执政委书记" },
+      "government": { "name": "副市长",                     "partyType": "行政",  "bossTitle": "市长",            "bossTitle2": "市委书记",             "bossTitle3": "省执政委党政人事院院长" },
+      "discipline": { "name": "市纪委常委/监委委员",         "partyType": "纪检",  "bossTitle": "市肃宪院长",      "bossTitle2": "省肃宪院长",           "bossTitle3": "市委书记" },
+      "league":     { "name": "团省执政委副书记/省执政委青工部副部长", "partyType": "团派", "bossTitle": "团省执政委书记", "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "省执政委书记" }
+    },
+    "8": {
+      "party":      { "name": "市委副书记（专职）",           "partyType": "党务",  "bossTitle": "市委书记",        "bossTitle2": "省执政委常委",         "bossTitle3": "省执政委书记" },
+      "government": { "name": "市长",                        "partyType": "行政",  "bossTitle": "省执政委书记",    "bossTitle2": "省长",                 "bossTitle3": "市委书记" },
+      "discipline": { "name": "市肃宪院长/市委常委",          "partyType": "纪检",  "bossTitle": "省肃宪院长",      "bossTitle2": "市委书记",             "bossTitle3": "肃宪督察院委员" },
+      "league":     { "name": "团省执政委书记/省执政委常委",   "partyType": "团派",  "bossTitle": "省执政委书记",    "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "团党务总枢府书记" }
+    },
+    "10": {
+      "party":      { "name": "省执政委常委（分管组织/宣传/政法）", "partyType": "党务", "bossTitle": "省执政委书记", "bossTitle2": "党政人事院副院长",    "bossTitle3": "联邦政务委员" },
+      "government": { "name": "副省长",                      "partyType": "行政",  "bossTitle": "省执政委书记",    "bossTitle2": "省长",                 "bossTitle3": "联邦副总统" },
+      "discipline": { "name": "省肃宪院长/省执政委常委",      "partyType": "纪检",  "bossTitle": "省执政委书记",    "bossTitle2": "肃宪督察院副书记",     "bossTitle3": "肃宪院长" },
+      "league":     { "name": "省执政委副书记（分管青年/组织）", "partyType": "团派", "bossTitle": "省执政委书记",   "bossTitle2": "党政人事院院长",       "bossTitle3": "团中央第一书记" }
+    },
+    "11": {
+      "party":      { "name": "省执政委书记（兼省联邦国会主任）", "partyType": "党务", "bossTitle": "党政人事院院长", "bossTitle2": "联邦政务委员",        "bossTitle3": "联邦政务常委" },
+      "government": { "name": "省长",                        "partyType": "行政",  "bossTitle": "省执政委书记",    "bossTitle2": "联邦副总统",           "bossTitle3": "联邦内阁总理" },
+      "discipline": { "name": "肃宪督察院委员/省执政委常委",  "partyType": "纪检",  "bossTitle": "肃宪院长",        "bossTitle2": "省执政委书记",         "bossTitle3": "联邦政务常委（分管纪检）" },
+      "league":     { "name": "省执政委书记/团中央第一书记",   "partyType": "团派",  "bossTitle": "党政人事院院长",  "bossTitle2": "联邦政务委员",         "bossTitle3": "联邦政务常委" }
+    },
+    "12": {
+      "party":      { "name": "联邦政务委员（分管党务/意识形态）", "partyType": "党务", "bossTitle": "中央执政党主席", "bossTitle2": "联邦政务常委",        "bossTitle3": "党务总枢府书记" },
+      "government": { "name": "内阁部长/国务委员（正部级）",  "partyType": "行政",  "bossTitle": "联邦内阁总理",    "bossTitle2": "联邦副总统",           "bossTitle3": "内阁秘书长" },
+      "discipline": { "name": "肃宪督察院副书记（正部级）",   "partyType": "纪检",  "bossTitle": "肃宪院长",        "bossTitle2": "联邦政务常委",         "bossTitle3": "联邦内阁总理" },
+      "league":     { "name": "联邦政务委员/党政人事院院长",  "partyType": "团派",  "bossTitle": "中央执政党主席",  "bossTitle2": "联邦政务常委",         "bossTitle3": "党务总枢府书记" }
+    },
+    "13": {
+      "party":      { "name": "联邦政务常委（分管党务·意识形态）", "partyType": "党务", "bossTitle": "中央执政党主席", "bossTitle2": "联邦国会议长",        "bossTitle3": "联邦政务常委会" },
+      "government": { "name": "内阁常务副总统（联邦政务委员）", "partyType": "行政", "bossTitle": "联邦内阁总理",   "bossTitle2": "联邦政务常委",         "bossTitle3": "内阁秘书长" },
+      "discipline": { "name": "肃宪督察院书记（联邦政务常委）", "partyType": "纪检", "bossTitle": "联邦政务常委会", "bossTitle2": "联邦国会议长",         "bossTitle3": "联邦内阁总理" },
+      "league":     { "name": "联邦国会副委员长（联邦政务委员）", "partyType": "团派", "bossTitle": "联邦国会议长",  "bossTitle2": "中央执政党主席",       "bossTitle3": "联邦政务常委会" }
+    },
+    "14": {
+      "party":      { "name": "执政党中央主席（联邦政务常委委员长）", "partyType": "党务", "bossTitle": "联邦政务常委会", "bossTitle2": "联邦国会议长",       "bossTitle3": "肃宪院长" },
+      "government": { "name": "联邦内阁总理（联邦政务常委）", "partyType": "行政",  "bossTitle": "联邦政务常委",    "bossTitle2": "联邦国会议长",         "bossTitle3": "肃宪院长" },
+      "discipline": { "name": "联邦政法委书记·联邦政务常委", "partyType": "纪检",  "bossTitle": "联邦政务常委会",  "bossTitle2": "联邦国会议长",         "bossTitle3": "联邦内阁总理" },
+      "league":     { "name": "联邦国会议长（联邦政务常委）", "partyType": "团派",  "bossTitle": "联邦政务常委会",  "bossTitle2": "中央执政党主席",       "bossTitle3": "联邦内阁总理" }
+    }
+  },
+  "promotionAgeLimits": {
+    "1": 22, "2": 24, "3": 25, "4": 27, "5": 28, "6": 30, "7": 32,
+    "8": 35, "9": 38, "10": 40, "11": 44, "12": 48, "13": 52, "14": 55
+  },
+  "tracks": {
+    "party": [
+      { "rank": 1,  "name": "乡镇科员" },
+      { "rank": 2,  "name": "副乡镇长" },
+      { "rank": 3,  "name": "乡镇党委书记" },
+      { "rank": 4,  "name": "县委常委（分管组织/宣传）" },
+      { "rank": 5,  "name": "县委常委（分管组织·资深）" },
+      { "rank": 6,  "name": "县委书记", "convergence": true },
+      { "rank": 7,  "name": "市委常委（分管组织/宣传/统战）" },
+      { "rank": 8,  "name": "市委副书记（专职）" },
+      { "rank": 9,  "name": "市委书记", "convergence": true },
+      { "rank": 10, "name": "省执政委常委（分管组织/宣传/政法）" },
+      { "rank": 11, "name": "省执政委书记（兼省联邦国会主任）" },
+      { "rank": 12, "name": "联邦政务委员（分管党务/意识形态）" },
+      { "rank": 13, "name": "联邦政务常委（分管党务）" },
+      { "rank": 14, "name": "执政党中央主席" },
+      { "rank": 15, "name": "联邦总统·执政党主席·枢武府主席", "convergence": true }
+    ],
+    "government": [
+      { "rank": 1,  "name": "乡镇科员" },
+      { "rank": 2,  "name": "副乡镇长" },
+      { "rank": 3,  "name": "乡镇长" },
+      { "rank": 4,  "name": "县委常委/副县长" },
+      { "rank": 5,  "name": "县长/区长" },
+      { "rank": 6,  "name": "县委书记", "convergence": true },
+      { "rank": 7,  "name": "副市长" },
+      { "rank": 8,  "name": "市长" },
+      { "rank": 9,  "name": "市委书记", "convergence": true },
+      { "rank": 10, "name": "副省长" },
+      { "rank": 11, "name": "省长" },
+      { "rank": 12, "name": "内阁部长/国务委员" },
+      { "rank": 13, "name": "内阁常务副总统" },
+      { "rank": 14, "name": "联邦内阁总理" },
+      { "rank": 15, "name": "联邦总统·执政党主席·枢武府主席", "convergence": true }
+    ],
+    "discipline": [
+      { "rank": 1,  "name": "乡镇科员" },
+      { "rank": 2,  "name": "副乡镇长" },
+      { "rank": 3,  "name": "乡镇纪检委员" },
+      { "rank": 4,  "name": "县纪委副书记" },
+      { "rank": 5,  "name": "县纪委书记" },
+      { "rank": 6,  "name": "县委书记", "convergence": true },
+      { "rank": 7,  "name": "市纪委常委/监委委员" },
+      { "rank": 8,  "name": "市肃宪院长/市委常委" },
+      { "rank": 9,  "name": "市委书记", "convergence": true },
+      { "rank": 10, "name": "省肃宪院长/省执政委常委" },
+      { "rank": 11, "name": "肃宪督察院委员/省执政委常委" },
+      { "rank": 12, "name": "肃宪督察院副书记（正部级）" },
+      { "rank": 13, "name": "肃宪督察院书记（联邦政务常委）" },
+      { "rank": 14, "name": "联邦政法委书记·联邦政务常委" },
+      { "rank": 15, "name": "联邦总统·执政党主席·枢武府主席", "convergence": true }
+    ],
+    "league": [
+      { "rank": 1,  "name": "乡镇科员" },
+      { "rank": 2,  "name": "副乡镇长" },
+      { "rank": 3,  "name": "乡镇团委书记" },
+      { "rank": 4,  "name": "团县委书记" },
+      { "rank": 5,  "name": "挂职副县长/团市委副书记" },
+      { "rank": 6,  "name": "县委书记", "convergence": true },
+      { "rank": 7,  "name": "团省执政委副书记/省执政委青工部副部长" },
+      { "rank": 8,  "name": "团省执政委书记/省执政委常委" },
+      { "rank": 9,  "name": "市委书记", "convergence": true },
+      { "rank": 10, "name": "省执政委副书记（分管青年/组织）" },
+      { "rank": 11, "name": "省执政委书记/团中央第一书记" },
+      { "rank": 12, "name": "联邦政务委员/党政人事院院长" },
+      { "rank": 13, "name": "联邦国会副委员长（联邦政务委员）" },
+      { "rank": 14, "name": "联邦国会议长（联邦政务常委）" },
+      { "rank": 15, "name": "联邦总统·执政党主席·枢武府主席", "convergence": true }
+    ]
+  }
+}

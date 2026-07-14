@@ -1,0 +1,1 @@
+ALTER TABLE player_saves ADD COLUMN IF NOT EXISTS last_competition_event_day INTEGER DEFAULT 0;

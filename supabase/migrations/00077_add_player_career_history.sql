@@ -1,0 +1,1 @@
+ALTER TABLE player_saves ADD COLUMN IF NOT EXISTS player_career_history JSONB DEFAULT '[]'::jsonb;

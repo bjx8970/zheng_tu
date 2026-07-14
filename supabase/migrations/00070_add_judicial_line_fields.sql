@@ -1,0 +1,7 @@
+
+ALTER TABLE player_saves
+  ADD COLUMN IF NOT EXISTS judicial_stability_index   INTEGER NOT NULL DEFAULT 80,
+  ADD COLUMN IF NOT EXISTS judicial_petition_backlog  INTEGER NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS judicial_sweep_count       INTEGER NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS judicial_speech_control    INTEGER NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS judicial_evidence_level    INTEGER NOT NULL DEFAULT 0;

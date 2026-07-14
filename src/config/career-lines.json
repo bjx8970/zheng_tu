@@ -1,0 +1,70 @@
+{
+  "lines": [
+    {
+      "label": "行政线",
+      "icon": "🏛️",
+      "color": "#1D4ED8",
+      "bg": "#EFF6FF",
+      "desc": "主抓地方经济建设、城市规划与招商引资，全面统筹城市治理",
+      "strengths": ["城市GDP提升快", "招商引资专属收益", "财政资金获取更多"],
+      "weaknesses": ["人事权受限", "廉洁风险较高"],
+      "switchRequire": "政绩积分 ≥ 50，上司好感 ≥ 50",
+      "penaltyCost": { "lineKpi": 30, "bossFavor": 10, "merit": 0 },
+      "switchCondition": {
+        "meritMin": 50,
+        "favorMin": 50
+      }
+    },
+    {
+      "label": "党务线",
+      "icon": "🔴",
+      "color": "#991B1B",
+      "bg": "#FEF2F2",
+      "desc": "掌握党委组织建设与人事权，擅长党内关系经营与干部培养",
+      "strengths": ["人事任命权专属", "上司好感提升快", "党建积分积累"],
+      "weaknesses": ["经济建设加成弱", "需维护派系关系"],
+      "switchRequire": "政绩积分 ≥ 50，派系积分 ≥ 20",
+      "penaltyCost": { "lineKpi": 30, "bossFavor": 8, "merit": 0 },
+      "switchCondition": {
+        "meritMin": 50,
+        "factionMin": 20
+      }
+    },
+    {
+      "label": "纪检线",
+      "icon": "⚖️",
+      "color": "#7C3AED",
+      "bg": "#F5F3FF",
+      "desc": "行使纪检监察权，擅长案件查处与廉洁建设，政治地位超然",
+      "strengths": ["廉洁风险自动降低", "政绩加成高", "政治权威提升"],
+      "weaknesses": ["容易树敌", "派系关系经营难"],
+      "switchRequire": "廉洁风险 ≤ 30，政绩积分 ≥ 60",
+      "penaltyCost": { "lineKpi": 35, "bossFavor": 5, "merit": 0 },
+      "switchCondition": {
+        "meritMin": 60,
+        "riskMax": 30
+      }
+    },
+    {
+      "label": "团派线",
+      "icon": "🌱",
+      "color": "#166534",
+      "bg": "#F0FDF4",
+      "desc": "通过青年服务与社会工作积累群众基础，舆情优势显著",
+      "strengths": ["舆情指数提升快", "民生分值高", "团派积分专属"],
+      "weaknesses": ["晋升速度较慢", "财政权限受限"],
+      "switchRequire": "舆情指数 ≥ 50，政绩积分 ≥ 40",
+      "penaltyCost": { "lineKpi": 25, "bossFavor": 5, "merit": 0 },
+      "switchCondition": {
+        "meritMin": 40,
+        "opinionMin": 50
+      }
+    }
+  ],
+  "globalConditions": {
+    "rankLockAbove": 8,
+    "rankLockReason": "8级以上路线已锁定，无法切换",
+    "minLineKpi": 15,
+    "minLineKpiReason": "当前路线积分不足（需≥15），先积累路线经验再切换"
+  }
+}

@@ -1,0 +1,22 @@
+
+ALTER TABLE game_saves
+  ADD COLUMN IF NOT EXISTS public_opinion_index   integer   NOT NULL DEFAULT 60,
+  ADD COLUMN IF NOT EXISTS inspection_risk        integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS last_inspection_day    integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS is_under_investigation boolean   NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS protection_umbrella_level   integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS protection_umbrella_name    text    NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS land_finance_total     bigint    NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS land_parcels_sold      integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS gdp_primary_share      integer   NOT NULL DEFAULT 10,
+  ADD COLUMN IF NOT EXISTS gdp_secondary_share    integer   NOT NULL DEFAULT 45,
+  ADD COLUMN IF NOT EXISTS gdp_tertiary_share     integer   NOT NULL DEFAULT 45,
+  ADD COLUMN IF NOT EXISTS gov_debt_total         bigint    NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS mass_incident_count    integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS mass_incident_pending  integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS faction_internal_rank  text      NOT NULL DEFAULT 'member',
+  ADD COLUMN IF NOT EXISTS faction_points         integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS bribery_accepted       bigint    NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS bribery_rejected       integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS inheritance_political  integer   NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS inheritance_network    integer   NOT NULL DEFAULT 0;

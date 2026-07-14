@@ -1,0 +1,2793 @@
+// 游戏数据库操作API
+import { supabase } from '@/client/supabase';
+import type { PlayerSave, Subordinate, BossTask, EventRecord, PoliceCase, FamilyMember, DeptKey, MonthlyMeeting, MeetingTask, Secretary, CityFinance, LoanRecord, InvestmentRecord, RecruitCandidate, MonthlyReport, LeadershipMember, PetitionEvent, LeadershipBand, PlayerHealth, PartySchoolRecord, PartySchoolLevel, NationalPolicy, CityMetrics, CareerEntry } from '@/types/game';
+import { RANK_CONFIG, DEFAULT_CITY_BY_LEVEL, SUB_TRAITS, DEPT_CONFIG, getDeptHeadTitle, getDeptDeputyTitle, getDeptNameByRank, getDeptPositionSubLevel, getDeptStaffRange, getZhongXuanDiaoStartRank, BAND_POSITIONS, GOVT_POSITIONS, NDA_POSITIONS, NPC_AGE_RANGE, RETIREMENT_AGE_MAP, PARTY_SCHOOL_CONFIG, NATIONAL_POLICY_POOL, randBirthPlace, pickUniversityName, npcSchoolTier, npcDegreeLabel, PROVINCE_LIST, PROVINCE_CITY_MAP, randRealStartTown, randRealStartTownByProvCity, RANK_INITIAL_FUND, RANK_MONTHLY_HEALTH_REGEN, RANK_DAILY_ENERGY_BONUS, ASSET_HEALTH_BONUS } from '@/types/game';
+
+// 转换数据库行到PlayerSave
+function rowToPlayerSave(row: Record<string, unknown>): PlayerSave {
+  return {
+    id: row.id as string,
+    userId: row.user_id as string,
+    playerName: row.player_name as string,
+    playerGender: (row.player_gender as string) ?? '男',
+    playerAge: (row.player_age as number) ?? 22,
+    playerBirthDay: (row.player_birth_day as number) ?? 0,
+    avatarId: (row.avatar_id as number) ?? 0,
+    school: (row.school as string) ?? '普通本科',
+    needsCharacterCreation: (row.needs_character_creation as boolean) ?? true,
+    // 个人档案
+    birthYear:        (row.birth_year as number) ?? 0,
+    birthProvince:    (row.birth_province as string) ?? '',
+    birthCity:        (row.birth_city as string) ?? '',
+    universityName:   (row.university_name as string) ?? '',
+    rankLevel: row.rank_level as number,
+    rankName: row.rank_name as string,
+    meritPoints: row.merit_points as number,
+    moralValue: row.moral_value as number,
+    assessmentGrade: row.assessment_grade as PlayerSave['assessmentGrade'],
+    tenureYears: row.tenure_years as number,
+    tenureDays: row.tenure_days as number,
+    maxTenureYears: row.max_tenure_years as number,
+    gameDays: row.game_days as number,
+    cityName: row.city_name as string,
+    cityGdp: row.city_gdp as number,
+    cityLivelihood: row.city_livelihood as number,
+    cityEcology: row.city_ecology as number,
+    cityBusiness: row.city_business as number,
+    policeForce: row.police_force as number,
+    securityIndex: row.security_index as number,
+    policeChiefName: row.police_chief_name as string | null,
+    reformFaction: row.reform_faction as number,
+    pragmaticFaction: row.pragmatic_faction as number,
+    cylRelation: (row.cyl_relation as number) ?? 30,
+    technoRelation: (row.techno_relation as number) ?? 30,
+    localRelation: (row.local_relation as number) ?? 30,
+    primaryFaction: (row.primary_faction as string) ?? '',
+    bossName: row.boss_name as string,
+    bossFavor: row.boss_favor as number,
+    requiredMerit: row.required_merit as number,
+    requiredTenureYears: row.required_tenure_years as number,
+    isPromotionAvailable: row.is_promotion_available as boolean,
+    isEventPending: row.is_event_pending as boolean,
+    familyHappiness: (row.family_happiness as number) ?? 50,
+    marriageStatus: (row.marriage_status as PlayerSave['marriageStatus']) ?? 'single',
+    eventsThisYear: (row.events_this_year as number) ?? 0,
+    lastRankDay: (row.last_rank_day as number) ?? 0,
+    annualRankPct: (row.annual_rank_pct as number) ?? 50,
+    isExcellentRank: (row.is_excellent_rank as boolean) ?? false,
+    cityPopulation: (row.city_population as number) ?? 50000,
+    residentIncome: (row.resident_income as number) ?? 50,
+    eduLevel: (row.edu_level as number) ?? 50,
+    healthcareRate: (row.healthcare_rate as number) ?? 50,
+    housingRate: (row.housing_rate as number) ?? 50,
+    fundBalance: (row.fund_balance as number) ?? 0,
+    boss2Name: (row.boss2_name as string) ?? '',
+    boss2Favor: (row.boss2_favor as number) ?? 50,
+    boss3Name: (row.boss3_name as string) ?? '',
+    boss3Favor: (row.boss3_favor as number) ?? 50,
+    lastRecruitYear: (row.last_recruit_year as number) ?? 0,
+    lastRecruitQuarter: (row.last_recruit_quarter as number) ?? 0,
+    cityTaxRate: (row.city_tax_rate as number) ?? 0.12,
+    cityTaxIncome: (row.city_tax_income as number) ?? 0,
+    taxRevenue: (row.tax_revenue as number) ?? 0,
+    lastMonthDay: (row.last_month_day as number) ?? 0,
+    kpiGdpTarget: (row.kpi_gdp_target as number) ?? 0,
+    kpiLivelihoodTarget: (row.kpi_livelihood_target as number) ?? 0,
+    kpiEcologyTarget: (row.kpi_ecology_target as number) ?? 0,
+    kpiBusinessTarget: (row.kpi_business_target as number) ?? 0,
+    kpiYear: (row.kpi_year as number) ?? 0,
+    subVisitPending: (row.sub_visit_pending as boolean) ?? false,
+    subVisitSubId: (row.sub_visit_sub_id as string) ?? null,
+    subVisitSubName: (row.sub_visit_sub_name as string) ?? null,
+    lastPersonnelYear: (row.last_personnel_year as number) ?? 0,
+    deptReportDay: (row.dept_report_day as number) ?? 0,
+    lastExchangeDay: (row.last_exchange_day as number) ?? 0,
+    lastMinistryRotateDay: (row.last_ministry_rotate_day as number) ?? 0,
+    spouseRelationValue: (row.spouse_relation_value as number) ?? 50,
+    marriageDay: (row.marriage_day as number) ?? 0,
+    playerPosition: (row.player_position as string) ?? (row.rank_name as string) ?? '',
+    concurrentPosts: (row.concurrent_posts as string[]) ?? [],
+    voteSupport: (row.vote_support as number) ?? 0,
+    lastVoteDay: (row.last_vote_day as number) ?? 0,
+    partyCongressVote: (row.party_congress_vote as number) ?? 0,
+    lastPartyCongressDay: (row.last_party_congress_day as number) ?? 0,
+    nationalTermsServed: (row.national_terms_served as number) ?? 0,
+    careerPath: (row.career_path as string) ?? '',
+    nationalGdp: (row.national_gdp as number) ?? 1200000,
+    sciTechInvestTotal: (row.sci_tech_invest_total as number) ?? 0,
+    sciTechResearchDir: (row.sci_tech_research_dir as string) ?? '',
+    sciTechProgress: (row.sci_tech_progress as number) ?? 0,
+    sciTechLastActDay: (row.sci_tech_last_act_day as number) ?? 0,
+    disciplineLastActDay: (row.discipline_last_act_day as number) ?? 0,
+    kpiRankingYear: (row.kpi_ranking_year as number) ?? 0,
+    kpiRankingResult: (row.kpi_ranking_result as string) ?? '',
+    lastAnnualPromoteYear: (row.last_annual_promote_year as number) ?? 0,
+    personalSavings: (row.personal_savings as number) ?? 0,
+    personalAssets: (row.personal_assets as string[]) ?? [],
+    lastSalaryDay: (row.last_salary_day as number) ?? 0,
+    providentFundBalance: (row.provident_fund_balance as number) ?? 0,
+    lastAnnualBonusDay: (row.last_annual_bonus_day as number) ?? 0,
+    retirementDelayYears: (row.retirement_delay_years as number) ?? 0,
+    isRetired: (row.is_retired as boolean) ?? false,
+    // 上司生命周期
+    bossTenureStart: (row.boss_tenure_start as number) ?? 0,
+    bossTenureDuration: (row.boss_tenure_duration as number) ?? 1460,
+    boss2TenureStart: (row.boss2_tenure_start as number) ?? 0,
+    boss2TenureDuration: (row.boss2_tenure_duration as number) ?? 1460,
+    boss3TenureStart: (row.boss3_tenure_start as number) ?? 0,
+    boss3TenureDuration: (row.boss3_tenure_duration as number) ?? 1460,
+    // 纪委风险追踪
+    lastDisciplineWarnDay: (row.last_discipline_warn_day as number) ?? 0,
+    lastCaseCheckDay: (row.last_case_check_day as number) ?? 0,
+    // 重大事故风险
+    consecutiveFailEvents: (row.consecutive_fail_events as number) ?? 0,
+    consecutiveExcellentYears: (row.consecutive_excellent_years as number) ?? 0,
+    // Game Over
+    gameOverType: (row.game_over_type as PlayerSave['gameOverType']) ?? null,
+    // 代会换届
+    lastCongressDay: (row.last_congress_day as number) ?? 0,
+    // 关系积分
+    alumniScore: (row.alumni_score as number) ?? 0,
+    // 交流干部自动模式
+    exchangeAutoMode: ((row.exchange_auto_mode as string) ?? 'manual') as 'manual' | 'auto-accept' | 'auto-decline',
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
+  };
+}
+
+function rowToSubordinate(row: Record<string, unknown>): Subordinate {
+  // 从名字哈希推算特长（如未入库则动态派生）
+  const derivedSpecialty = (() => {
+    const name = (row.name as string) ?? '';
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) & 0xffff;
+    const pool: import('@/types/game').CadreSpecialty[] = ['economy','social','legal','agriculture','tech','party','finance','military'];
+    return pool[hash % pool.length];
+  })();
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    name: row.name as string,
+    position: row.position as string,
+    role: row.role as string,
+    avatarId: (row.avatar_id as number) ?? 0,
+    gender: (row.gender as string) ?? '男',
+    ability: row.ability as number,
+    loyalty: row.loyalty as number,
+    integrity: row.integrity as number,
+    experience: row.experience as number,
+    faction: ((row.faction as string) ?? 'reform') as import('@/types/game').Faction,
+    subLevel: (row.sub_level as number) ?? 1,
+    isAppointed: row.is_appointed as boolean,
+    appointedRole: row.appointed_role as string | null,
+    appointedDept: row.appointed_dept as DeptKey | null,
+    deptPosition: ((row.dept_position as string) ?? 'head') as 'head' | 'deputy',
+    transferredCity: (row.transferred_city as string) ?? null,
+    lastAssessedDay: (row.last_assessed_day as number) ?? 0,
+    createdAt: row.created_at as string,
+    // ── 新增字段 ────────────────────────────────────────────────────────────
+    specialty: ((row.specialty as string) ?? derivedSpecialty) as import('@/types/game').CadreSpecialty,
+    isReserve: (row.is_reserve as boolean) ?? false,
+    nominationStatus: ((row.nomination_status as string) ?? 'idle') as import('@/types/game').NominationStatus,
+    nominationDept: (row.nomination_dept as DeptKey) ?? null,
+    nominationPosition: (row.nomination_position as 'head' | 'deputy') ?? null,
+    nominationStartDay: (row.nomination_start_day as number) ?? null,
+    eventType: (row.event_type as import('@/types/game').SubEventType) ?? null,
+    eventDay: (row.event_day as number) ?? null,
+    eventHandled: (row.event_handled as boolean) ?? true,
+    satisfaction: (row.satisfaction as number) ?? 60,
+    lastReviewScores: (row.last_review_scores as string) ?? null,
+    cadreAge: (row.cadre_age as number) ?? null,
+    borrowedTo: (row.borrowed_to as string) ?? null,
+    // ── 个人档案 ────────────────────────────────────────────────────────────
+    birthYear: (row.birth_year as number) ?? null,
+    university: (row.university as string) ?? null,
+    major: (row.major as string) ?? null,
+    hometown: (row.hometown as string) ?? null,
+  };
+}
+
+function rowToBossTask(row: Record<string, unknown>): BossTask {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    title: row.title as string,
+    description: row.description as string,
+    taskType: row.task_type as string,
+    targetValue: row.target_value as number,
+    currentValue: row.current_value as number,
+    rewardMerit: row.reward_merit as number,
+    rewardFavor: row.reward_favor as number,
+    status: row.status as BossTask['status'],
+    deadlineDays: row.deadline_days as number,
+    createdDay: row.created_day as number,
+    bossLevel: (row.boss_level as number) ?? 1,
+    isPostponed: (row.is_postponed as boolean) ?? false,
+    createdAt: row.created_at as string,
+    urgency: (row.urgency as BossTask['urgency']) ?? 'normal',
+    penaltyMerit: (row.penalty_merit as number) ?? 0,
+    penaltyFavor: (row.penalty_favor as number) ?? 0,
+  };
+}
+
+function rowToPoliceCase(row: Record<string, unknown>): PoliceCase {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    title: row.title as string,
+    description: row.description as string,
+    caseType: row.case_type as PoliceCase['caseType'],
+    difficulty: row.difficulty as number,
+    requiredPolice: row.required_police as number,
+    rewardMerit: row.reward_merit as number,
+    securityChange: row.security_change as number,
+    status: row.status as PoliceCase['status'],
+    createdDay: row.created_day as number,
+    solvedDay: row.solved_day as number | null,
+    createdAt: row.created_at as string,
+  };
+}
+
+// ============ 存档操作 ============
+
+export async function getOrCreateSave(): Promise<PlayerSave | null> {
+  const { data: user } = await supabase.auth.getUser();
+  if (!user.user) return null;
+
+  const { data, error } = await supabase
+    .from('player_saves')
+    .select('*')
+    .eq('user_id', user.user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) return null;
+  if (data) return rowToPlayerSave(data as Record<string, unknown>);
+
+  // 创建新存档（needsCharacterCreation = true，等待角色创建）
+  const config = RANK_CONFIG[1];
+  const cityName = randRealStartTown();
+  const { data: newSave, error: createError } = await supabase
+    .from('player_saves')
+    .insert({
+      user_id: user.user.id,
+      player_name: '新官员',
+      player_gender: '男',
+      player_age: 22,
+      player_birth_day: 0,
+      avatar_id: 0,
+      school: '普通本科',
+      needs_character_creation: true,
+      rank_level: 1,
+      rank_name: config.name,
+      player_position: config.name,
+      merit_points: 0,
+      moral_value: 80,
+      assessment_grade: '合格',
+      tenure_years: 0,
+      tenure_days: 0,
+      max_tenure_years: config.maxTenureYears,
+      game_days: 0,
+      city_name: cityName,
+      city_gdp: 50,
+      city_livelihood: 50,
+      city_ecology: 50,
+      city_business: 50,
+      police_force: 100,
+      security_index: 50,
+      police_chief_name: null,
+      reform_faction: 50,
+      pragmatic_faction: 50,
+      cyl_relation: 30,
+      techno_relation: 30,
+      local_relation: 30,
+      primary_faction: '',
+      boss_name: config.bossTitle,
+      boss_favor: 50,
+      boss2_name: config.bossTitle2,
+      boss2_favor: 50,
+      boss3_name: config.bossTitle3,
+      boss3_favor: 50,
+      required_merit: config.requiredMerit,
+      required_tenure_years: config.requiredTenureYears,
+      is_promotion_available: false,
+      is_event_pending: false,
+      family_happiness: 50,
+      marriage_status: 'single',
+      fund_balance: RANK_INITIAL_FUND[1] ?? 30,
+      city_tax_rate: 0.12,
+      city_tax_income: 0,
+    })
+    .select('*')
+    .single();
+
+  if (createError || !newSave) return null;
+
+  // 初始化下属（传入起始职级，生成匹配层级的称谓和职级）
+  await initSubordinates(newSave.id, user.user.id, (newSave as Record<string, unknown>).rank_level as number ?? 1);
+  // 初始化任务
+  await initBossTasks(newSave.id, user.user.id);
+  // 初始化案件
+  await initPoliceCases(newSave.id, user.user.id, 0);
+  // 初始化城市财政（记录初始值，月度结算以 player_saves.fund_balance 为准）
+  await supabase.from('city_finance').insert({
+    save_id: newSave.id, user_id: user.user.id,
+    fund_balance: RANK_INITIAL_FUND[1] ?? 30, debt_total: 0, loans: [], investments: [],
+  });
+
+  return rowToPlayerSave(newSave as Record<string, unknown>);
+}
+
+export async function completeCharacterCreation(saveId: string, opts: {
+  playerName: string;
+  playerGender: string;
+  playerAge: number;
+  avatarId: number;
+  school: string;
+  isZhongXuanDiao?: boolean;
+  degree?: string;
+  birthYear?: number;
+  birthProvince?: string;
+  birthCity?: string;
+  universityName?: string;
+}): Promise<PlayerSave | null> {
+  const isZhongXuan = opts.isZhongXuanDiao === true || opts.school === '985院校（选调生）';
+  const schoolValue = isZhongXuan ? '985院校（选调生）' : opts.school;
+  const abilityBonus = isZhongXuan ? 20 : schoolValue === '985院校' ? 10 : schoolValue === '211院校' ? 5 : schoolValue === '大专院校' ? -5 : 0;
+
+  // 中央选调生：硕士→副乡镇长(rank2/副科)，博士→乡镇长(rank3/正科)
+  const degreeVal = (opts.degree as '本科' | '硕士' | '博士') ?? '本科';
+  const startRank = isZhongXuan ? getZhongXuanDiaoStartRank(degreeVal) : 1;
+  const rankCfg = RANK_CONFIG[startRank];
+
+  const updatePayload: Record<string, unknown> = {
+    player_name:    opts.playerName,
+    player_gender:  opts.playerGender,
+    player_age:     opts.playerAge,
+    player_birth_day: 0,
+    avatar_id:      opts.avatarId,
+    school:         schoolValue,
+    needs_character_creation: false,
+    moral_value:    Math.min(100, 80 + Math.floor(abilityBonus / 2)),
+    updated_at:     new Date().toISOString(),
+    // 个人档案
+    birth_year:       opts.birthYear ?? 0,
+    birth_province:   opts.birthProvince ?? '',
+    birth_city:       opts.birthCity ?? '',
+    university_name:  opts.universityName ?? '',
+    // 开局城市纯随机，与出生地无关
+    city_name: randRealStartTown(),
+  };
+
+  if (isZhongXuan) {
+    // 博士选调：正科/乡镇长，政绩+50；硕士选调：副科/副乡镇长，政绩+30
+    const isMaster = degreeVal === '硕士';
+    updatePayload.rank_level = startRank;
+    updatePayload.rank_name = rankCfg.name;
+    updatePayload.player_position = rankCfg.name;
+    updatePayload.merit_points = isMaster ? 30 : 50;   // 博士起点积累更多
+    updatePayload.boss_favor = isMaster ? 65 : 70;      // 博士受到更多关注
+    updatePayload.boss_name = rankCfg.bossTitle;
+    updatePayload.boss2_name = rankCfg.bossTitle2;
+    updatePayload.boss3_name = rankCfg.bossTitle3;
+    updatePayload.required_merit = rankCfg.requiredMerit;
+    updatePayload.required_tenure_years = rankCfg.requiredTenureYears;
+    updatePayload.max_tenure_years = rankCfg.maxTenureYears;
+  }
+
+  const { data, error } = await supabase
+    .from('player_saves')
+    .update(updatePayload)
+    .eq('id', saveId)
+    .select('*')
+    .single();
+  if (error || !data) return null;
+  return rowToPlayerSave(data as Record<string, unknown>);
+}
+
+export async function updateSave(saveId: string, updates: Partial<{
+  meritPoints: number;
+  moralValue: number;
+  assessmentGrade: string;
+  tenureYears: number;
+  tenureDays: number;
+  gameDays: number;
+  cityGdp: number;
+  cityLivelihood: number;
+  cityEcology: number;
+  cityBusiness: number;
+  policeForce: number;
+  securityIndex: number;
+  policeChiefName: string | null;
+  reformFaction: number;
+  pragmaticFaction: number;
+  cylRelation: number;
+  technoRelation: number;
+  localRelation: number;
+  primaryFaction: string;
+  bossFavor: number;
+  isPromotionAvailable: boolean;
+  isEventPending: boolean;
+  rankLevel: number;
+  rankName: string;
+  cityName: string;
+  maxTenureYears: number;
+  requiredMerit: number;
+  requiredTenureYears: number;
+  bossName: string;
+  playerName: string;
+  familyHappiness: number;
+  marriageStatus: string;
+  playerAge: number;
+  eventsThisYear: number;
+  lastRankDay: number;
+  annualRankPct: number;
+  isExcellentRank: boolean;
+  cityPopulation: number;
+  residentIncome: number;
+  eduLevel: number;
+  healthcareRate: number;
+  housingRate: number;
+  fundBalance: number;
+  boss2Name: string;
+  boss2Favor: number;
+  boss3Name: string;
+  boss3Favor: number;
+  lastRecruitYear: number;
+  lastRecruitQuarter: number;
+  cityTaxRate: number;
+  cityTaxIncome: number;
+  taxRevenue: number;
+  lastMonthDay: number;
+  kpiGdpTarget: number;
+  kpiLivelihoodTarget: number;
+  kpiEcologyTarget: number;
+  kpiBusinessTarget: number;
+  kpiYear: number;
+  subVisitPending: boolean;
+  subVisitSubId: string | null;
+  subVisitSubName: string | null;
+  lastPersonnelYear: number;
+  deptReportDay: number;
+  lastExchangeDay: number;
+  lastMinistryRotateDay: number;
+  spouseRelationValue: number;
+  marriageDay: number;
+  playerPosition: string;
+  concurrentPosts: string[];
+  voteSupport: number;
+  lastVoteDay: number;
+  partyCongressVote: number;
+  lastPartyCongressDay: number;
+  nationalTermsServed: number;
+  careerPath: string;
+  nationalGdp: number;
+  sciTechInvestTotal: number;
+  sciTechResearchDir: string;
+  sciTechProgress: number;
+  sciTechLastActDay: number;
+  disciplineLastActDay: number;
+  kpiRankingYear: number;
+  kpiRankingResult: string;
+  lastAnnualPromoteYear: number;
+  personalSavings: number;
+  personalAssets: string[];
+  lastSalaryDay: number;
+  providentFundBalance: number;
+  lastAnnualBonusDay: number;
+  retirementDelayYears: number;
+  isRetired: boolean;
+  // 上司生命周期
+  bossTenureStart: number;
+  bossTenureDuration: number;
+  boss2TenureStart: number;
+  boss2TenureDuration: number;
+  boss3TenureStart: number;
+  boss3TenureDuration: number;
+  // 纪委风险追踪
+  lastDisciplineWarnDay: number;
+  lastCaseCheckDay: number;
+  // 重大事故风险
+  consecutiveFailEvents: number;
+  // 连续优秀/特等加速晋升
+  consecutiveExcellentYears: number;
+  // Game Over
+  gameOverType: 'corruption' | 'accident' | 'purge' | null;
+  // 代会换届追踪
+  lastCongressDay: number;
+  // 关系积分
+  alumniScore: number;
+  // 交流干部自动模式
+  exchangeAutoMode: 'manual' | 'auto-accept' | 'auto-decline';
+}>): Promise<PlayerSave | null> {
+  const dbUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+
+  if (updates.meritPoints !== undefined) dbUpdates.merit_points = Math.round(updates.meritPoints);
+  if (updates.moralValue !== undefined) dbUpdates.moral_value = Math.round(updates.moralValue);
+  if (updates.assessmentGrade !== undefined) dbUpdates.assessment_grade = updates.assessmentGrade;
+  if (updates.tenureYears !== undefined) dbUpdates.tenure_years = Math.round(updates.tenureYears);
+  if (updates.tenureDays !== undefined) dbUpdates.tenure_days = Math.round(updates.tenureDays);
+  if (updates.gameDays !== undefined) dbUpdates.game_days = Math.round(updates.gameDays);
+  if (updates.cityGdp !== undefined) dbUpdates.city_gdp = Math.round(updates.cityGdp);
+  if (updates.cityLivelihood !== undefined) dbUpdates.city_livelihood = Math.round(updates.cityLivelihood);
+  if (updates.cityEcology !== undefined) dbUpdates.city_ecology = Math.round(updates.cityEcology);
+  if (updates.cityBusiness !== undefined) dbUpdates.city_business = Math.round(updates.cityBusiness);
+  if (updates.policeForce !== undefined) dbUpdates.police_force = Math.round(updates.policeForce);
+  if (updates.securityIndex !== undefined) dbUpdates.security_index = Math.round(updates.securityIndex);
+  if (updates.policeChiefName !== undefined) dbUpdates.police_chief_name = updates.policeChiefName;
+  if (updates.reformFaction !== undefined) dbUpdates.reform_faction = Math.round(updates.reformFaction);
+  if (updates.pragmaticFaction !== undefined) dbUpdates.pragmatic_faction = Math.round(updates.pragmaticFaction);
+  if (updates.cylRelation !== undefined) dbUpdates.cyl_relation = Math.round(updates.cylRelation);
+  if (updates.technoRelation !== undefined) dbUpdates.techno_relation = Math.round(updates.technoRelation);
+  if (updates.localRelation !== undefined) dbUpdates.local_relation = Math.round(updates.localRelation);
+  if (updates.primaryFaction !== undefined) dbUpdates.primary_faction = updates.primaryFaction;
+  if (updates.bossFavor !== undefined) dbUpdates.boss_favor = Math.round(updates.bossFavor);
+  if (updates.isPromotionAvailable !== undefined) dbUpdates.is_promotion_available = updates.isPromotionAvailable;
+  if (updates.isEventPending !== undefined) dbUpdates.is_event_pending = updates.isEventPending;
+  if (updates.rankLevel !== undefined) dbUpdates.rank_level = updates.rankLevel;
+  if (updates.rankName !== undefined) dbUpdates.rank_name = updates.rankName;
+  if (updates.cityName !== undefined) dbUpdates.city_name = updates.cityName;
+  if (updates.maxTenureYears !== undefined) dbUpdates.max_tenure_years = updates.maxTenureYears;
+  if (updates.requiredMerit !== undefined) dbUpdates.required_merit = updates.requiredMerit;
+  if (updates.requiredTenureYears !== undefined) dbUpdates.required_tenure_years = updates.requiredTenureYears;
+  if (updates.bossName !== undefined) dbUpdates.boss_name = updates.bossName;
+  if (updates.playerName !== undefined) dbUpdates.player_name = updates.playerName;
+  if (updates.familyHappiness !== undefined) dbUpdates.family_happiness = updates.familyHappiness;
+  if (updates.marriageStatus !== undefined) dbUpdates.marriage_status = updates.marriageStatus;
+  if (updates.playerAge !== undefined) dbUpdates.player_age = updates.playerAge;
+  if (updates.eventsThisYear !== undefined) dbUpdates.events_this_year = updates.eventsThisYear;
+  if (updates.lastRankDay !== undefined) dbUpdates.last_rank_day = updates.lastRankDay;
+  if (updates.annualRankPct !== undefined) dbUpdates.annual_rank_pct = updates.annualRankPct;
+  if (updates.isExcellentRank !== undefined) dbUpdates.is_excellent_rank = updates.isExcellentRank;
+  if (updates.cityPopulation !== undefined) dbUpdates.city_population = updates.cityPopulation;
+  if (updates.residentIncome !== undefined) dbUpdates.resident_income = updates.residentIncome;
+  if (updates.eduLevel !== undefined) dbUpdates.edu_level = updates.eduLevel;
+  if (updates.healthcareRate !== undefined) dbUpdates.healthcare_rate = updates.healthcareRate;
+  if (updates.housingRate !== undefined) dbUpdates.housing_rate = updates.housingRate;
+  if (updates.fundBalance !== undefined) dbUpdates.fund_balance = updates.fundBalance;
+  if (updates.boss2Name !== undefined) dbUpdates.boss2_name = updates.boss2Name;
+  if (updates.boss2Favor !== undefined) dbUpdates.boss2_favor = Math.round(updates.boss2Favor);
+  if (updates.boss3Name !== undefined) dbUpdates.boss3_name = updates.boss3Name;
+  if (updates.boss3Favor !== undefined) dbUpdates.boss3_favor = Math.round(updates.boss3Favor);
+  if (updates.lastRecruitYear !== undefined) dbUpdates.last_recruit_year = updates.lastRecruitYear;
+  if (updates.lastRecruitQuarter !== undefined) dbUpdates.last_recruit_quarter = updates.lastRecruitQuarter;
+  if (updates.cityTaxRate !== undefined) dbUpdates.city_tax_rate = updates.cityTaxRate;
+  if (updates.cityTaxIncome !== undefined) dbUpdates.city_tax_income = updates.cityTaxIncome;
+  if (updates.taxRevenue !== undefined) dbUpdates.tax_revenue = updates.taxRevenue;
+  if (updates.lastMonthDay !== undefined) dbUpdates.last_month_day = updates.lastMonthDay;
+  if (updates.kpiGdpTarget !== undefined) dbUpdates.kpi_gdp_target = updates.kpiGdpTarget;
+  if (updates.kpiLivelihoodTarget !== undefined) dbUpdates.kpi_livelihood_target = updates.kpiLivelihoodTarget;
+  if (updates.kpiEcologyTarget !== undefined) dbUpdates.kpi_ecology_target = updates.kpiEcologyTarget;
+  if (updates.kpiBusinessTarget !== undefined) dbUpdates.kpi_business_target = updates.kpiBusinessTarget;
+  if (updates.kpiYear !== undefined) dbUpdates.kpi_year = updates.kpiYear;
+  if (updates.subVisitPending !== undefined) dbUpdates.sub_visit_pending = updates.subVisitPending;
+  if (updates.subVisitSubId !== undefined) dbUpdates.sub_visit_sub_id = updates.subVisitSubId;
+  if (updates.subVisitSubName !== undefined) dbUpdates.sub_visit_sub_name = updates.subVisitSubName;
+  if (updates.lastPersonnelYear !== undefined) dbUpdates.last_personnel_year = updates.lastPersonnelYear;
+  if (updates.deptReportDay !== undefined) dbUpdates.dept_report_day = updates.deptReportDay;
+  if (updates.lastExchangeDay !== undefined) dbUpdates.last_exchange_day = updates.lastExchangeDay;
+  if (updates.lastMinistryRotateDay !== undefined) dbUpdates.last_ministry_rotate_day = updates.lastMinistryRotateDay;
+  if (updates.spouseRelationValue !== undefined) dbUpdates.spouse_relation_value = updates.spouseRelationValue;
+  if (updates.marriageDay !== undefined) dbUpdates.marriage_day = updates.marriageDay;
+  if (updates.playerPosition !== undefined) dbUpdates.player_position = updates.playerPosition;
+  if (updates.concurrentPosts !== undefined) dbUpdates.concurrent_posts = updates.concurrentPosts;
+  if (updates.voteSupport !== undefined) dbUpdates.vote_support = Math.round(updates.voteSupport);
+  if (updates.lastVoteDay !== undefined) dbUpdates.last_vote_day = updates.lastVoteDay;
+  if (updates.partyCongressVote !== undefined) dbUpdates.party_congress_vote = Math.round(updates.partyCongressVote);
+  if (updates.lastPartyCongressDay !== undefined) dbUpdates.last_party_congress_day = updates.lastPartyCongressDay;
+  if (updates.nationalTermsServed !== undefined) dbUpdates.national_terms_served = updates.nationalTermsServed;
+  if (updates.careerPath !== undefined) dbUpdates.career_path = updates.careerPath;
+  if (updates.nationalGdp !== undefined) dbUpdates.national_gdp = Math.round(updates.nationalGdp);
+  if (updates.sciTechInvestTotal !== undefined) dbUpdates.sci_tech_invest_total = Math.round(updates.sciTechInvestTotal);
+  if (updates.sciTechResearchDir !== undefined) dbUpdates.sci_tech_research_dir = updates.sciTechResearchDir;
+  if (updates.sciTechProgress !== undefined) dbUpdates.sci_tech_progress = Math.round(updates.sciTechProgress);
+  if (updates.sciTechLastActDay !== undefined) dbUpdates.sci_tech_last_act_day = updates.sciTechLastActDay;
+  if (updates.disciplineLastActDay !== undefined) dbUpdates.discipline_last_act_day = updates.disciplineLastActDay;
+  if (updates.kpiRankingYear !== undefined) dbUpdates.kpi_ranking_year = updates.kpiRankingYear;
+  if (updates.kpiRankingResult !== undefined) dbUpdates.kpi_ranking_result = updates.kpiRankingResult;
+  if (updates.lastAnnualPromoteYear !== undefined) dbUpdates.last_annual_promote_year = updates.lastAnnualPromoteYear;
+  if (updates.personalSavings !== undefined) dbUpdates.personal_savings = Math.round(updates.personalSavings);
+  if (updates.personalAssets !== undefined) dbUpdates.personal_assets = updates.personalAssets;
+  if (updates.lastSalaryDay !== undefined) dbUpdates.last_salary_day = updates.lastSalaryDay;
+  if (updates.providentFundBalance !== undefined) dbUpdates.provident_fund_balance = Math.round(updates.providentFundBalance);
+  if (updates.lastAnnualBonusDay !== undefined) dbUpdates.last_annual_bonus_day = updates.lastAnnualBonusDay;
+  if (updates.retirementDelayYears !== undefined) dbUpdates.retirement_delay_years = updates.retirementDelayYears;
+  if (updates.isRetired !== undefined) dbUpdates.is_retired = updates.isRetired;
+  // 上司生命周期
+  if (updates.bossTenureStart !== undefined) dbUpdates.boss_tenure_start = updates.bossTenureStart;
+  if (updates.bossTenureDuration !== undefined) dbUpdates.boss_tenure_duration = updates.bossTenureDuration;
+  if (updates.boss2TenureStart !== undefined) dbUpdates.boss2_tenure_start = updates.boss2TenureStart;
+  if (updates.boss2TenureDuration !== undefined) dbUpdates.boss2_tenure_duration = updates.boss2TenureDuration;
+  if (updates.boss3TenureStart !== undefined) dbUpdates.boss3_tenure_start = updates.boss3TenureStart;
+  if (updates.boss3TenureDuration !== undefined) dbUpdates.boss3_tenure_duration = updates.boss3TenureDuration;
+  // 纪委风险
+  if (updates.lastDisciplineWarnDay !== undefined) dbUpdates.last_discipline_warn_day = updates.lastDisciplineWarnDay;
+  if (updates.lastCaseCheckDay !== undefined) dbUpdates.last_case_check_day = updates.lastCaseCheckDay;
+  // 重大事故风险
+  if (updates.consecutiveFailEvents !== undefined) dbUpdates.consecutive_fail_events = updates.consecutiveFailEvents;
+  if (updates.consecutiveExcellentYears !== undefined) dbUpdates.consecutive_excellent_years = updates.consecutiveExcellentYears;
+  // Game Over
+  if (updates.gameOverType !== undefined) dbUpdates.game_over_type = updates.gameOverType;
+  // 代会换届
+  if (updates.lastCongressDay !== undefined) dbUpdates.last_congress_day = updates.lastCongressDay;
+  // 关系积分
+  if (updates.alumniScore !== undefined) dbUpdates.alumni_score = updates.alumniScore;
+  // 交流干部自动模式
+  if (updates.exchangeAutoMode !== undefined) dbUpdates.exchange_auto_mode = updates.exchangeAutoMode;
+
+  const { data, error } = await supabase
+    .from('player_saves')
+    .update(dbUpdates)
+    .eq('id', saveId)
+    .select('*')
+    .single();
+
+  if (error || !data) return null;
+  return rowToPlayerSave(data as Record<string, unknown>);
+}
+
+// ============ 下属操作 ============
+
+const SUBORDINATE_NAMES_MALE = [
+  '张伟', '王磊', '李强', '刘洋', '孙辉', '吴刚', '郑博', '韩杰', '冯刚', '陈勇',
+  '周毅', '林峰', '黄浩', '马超', '何勇', '谢文', '罗刚', '曹磊', '唐杰', '邓强',
+  '杨明', '胡博', '徐辉', '朱建', '苏远', '章伟', '潘磊', '史峰', '余刚', '傅强',
+  '贾鸿', '叶锋', '秦磊', '尹博', '翟明', '龚伟', '魏远', '许建', '方磊', '白鹏',
+];
+const SUBORDINATE_NAMES_FEMALE = [
+  '王芳', '陈敏', '周娟', '冯霞', '李静', '张丽', '刘云', '赵雪', '孙梅', '吴萍',
+  '林慧', '黄婷', '马晓', '何敏', '谢霞', '罗丽', '曹燕', '唐娜', '邓雪', '杨云',
+  '胡静', '徐梅', '朱红', '苏慧', '章芳', '潘丽', '史敏', '余霞', '傅婷', '贾雪',
+];
+const POSITIONS = ['副科长', '科员', '主任科员', '副主任', '主任', '办公室主任', '专员'];
+
+export async function initSubordinates(saveId: string, userId: string, rankLevel = 3) {
+  // 12个部门每个分配正职+副职，共24人 + 2名待命下属
+  // 正副职 sub_level 按现实职级体系计算（公安等强力部门高配）
+
+  const DEPT_KEYS: DeptKey[] = ['police', 'ndrc', 'finance', 'urban', 'education', 'health', 'ecology', 'market', 'agriculture', 'personnel', 'invest', 'tax'];
+  const FACTIONS: import('@/types/game').Faction[] = ['reform', 'pragmatic', 'neutral', 'economy', 'discipline'];
+  const subs = [];
+  // 跟踪已用名字，防止同批次重复
+  const _usedSubNames = new Set<string>();
+
+  const makeSub = (deptKey: DeptKey | null, isAppointed: boolean, deptPosition: 'head' | 'deputy') => {
+    const isFemale = Math.random() < 0.35;
+    const gender = isFemale ? '女' : '男';
+    const namePool = isFemale ? SUBORDINATE_NAMES_FEMALE : SUBORDINATE_NAMES_MALE;
+    let name = namePool[Math.floor(Math.random() * namePool.length)];
+    // 去重：最多重试60次
+    for (let _r = 0; _r < 60 && _usedSubNames.has(name); _r++) {
+      name = namePool[Math.floor(Math.random() * namePool.length)];
+    }
+    _usedSubNames.add(name);
+    // 动态生成职务称谓（随rankLevel适配乡镇/县/市/省/国层级）
+    const roleLabel = deptKey
+      ? (deptPosition === 'head' ? getDeptHeadTitle(deptKey, rankLevel) : getDeptDeputyTitle(deptKey, rankLevel))
+      : null;
+    // 按现实职级体系计算 sub_level（公安/税务/组织等高配部门正职高一级）
+    const subLevel = deptKey
+      ? getDeptPositionSubLevel(deptKey, rankLevel, deptPosition)
+      : Math.max(1, rankLevel - 2);
+    const faction = FACTIONS[Math.floor(Math.random() * FACTIONS.length)];
+    // position 字段显示实际职务（与 roleLabel 一致）
+    const position = roleLabel ?? (deptPosition === 'head' ? '负责人' : '工作人员');
+    return {
+      save_id: saveId,
+      user_id: userId,
+      name,
+      gender,
+      position,
+      role: 'regular',
+      avatar_id: Math.floor(Math.random() * 8),
+      ability: 45 + Math.floor(Math.random() * 30),
+      loyalty: 50 + Math.floor(Math.random() * 30),
+      integrity: 50 + Math.floor(Math.random() * 30),
+      experience: 30 + Math.floor(Math.random() * 30),
+      faction,
+      sub_level: subLevel,
+      is_appointed: isAppointed,
+      appointed_role: roleLabel,
+      appointed_dept: deptKey,
+      dept_position: deptPosition,
+      transferred_city: null,
+      last_assessed_day: 0,
+    };
+  };
+
+  // 12 正职
+  for (const dk of DEPT_KEYS) subs.push(makeSub(dk, true, 'head'));
+  // 12 副职
+  for (const dk of DEPT_KEYS) subs.push(makeSub(dk, true, 'deputy'));
+  // 额外2名待命下属
+  subs.push(makeSub(null, false, 'head'));
+  subs.push(makeSub(null, false, 'head'));
+
+  await supabase.from('subordinates').insert(subs);
+}
+
+export async function getSubordinates(saveId: string): Promise<Subordinate[]> {
+  const { data, error } = await supabase
+    .from('subordinates')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: true });
+
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToSubordinate);
+}
+
+/**
+ * 按玩家当前职级过滤下属：
+ * rankLevel R 的玩家只能管理 subLevel 在 [R-3, R-1] 范围内的直属下属
+ * （例如国务院部长12级只看9-11级下属，省委书记11级只看8-10级）
+ */
+export async function getSubordinatesByRank(saveId: string, rankLevel: number): Promise<Subordinate[]> {
+  // 总理（rank14+）：展示所有部级委员/省委书记及以上（subLevel 9+，涵盖国务院部长/副部/省委书记/副书记等）
+  // 副总理（rank13）：展示省级及以上人员（subLevel >= 9）
+  // 其他高层：根据 rankLevel 计算范围
+  const minSub = rankLevel >= 13 ? 9 : Math.max(1, rankLevel - 3);
+  const maxSub = rankLevel >= 14 ? 13 : Math.max(1, rankLevel - 1);
+  const { data, error } = await supabase
+    .from('subordinates')
+    .select('*')
+    .eq('save_id', saveId)
+    .gte('sub_level', minSub)
+    .lte('sub_level', maxSub)
+    .order('sub_level', { ascending: false });
+
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToSubordinate);
+}
+
+/** 获取某存档下所有下属（不过滤职级，供KPI排名等全量场景使用） */
+export async function getAllSubordinates(saveId: string): Promise<Subordinate[]> {
+  const { data, error } = await supabase
+    .from('subordinates')
+    .select('*')
+    .eq('save_id', saveId)
+    .is('transferred_city', null)
+    .order('sub_level', { ascending: false })
+    .limit(200);
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToSubordinate);
+}
+
+export async function appointSubordinate(
+  subId: string,
+  role: string | null,
+  roleLabel: string | null,
+  deptKey: DeptKey | null,
+  deptPosition: 'head' | 'deputy' | 'staff' = 'head',
+  rankLevel = 3,
+): Promise<boolean> {
+  // 写入时同步更新 sub_level（按职级体系）和 position（显示实际职务名称）
+  const subLevel = deptKey
+    ? getDeptPositionSubLevel(deptKey, rankLevel, deptPosition === 'staff' ? 'deputy' : deptPosition)
+    : undefined;
+  const { error } = await supabase
+    .from('subordinates')
+    .update({
+      is_appointed: !!role,
+      appointed_role: roleLabel,
+      appointed_dept: deptKey,
+      dept_position: deptPosition,
+      ...(subLevel !== undefined ? { sub_level: subLevel } : {}),
+      ...(roleLabel ? { position: roleLabel } : {}),
+    })
+    .eq('id', subId);
+  return !error;
+}
+
+export async function transferSubordinate(subId: string, targetCity: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('subordinates')
+    .update({ transferred_city: targetCity, is_appointed: false, appointed_role: null, appointed_dept: null })
+    .eq('id', subId);
+  return !error;
+}
+
+/** 获取所有已调任的历史下属 */
+export async function getTransferredSubordinates(saveId: string): Promise<Subordinate[]> {
+  const { data, error } = await supabase
+    .from('subordinates')
+    .select('*')
+    .eq('save_id', saveId)
+    .not('transferred_city', 'is', null)
+    .order('sub_level', { ascending: false });
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToSubordinate);
+}
+
+/** 召回历史调任下属到当前队伍（清除 transferred_city） */
+export async function recallSubordinate(subId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('subordinates')
+    .update({ transferred_city: null, is_appointed: false, appointed_role: null, appointed_dept: null })
+    .eq('id', subId);
+  return !error;
+}
+
+export async function assessSubordinate(subId: string, currentDay: number, abilityDelta: number, loyaltyDelta: number, integrityDelta: number, expDelta: number): Promise<boolean> {
+  const { data } = await supabase.from('subordinates').select('ability, loyalty, integrity, experience').eq('id', subId).single();
+  if (!data) return false;
+  const row = data as Record<string, unknown>;
+  const { error } = await supabase.from('subordinates').update({
+    ability: Math.max(0, Math.min(100, (row.ability as number) + abilityDelta)),
+    loyalty: Math.max(0, Math.min(100, (row.loyalty as number) + loyaltyDelta)),
+    integrity: Math.max(0, Math.min(100, (row.integrity as number) + integrityDelta)),
+    experience: Math.max(0, Math.min(100, (row.experience as number) + expDelta)),
+    last_assessed_day: currentDay,
+  }).eq('id', subId);
+  return !error;
+}
+
+// ============ 任务操作 ============
+
+type TaskUrgency = 'normal' | 'important' | 'urgent';
+
+interface TaskTemplate {
+  title: string;
+  description: string;
+  taskType: string;
+  category: string; // 'economic'|'livelihood'|'security'|'reception'|'petition'|'opinion'|'project'|'inspection'|'merit'
+  targetValue: number;
+  rewardMerit: number;
+  rewardFavor: number;
+  penaltyMerit: number;
+  penaltyFavor: number;
+  deadlineDays: number; // 相对天数
+  urgency: TaskUrgency;
+}
+
+const TASK_TEMPLATES: TaskTemplate[] = [
+  // ── 经济指标类 (economic) ──
+  {
+    title: 'GDP增长指标完成',
+    description: '省委年度经济工作会议要求本辖区GDP指数达到60以上。增长不达标将影响年终考核评优，请统筹安排招商引资与项目推进工作。',
+    taskType: 'city', category: 'economic', targetValue: 60,
+    rewardMerit: 30, rewardFavor: 15, penaltyMerit: 20, penaltyFavor: 10,
+    deadlineDays: 365, urgency: 'normal',
+  },
+  {
+    title: '营商环境专项提升',
+    description: '省营商环境督导组将于近期来访，要求营商环境指数提升至65以上。请尽快落实"放管服"改革举措，减少审批环节。',
+    taskType: 'city', category: 'economic', targetValue: 65,
+    rewardMerit: 28, rewardFavor: 14, penaltyMerit: 18, penaltyFavor: 8,
+    deadlineDays: 270, urgency: 'important',
+  },
+  {
+    title: '财政收入目标',
+    description: '年度预算编制显示财政收入缺口较大，需通过强化税收征管、规范非税收入完成财政目标。请督促财政和税务部门落实。',
+    taskType: 'city', category: 'economic', targetValue: 58,
+    rewardMerit: 25, rewardFavor: 12, penaltyMerit: 15, penaltyFavor: 7,
+    deadlineDays: 365, urgency: 'normal',
+  },
+  // ── 民生工程类 (livelihood) ──
+  {
+    title: '民生满意度提升',
+    description: '第三方机构民意调查显示民生指数偏低，位列全省后三分之一。上级明确要求限期整改，重点在教育、医疗、住房保障方面发力。',
+    taskType: 'city', category: 'livelihood', targetValue: 60,
+    rewardMerit: 25, rewardFavor: 12, penaltyMerit: 15, penaltyFavor: 8,
+    deadlineDays: 365, urgency: 'normal',
+  },
+  {
+    title: '老旧小区改造工程',
+    description: '住建部门将城区老旧小区列为民生重点项目，要求在年底前完成改造并达到宜居标准，改善居民生活条件，提升民生满意度至62以上。',
+    taskType: 'city', category: 'livelihood', targetValue: 62,
+    rewardMerit: 22, rewardFavor: 10, penaltyMerit: 12, penaltyFavor: 6,
+    deadlineDays: 300, urgency: 'important',
+  },
+  // ── 治安维稳类 (security) ──
+  {
+    title: '治安专项整治',
+    description: '连续发生多起入室盗窃和街面寻衅滋事事件，群众安全感下降。上级部署专项整治，要求治安指数在90天内恢复至65以上。',
+    taskType: 'security', category: 'security', targetValue: 65,
+    rewardMerit: 20, rewardFavor: 10, penaltyMerit: 15, penaltyFavor: 8,
+    deadlineDays: 90, urgency: 'urgent',
+  },
+  {
+    title: '扫黑除恶专项行动',
+    description: '中央部署扫黑除恶专项行动，要求各地清除黑恶势力，摧毁地下势力保护伞，治安指数需提升至68以上，并提交专项报告。',
+    taskType: 'security', category: 'security', targetValue: 68,
+    rewardMerit: 30, rewardFavor: 15, penaltyMerit: 25, penaltyFavor: 12,
+    deadlineDays: 180, urgency: 'important',
+  },
+  // ── 接待调研类 (reception) ──
+  {
+    title: '迎接省级调研组',
+    description: '省委调研组定于下月初莅临检查，重点考察经济发展和营商环境。请做好汇报材料准备，确保重点指标达标，营造良好接待氛围。累计政绩须达50分。',
+    taskType: 'merit', category: 'reception', targetValue: 50,
+    rewardMerit: 35, rewardFavor: 20, penaltyMerit: 10, penaltyFavor: 15,
+    deadlineDays: 90, urgency: 'important',
+  },
+  {
+    title: '全国现场会承办',
+    description: '本辖区被确定为全国典型经验现场交流会举办地，需确保各项指标全面达标、接待工作万无一失。这是难得的亮相机会，政绩须达60分。',
+    taskType: 'merit', category: 'reception', targetValue: 60,
+    rewardMerit: 45, rewardFavor: 22, penaltyMerit: 20, penaltyFavor: 18,
+    deadlineDays: 120, urgency: 'urgent',
+  },
+  // ── 信访处置类 (petition) ──
+  {
+    title: '重点信访积案化解',
+    description: '信访局上报多起跨越三年以上的积案，上级已将其列为重点督查事项。要求在180天内将治安指数提升至62以上，从根源上减少信访产生。',
+    taskType: 'security', category: 'petition', targetValue: 62,
+    rewardMerit: 18, rewardFavor: 10, penaltyMerit: 20, penaltyFavor: 12,
+    deadlineDays: 180, urgency: 'important',
+  },
+  // ── 舆情管控类 (opinion) ──
+  {
+    title: '负面舆情应对处置',
+    description: '辖区一工厂排污事件被网络曝光，引发大量负面舆情，新闻媒体持续追踪。上级要求立即处置，限期治理，民生指数须恢复至58以上以平息民意。',
+    taskType: 'city', category: 'opinion', targetValue: 58,
+    rewardMerit: 20, rewardFavor: 12, penaltyMerit: 25, penaltyFavor: 15,
+    deadlineDays: 60, urgency: 'urgent',
+  },
+  // ── 项目推进类 (project) ──
+  {
+    title: '重点项目年底开工',
+    description: '纳入省重点项目名单的基础设施工程须在年底前开工建设，请协调国土、住建、环保等部门加快审批，推进征地拆迁工作，确保GDP增长目标。',
+    taskType: 'city', category: 'project', targetValue: 63,
+    rewardMerit: 32, rewardFavor: 16, penaltyMerit: 20, penaltyFavor: 10,
+    deadlineDays: 330, urgency: 'normal',
+  },
+  {
+    title: '产业园区招商引资',
+    description: '开发区管委会完成基础设施建设，现阶段核心任务是招商引资。上级要求在年内引进有效项目，推动园区GDP指数提升至65以上。',
+    taskType: 'city', category: 'project', targetValue: 65,
+    rewardMerit: 28, rewardFavor: 14, penaltyMerit: 15, penaltyFavor: 8,
+    deadlineDays: 365, urgency: 'normal',
+  },
+  // ── 巡视配合类 (inspection) ──
+  {
+    title: '配合中央巡视组工作',
+    description: '中央巡视组已进驻，要求领导干部如实提供材料并接受约谈。这是政治上的重要考验，须保持高政绩分值展示执政成效，政绩须达55分。',
+    taskType: 'merit', category: 'inspection', targetValue: 55,
+    rewardMerit: 40, rewardFavor: 18, penaltyMerit: 30, penaltyFavor: 20,
+    deadlineDays: 90, urgency: 'urgent',
+  },
+  {
+    title: '年度政绩综合考核',
+    description: '年度领导干部综合考核即将启动，组织部门将全面评估政绩。须积累足够的政绩值（≥50）以获得优秀评级，进入晋升考察序列。',
+    taskType: 'merit', category: 'merit', targetValue: 50,
+    rewardMerit: 35, rewardFavor: 18, penaltyMerit: 15, penaltyFavor: 10,
+    deadlineDays: 365, urgency: 'normal',
+  },
+  {
+    title: '环保督察整改落实',
+    description: '省环保督察组反馈整改意见，要求在120天内完成涉及大气、水质、土壤污染的整改任务，并提交书面整改报告。城市综合指数须提升至62。',
+    taskType: 'city', category: 'inspection', targetValue: 62,
+    rewardMerit: 25, rewardFavor: 13, penaltyMerit: 30, penaltyFavor: 18,
+    deadlineDays: 120, urgency: 'urgent',
+  },
+];
+
+export async function initBossTasks(saveId: string, userId: string) {
+  // 初始给三级上司各分配1~2个任务
+  const templates = [
+    { ...TASK_TEMPLATES[0], bossLevel: 1, gameDays: 0 },
+    { ...TASK_TEMPLATES[3], bossLevel: 1, gameDays: 0 },
+    { ...TASK_TEMPLATES[5], bossLevel: 2, gameDays: 0 },
+    { ...TASK_TEMPLATES[14], bossLevel: 3, gameDays: 0 },
+  ];
+  const tasks = templates.map((t) => ({
+    save_id: saveId,
+    user_id: userId,
+    title: t.title,
+    description: t.description,
+    task_type: t.taskType,
+    target_value: t.targetValue,
+    current_value: 0,
+    reward_merit: t.rewardMerit,
+    reward_favor: t.rewardFavor,
+    penalty_merit: t.penaltyMerit,
+    penalty_favor: t.penaltyFavor,
+    status: 'active',
+    deadline_days: t.deadlineDays,
+    created_day: 0,
+    boss_level: t.bossLevel,
+    is_postponed: false,
+    urgency: t.urgency,
+  }));
+  await supabase.from('boss_tasks').insert(tasks);
+}
+
+export async function getBossTasks(saveId: string): Promise<BossTask[]> {
+  const { data, error } = await supabase
+    .from('boss_tasks')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: true });
+
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToBossTask);
+}
+
+export async function completeTask(taskId: string): Promise<boolean> {
+  const { error } = await supabase.from('boss_tasks').update({ status: 'completed' }).eq('id', taskId);
+  return !error;
+}
+
+// 申请减负：延期30天，标记已申请
+export async function postponeTask(taskId: string, extraDays: number): Promise<boolean> {
+  const { data: row } = await supabase.from('boss_tasks').select('deadline_days').eq('id', taskId).single();
+  if (!row) return false;
+  const newDeadline = (row.deadline_days as number) + extraDays;
+  const { error } = await supabase.from('boss_tasks').update({
+    deadline_days: newDeadline,
+    is_postponed: true,
+  }).eq('id', taskId);
+  return !error;
+}
+
+export async function addNewTask(saveId: string, userId: string, gameDays: number): Promise<void> {
+  const tpl = TASK_TEMPLATES[Math.floor(Math.random() * TASK_TEMPLATES.length)];
+  const bossLevel = Math.ceil(Math.random() * 3);
+  await supabase.from('boss_tasks').insert({
+    save_id: saveId,
+    user_id: userId,
+    title: tpl.title,
+    description: tpl.description,
+    task_type: tpl.taskType,
+    target_value: tpl.targetValue,
+    current_value: 0,
+    reward_merit: tpl.rewardMerit,
+    reward_favor: tpl.rewardFavor,
+    penalty_merit: tpl.penaltyMerit,
+    penalty_favor: tpl.penaltyFavor,
+    status: 'active',
+    deadline_days: gameDays + tpl.deadlineDays,
+    created_day: gameDays,
+    boss_level: bossLevel,
+    is_postponed: false,
+    urgency: tpl.urgency,
+  });
+}
+
+// ============ 上司关系互动 ============
+
+export interface BossInteraction {
+  id: string;
+  saveId: string;
+  bossLevel: number;
+  actionType: string; // 'report'|'consult'|'greet'
+  gameDay: number;
+  favorDelta: number;
+  createdAt: string;
+}
+
+/** 获取指定存档的上司互动记录（最近100条） */
+export async function getBossInteractions(saveId: string): Promise<BossInteraction[]> {
+  const { data, error } = await supabase
+    .from('boss_interactions')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('game_day', { ascending: false })
+    .limit(100);
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(r => ({
+    id: r.id as string,
+    saveId: r.save_id as string,
+    bossLevel: r.boss_level as number,
+    actionType: r.action_type as string,
+    gameDay: r.game_day as number,
+    favorDelta: r.favor_delta as number,
+    createdAt: r.created_at as string,
+  }));
+}
+
+/** 执行上司关系操作，返回实际好感度增量（0表示冷却中或精力不足） */
+export async function performBossAction(
+  saveId: string,
+  bossLevel: number,
+  actionType: 'report' | 'consult' | 'greet',
+  currentGameDay: number,
+  interactions: BossInteraction[],
+): Promise<number> {
+  const COOLDOWN = 30; // 冷却天数
+  const lastSame = interactions
+    .filter(i => i.bossLevel === bossLevel && i.actionType === actionType)
+    .sort((a, b) => b.gameDay - a.gameDay)[0];
+  if (lastSame && currentGameDay - lastSame.gameDay < COOLDOWN) return 0;
+
+  const BASE_FAVOR: Record<string, number> = { report: 5, consult: 8, greet: 3 };
+  const delta = BASE_FAVOR[actionType] ?? 3;
+
+  await supabase.from('boss_interactions').insert({
+    save_id: saveId,
+    boss_level: bossLevel,
+    action_type: actionType,
+    game_day: currentGameDay,
+    favor_delta: delta,
+  });
+  return delta;
+}
+
+// ============ 案件操作 ============
+
+const CASE_TEMPLATES = [
+  { title: '连环入室盗窃案', description: '城区多处居民楼发生入室盗窃，嫌疑人惯用相同手法，有组织作案迹象。居民恐慌，媒体关注。', caseType: 'criminal' as const, difficulty: 40, requiredPolice: 15, rewardMerit: 12, securityChange: 8 },
+  { title: '涉黄赌场端掉', description: '线报显示辖区某地下室长期经营赌场，参与人员众多，涉案金额较大。', caseType: 'criminal' as const, difficulty: 50, requiredPolice: 20, rewardMerit: 15, securityChange: 10 },
+  { title: '官员腐败举报查处', description: '纪委转来群众举报，某科级干部涉嫌收受贿赂，需配合调查。', caseType: 'corruption' as const, difficulty: 60, requiredPolice: 10, rewardMerit: 20, securityChange: 5 },
+  { title: '贩毒团伙打击', description: '情报部门掌握一处中转毒品的窝点线索，需要组织精干力量实施抓捕。', caseType: 'drug' as const, difficulty: 70, requiredPolice: 30, rewardMerit: 25, securityChange: 15 },
+  { title: '电信诈骗团伙侦破', description: '多名群众报案称遭受网络电信诈骗，受骗金额巨大，犯罪团伙藏匿于辖区。', caseType: 'fraud' as const, difficulty: 55, requiredPolice: 20, rewardMerit: 18, securityChange: 12 },
+  { title: '寻衅滋事团伙处置', description: '辖区内一帮社会闲散人员多次寻衅滋事，严重影响社会秩序。', caseType: 'criminal' as const, difficulty: 35, requiredPolice: 12, rewardMerit: 10, securityChange: 7 },
+];
+
+export async function initPoliceCases(saveId: string, userId: string, gameDays: number) {
+  const cases = CASE_TEMPLATES.slice(0, 4).map(c => ({
+    save_id: saveId,
+    user_id: userId,
+    title: c.title,
+    description: c.description,
+    case_type: c.caseType,
+    difficulty: c.difficulty,
+    required_police: c.requiredPolice,
+    reward_merit: c.rewardMerit,
+    security_change: c.securityChange,
+    status: 'pending',
+    created_day: gameDays,
+  }));
+  await supabase.from('police_cases').insert(cases);
+}
+
+export async function getPoliceCases(saveId: string): Promise<PoliceCase[]> {
+  const { data, error } = await supabase
+    .from('police_cases')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToPoliceCase);
+}
+
+export async function solveCase(caseId: string, gameDays: number): Promise<boolean> {
+  const { error } = await supabase
+    .from('police_cases')
+    .update({ status: 'solved', solved_day: gameDays })
+    .eq('id', caseId);
+  return !error;
+}
+
+export async function addNewCases(saveId: string, userId: string, gameDays: number): Promise<void> {
+  const indices = Array.from({ length: CASE_TEMPLATES.length }, (_, i) => i)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 2);
+
+  const cases = indices.map(i => ({
+    save_id: saveId,
+    user_id: userId,
+    title: CASE_TEMPLATES[i].title,
+    description: CASE_TEMPLATES[i].description,
+    case_type: CASE_TEMPLATES[i].caseType,
+    difficulty: CASE_TEMPLATES[i].difficulty,
+    required_police: CASE_TEMPLATES[i].requiredPolice,
+    reward_merit: CASE_TEMPLATES[i].rewardMerit,
+    security_change: CASE_TEMPLATES[i].securityChange,
+    status: 'pending',
+    created_day: gameDays,
+  }));
+  await supabase.from('police_cases').insert(cases);
+}
+
+// ============ 事件记录 ============
+
+export async function saveEventRecord(record: Omit<EventRecord, 'id' | 'createdAt'>): Promise<boolean> {
+  const { error } = await supabase.from('event_records').insert({
+    save_id: record.saveId,
+    user_id: record.userId,
+    event_type: record.eventType,
+    title: record.title,
+    description: record.description,
+    choice_index: record.choiceIndex,
+    choice_text: record.choiceText,
+    merit_change: record.meritChange,
+    moral_change: record.moralChange,
+    gdp_change: record.gdpChange,
+    livelihood_change: record.livelihoodChange,
+    ecology_change: record.ecologyChange,
+    business_change: record.businessChange,
+    game_day: record.gameDay,
+  });
+  return !error;
+}
+
+// ============ 家庭成员操作 ============
+
+function rowToFamilyMember(row: Record<string, unknown>): FamilyMember {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    memberType: row.member_type as FamilyMember['memberType'],
+    name: row.name as string,
+    gender: (row.gender as string) ?? '男',
+    birthDay: (row.birth_day as number) ?? 0,
+    personality: (row.personality as string) ?? '温和',
+    job: (row.job as string) ?? '教师',
+    studyScore: (row.study_score as number) ?? 50,
+    healthScore: (row.health_score as number) ?? 80,
+    moralScore: (row.moral_score as number) ?? 80,
+    isAdult: (row.is_adult as boolean) ?? false,
+    adultPath: row.adult_path as string | null,
+    createdAt: row.created_at as string,
+  };
+}
+
+export async function getFamilyMembers(saveId: string): Promise<FamilyMember[]> {
+  const { data, error } = await supabase
+    .from('family_members')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: true });
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToFamilyMember);
+}
+
+const SPOUSE_PERSONALITIES = ['温和', '贤惠', '开朗', '理性', '独立', '体贴', '直爽', '睿智'];
+const SPOUSE_JOBS_FEMALE = ['教师', '医生', '工程师', '公务员', '企业职员', '律师', '会计师', '护士'];
+const SPOUSE_JOBS_MALE = ['教师', '医生', '工程师', '公务员', '企业管理', '律师', '警察', '教授'];
+
+export async function addSpouse(saveId: string, userId: string, name: string, gender: string, gameDays: number): Promise<FamilyMember | null> {
+  const personality = SPOUSE_PERSONALITIES[Math.floor(Math.random() * SPOUSE_PERSONALITIES.length)];
+  const jobPool = gender === '女' ? SPOUSE_JOBS_FEMALE : SPOUSE_JOBS_MALE;
+  const job = jobPool[Math.floor(Math.random() * jobPool.length)];
+  const { data, error } = await supabase
+    .from('family_members')
+    .insert({
+      save_id: saveId,
+      user_id: userId,
+      member_type: 'spouse',
+      name,
+      gender,
+      birth_day: gameDays - 365 * (20 + Math.floor(Math.random() * 8)),
+      personality,
+      job,
+      study_score: 50,
+      health_score: 85,
+      moral_score: 80,
+      is_adult: true,
+    })
+    .select('*')
+    .single();
+  if (error || !data) return null;
+  return rowToFamilyMember(data as Record<string, unknown>);
+}
+
+const CHILD_NAMES_MALE = ['子轩', '浩然', '明睿', '文博', '宇航', '泽宇', '志远', '嘉豪'];
+const CHILD_NAMES_FEMALE = ['思雨', '雨欣', '晓彤', '梦琪', '若曦', '佳颖', '静怡', '雪儿'];
+
+export async function addChild(saveId: string, userId: string, gender: string, gameDays: number, familyName: string): Promise<FamilyMember | null> {
+  const namePool = gender === '女' ? CHILD_NAMES_FEMALE : CHILD_NAMES_MALE;
+  const childName = familyName + namePool[Math.floor(Math.random() * namePool.length)];
+  const { data, error } = await supabase
+    .from('family_members')
+    .insert({
+      save_id: saveId,
+      user_id: userId,
+      member_type: 'child',
+      name: childName,
+      gender,
+      birth_day: gameDays,
+      personality: SPOUSE_PERSONALITIES[Math.floor(Math.random() * SPOUSE_PERSONALITIES.length)],
+      job: '学生',
+      study_score: 50,
+      health_score: 90,
+      moral_score: 80,
+      is_adult: false,
+    })
+    .select('*')
+    .single();
+  if (error || !data) return null;
+  return rowToFamilyMember(data as Record<string, unknown>);
+}
+
+export async function updateFamilyMember(memberId: string, updates: Partial<{
+  studyScore: number;
+  healthScore: number;
+  moralScore: number;
+  isAdult: boolean;
+  adultPath: string;
+  job: string;
+}>): Promise<boolean> {
+  const dbUp: Record<string, unknown> = {};
+  if (updates.studyScore !== undefined) dbUp.study_score = updates.studyScore;
+  if (updates.healthScore !== undefined) dbUp.health_score = updates.healthScore;
+  if (updates.moralScore !== undefined) dbUp.moral_score = updates.moralScore;
+  if (updates.isAdult !== undefined) dbUp.is_adult = updates.isAdult;
+  if (updates.adultPath !== undefined) dbUp.adult_path = updates.adultPath;
+  if (updates.job !== undefined) dbUp.job = updates.job;
+  const { error } = await supabase.from('family_members').update(dbUp).eq('id', memberId);
+  return !error;
+}
+
+// ============ 建设项目 ============
+function rowToBuildProject(row: Record<string, unknown>): import('@/types/game').BuildProject {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    name: row.name as string,
+    category: row.category as import('@/types/game').BuildCategory,
+    costMerit: (row.cost_merit as number) ?? 0,
+    costFund: (row.cost_fund as number) ?? 0,
+    durationDays: row.duration_days as number,
+    startDay: row.start_day as number,
+    finishDay: row.finish_day as number,
+    status: row.status as 'building' | 'done',
+    effectType: row.effect_type as import('@/types/game').EffectType,
+    effectValue: row.effect_value as number,
+    meritReward: row.merit_reward as number,
+    createdAt: row.created_at as string,
+  };
+}
+
+export async function getBuildProjects(saveId: string): Promise<import('@/types/game').BuildProject[]> {
+  const { data, error } = await supabase
+    .from('construction_projects')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: false });
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToBuildProject);
+}
+
+export async function startBuildProject(
+  saveId: string, userId: string, gameDays: number,
+  tpl: import('@/types/game').BuildProjectTemplate
+): Promise<import('@/types/game').BuildProject | null> {
+  const { data, error } = await supabase
+    .from('construction_projects')
+    .insert({
+      save_id: saveId,
+      user_id: userId,
+      name: tpl.name,
+      category: tpl.category,
+      cost_merit: 0,
+      cost_fund: tpl.costFund,
+      duration_days: tpl.durationDays,
+      start_day: gameDays,
+      finish_day: gameDays + tpl.durationDays,
+      status: 'building',
+      effect_type: tpl.effectType,
+      effect_value: tpl.effectValue,
+      merit_reward: tpl.meritReward,
+    })
+    .select('*')
+    .single();
+  if (error || !data) return null;
+  return rowToBuildProject(data as Record<string, unknown>);
+}
+
+export async function completeBuildProjects(saveId: string, gameDays: number): Promise<import('@/types/game').BuildProject[]> {
+  // 查找到期项目
+  const { data, error } = await supabase
+    .from('construction_projects')
+    .select('*')
+    .eq('save_id', saveId)
+    .eq('status', 'building')
+    .lte('finish_day', gameDays);
+  if (error || !data || data.length === 0) return [];
+  const projects = (data as Record<string, unknown>[]).map(rowToBuildProject);
+  const ids = projects.map(p => p.id);
+  await supabase.from('construction_projects').update({ status: 'done' }).in('id', ids);
+  return projects;
+}
+
+// ============ 管辖区域 ============
+function rowToArea(row: Record<string, unknown>): import('@/types/game').GoverningArea {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    areaName: row.area_name as string,
+    areaType: row.area_type as 'town' | 'district',
+    devIndex: row.dev_index as number,
+    favorIndex: row.favor_index as number,
+    lastVisitedDay: row.last_visited_day as number,
+    lastInvestedDay: row.last_invested_day as number,
+    createdAt: row.created_at as string,
+  };
+}
+
+export async function getGoverningAreas(saveId: string): Promise<import('@/types/game').GoverningArea[]> {
+  const { data, error } = await supabase
+    .from('governing_areas')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: true });
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(rowToArea);
+}
+
+export async function initGoverningAreas(
+  saveId: string, userId: string,
+  areas: { name: string; type: 'village' | 'town' | 'district' | 'city_level' }[]
+): Promise<boolean> {
+  // 先清空旧区域
+  await supabase.from('governing_areas').delete().eq('save_id', saveId);
+  if (areas.length === 0) return true;
+  const rows = areas.map(a => ({
+    save_id: saveId,
+    user_id: userId,
+    area_name: a.name,
+    area_type: a.type,
+    dev_index: 40 + Math.floor(Math.random() * 30),
+    favor_index: 40 + Math.floor(Math.random() * 30),
+    last_visited_day: 0,
+    last_invested_day: 0,
+  }));
+  const { error } = await supabase.from('governing_areas').insert(rows);
+  return !error;
+}
+
+export async function investArea(areaId: string, devDelta: number): Promise<boolean> {
+  const { data } = await supabase.from('governing_areas').select('dev_index').eq('id', areaId).single();
+  if (!data) return false;
+  const newVal = Math.min(100, (data as Record<string, number>).dev_index + devDelta);
+  const { error } = await supabase.from('governing_areas').update({ dev_index: newVal, last_invested_day: 0 }).eq('id', areaId);
+  return !error;
+}
+
+export async function visitArea(areaId: string, visitDay: number, favorDelta: number): Promise<boolean> {
+  const { data } = await supabase.from('governing_areas').select('favor_index').eq('id', areaId).single();
+  if (!data) return false;
+  const newFavor = Math.min(100, (data as Record<string, number>).favor_index + favorDelta);
+  const { error } = await supabase.from('governing_areas').update({ favor_index: newFavor, last_visited_day: visitDay }).eq('id', areaId);
+  return !error;
+}
+
+export async function updateAreaDevIndex(areaId: string, gameDays: number): Promise<void> {
+  await supabase.from('governing_areas').update({ last_invested_day: gameDays }).eq('id', areaId);
+}
+
+// ============ 补充下属至职级上限 ============
+export async function supplementSubordinates(
+  saveId: string, userId: string, rankLevel: number, currentCount: number
+): Promise<number> {
+  const { SUBORDINATE_LIMIT } = await import('@/types/game');
+  const limit = SUBORDINATE_LIMIT[rankLevel] ?? 5;
+  const needed = limit - currentCount;
+  if (needed <= 0) return 0;
+
+  // 复用顶部扩充的名字池（与 initSubordinates 共享）
+  const NAMES_MALE = SUBORDINATE_NAMES_MALE;
+  const NAMES_FEMALE = SUBORDINATE_NAMES_FEMALE;
+  const POSITIONS = ['副科长', '科员', '主任科员', '副主任', '主任', '办公室主任', '专员', '副处长', '处长'];
+
+  // 拿库中已有名字，防止与已有下属重名
+  const { data: existingRows } = await supabase
+    .from('subordinates')
+    .select('name')
+    .eq('save_id', saveId);
+  const _usedNames = new Set<string>((existingRows ?? []).map((r: Record<string, unknown>) => r.name as string));
+
+  // 按玩家职级生成现实合理的下属初始职级：以 rankLevel-2 为基础，分布到 [rankLevel-3, rankLevel-1]
+  // 例如玩家 rank6（县委书记）→ 下属主要在 3-5 级（正科～正处）
+  const subLevelBase = Math.max(1, rankLevel - 2);
+  const genSubLevel = () => {
+    const r = Math.random();
+    if (r < 0.5) return subLevelBase;                          // 50% 中间层
+    if (r < 0.80) return Math.max(1, subLevelBase - 1);       // 30% 低一级
+    return Math.min(12, subLevelBase + 1);                     // 20% 高一级
+  };
+
+  const rows = Array.from({ length: needed }, () => {
+    const isMale = Math.random() > 0.45;
+    const names = isMale ? NAMES_MALE : NAMES_FEMALE;
+    let name = names[Math.floor(Math.random() * names.length)];
+    for (let _r = 0; _r < 60 && _usedNames.has(name); _r++) {
+      name = names[Math.floor(Math.random() * names.length)];
+    }
+    _usedNames.add(name);
+    return {
+      save_id: saveId,
+      user_id: userId,
+      name,
+      position: POSITIONS[Math.floor(Math.random() * POSITIONS.length)],
+      role: '普通干部',
+      avatar_id: Math.floor(Math.random() * 6),
+      gender: isMale ? '男' : '女',
+      ability: 40 + Math.floor(Math.random() * 30),
+      loyalty: 40 + Math.floor(Math.random() * 30),
+      integrity: 50 + Math.floor(Math.random() * 30),
+      experience: 10 + Math.floor(Math.random() * 30),
+      sub_level: genSubLevel(),  // ← 按玩家职级生成现实职级
+      is_appointed: false,
+      appointed_role: null,
+      appointed_dept: null,
+      dept_position: 'head',
+      transferred_city: null,
+      last_assessed_day: 0,
+    };
+  });
+
+  await supabase.from('subordinates').insert(rows);
+  return needed;
+}
+
+// ============ 招募候选人 ============
+function rowToRecruit(row: Record<string, unknown>): RecruitCandidate {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    yearKey: row.year_key as number,
+    name: row.name as string,
+    gender: (row.gender as string) ?? '男',
+    avatarId: (row.avatar_id as number) ?? 0,
+    ability: row.ability as number,
+    loyalty: row.loyalty as number,
+    integrity: row.integrity as number,
+    experience: row.experience as number,
+    trait: (row.trait as string) ?? '',
+    rankOrder: (row.rank_order as number) ?? null,
+    status: (row.status as RecruitCandidate['status']) ?? 'pending',
+    createdAt: row.created_at as string,
+    // ── 个人档案 ──────────────────────────────────────────────────
+    birthYear: (row.birth_year as number) ?? null,
+    university: (row.university as string) ?? null,
+    major: (row.major as string) ?? null,
+    hometown: (row.hometown as string) ?? null,
+    score: (row.score as number) ?? null,
+  };
+}
+
+const RECRUIT_NAMES_MALE = ['刘海', '陈磊', '王建国', '赵兴', '孙鹏', '李博', '张浩', '周翔', '吴杰', '郑刚', '钱志远', '冯磊'];
+const RECRUIT_NAMES_FEMALE = ['刘慧', '陈雪', '王晓燕', '赵婷', '孙丽', '李萍', '张婧', '周雅', '吴敏', '郑静'];
+
+export async function getOrCreateRecruitCandidates(
+  saveId: string, userId: string, yearKey: number
+): Promise<RecruitCandidate[]> {
+  // 查询当年候选人
+  const { data: existing } = await supabase
+    .from('recruit_candidates')
+    .select('*')
+    .eq('save_id', saveId)
+    .eq('year_key', yearKey)
+    .order('created_at', { ascending: true });
+  if (existing && existing.length > 0) return (existing as Record<string, unknown>[]).map(rowToRecruit);
+
+  // 生成10名候选人
+  const rows = Array.from({ length: 10 }, () => {
+    const isMale = Math.random() > 0.4;
+    const names = isMale ? RECRUIT_NAMES_MALE : RECRUIT_NAMES_FEMALE;
+    const name = names[Math.floor(Math.random() * names.length)];
+    const trait = SUB_TRAITS[Math.floor(Math.random() * SUB_TRAITS.length)];
+    return {
+      save_id: saveId,
+      user_id: userId,
+      year_key: yearKey,
+      name,
+      gender: isMale ? '男' : '女',
+      avatar_id: Math.floor(Math.random() * 8),
+      ability: 45 + Math.floor(Math.random() * 40),
+      loyalty: 50 + Math.floor(Math.random() * 35),
+      integrity: 50 + Math.floor(Math.random() * 35),
+      experience: 15 + Math.floor(Math.random() * 35),
+      trait,
+      rank_order: null,
+      status: 'pending',
+    };
+  });
+  const { data: created } = await supabase.from('recruit_candidates').insert(rows).select('*');
+  if (!created) return [];
+  return (created as Record<string, unknown>[]).map(rowToRecruit);
+}
+
+export async function selectRecruit(candidateId: string, rankOrder: number): Promise<boolean> {
+  const { error } = await supabase
+    .from('recruit_candidates')
+    .update({ status: 'selected', rank_order: rankOrder })
+    .eq('id', candidateId);
+  return !error;
+}
+
+export async function dismissRecruit(candidateId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('recruit_candidates')
+    .update({ status: 'dismissed', rank_order: null })
+    .eq('id', candidateId);
+  return !error;
+}
+
+// 确认招募：将选中的候选人加入下属列表，最多3名，自动分配到编制空缺部门
+export async function confirmRecruits(
+  saveId: string, userId: string, yearKey: number
+): Promise<{ count: number; assignments: { name: string; dept: string; position: string }[] }> {
+  const { data } = await supabase
+    .from('recruit_candidates')
+    .select('*')
+    .eq('save_id', saveId)
+    .eq('year_key', yearKey)
+    .eq('status', 'selected')
+    .order('rank_order', { ascending: true })
+    .limit(3);
+  if (!data || data.length === 0) return { count: 0, assignments: [] };
+
+  const rows = (data as Record<string, unknown>[]).map(r => ({
+    save_id: saveId,
+    user_id: userId,
+    name: r.name,
+    position: '待分配',
+    role: '新录用干部',
+    avatar_id: r.avatar_id,
+    gender: r.gender,
+    ability: r.ability,
+    loyalty: r.loyalty,
+    integrity: r.integrity,
+    experience: r.experience,
+    sub_level: 1, // 新录用公务员从科员级(1)起步
+    is_appointed: false,
+    appointed_role: null,
+    appointed_dept: null,
+    dept_position: 'deputy',
+    transferred_city: null,
+    last_assessed_day: 0,
+  }));
+
+  const { data: inserted } = await supabase.from('subordinates').insert(rows).select('id');
+  const newIds = (inserted ?? []).map((r: Record<string, unknown>) => r.id as string);
+
+  // 自动分配到编制最空缺的部门
+  const assignments = await autoAssignNewRecruits(saveId, newIds);
+
+  // 标记本批次已完成招募
+  await supabase
+    .from('recruit_candidates')
+    .update({ status: 'dismissed' })
+    .eq('save_id', saveId)
+    .eq('year_key', yearKey);
+  // 更新 player_saves.last_recruit_quarter
+  await supabase
+    .from('player_saves')
+    .update({ last_recruit_quarter: yearKey })
+    .eq('id', saveId);
+  return { count: rows.length, assignments };
+}
+
+// ============ 下属拜访 ============
+// 随机触发：选一个高忠诚度下属拜访
+export async function triggerSubVisit(saveId: string): Promise<{ subId: string; subName: string } | null> {
+  const { data } = await supabase
+    .from('subordinates')
+    .select('id, name, loyalty')
+    .eq('save_id', saveId)
+    .gte('loyalty', 60)
+    .order('loyalty', { ascending: false })
+    .limit(10);
+  if (!data || data.length === 0) return null;
+  const pool = data as { id: string; name: string; loyalty: number }[];
+  const picked = pool[Math.floor(Math.random() * Math.min(pool.length, 5))];
+  return { subId: picked.id, subName: picked.name };
+}
+
+// 响应拜访：增加忠诚度+好感度
+export async function resolveSubVisit(
+  saveId: string, subId: string, accept: boolean
+): Promise<void> {
+  if (accept) {
+    const { data } = await supabase.from('subordinates').select('loyalty').eq('id', subId).maybeSingle();
+    if (data) {
+      const row = data as { loyalty: number };
+      await supabase.from('subordinates').update({
+        loyalty: Math.min(100, row.loyalty + 8),
+      }).eq('id', subId);
+    }
+  }
+  await supabase.from('player_saves').update({
+    sub_visit_pending: false,
+    sub_visit_sub_id: null,
+    sub_visit_sub_name: null,
+  }).eq('id', saveId);
+}
+
+// ============ 年度考核（按能力高低分级不合格率）============
+// 能力<70 → 20%不合格；能力>=70 → 5%不合格；调任下属不参与
+export async function runAnnualSubAssessment(saveId: string, currentDay: number): Promise<{
+  failed: string[]; passed: string[];
+}> {
+  const { data } = await supabase
+    .from('subordinates')
+    .select('id, name, ability, integrity, experience')
+    .eq('save_id', saveId)
+    .is('transferred_city', null);
+  if (!data) return { failed: [], passed: [] };
+
+  const rows = data as { id: string; name: string; ability: number; integrity: number; experience: number }[];
+  const failed: string[] = [];
+  const passed: string[] = [];
+
+  for (const sub of rows) {
+    // 不合格概率：能力低70% → 20%；能力高 → 5%
+    const failRate = sub.ability < 70 ? 0.20 : 0.05;
+    const isFail = Math.random() < failRate;
+    if (isFail) {
+      failed.push(sub.name);
+      // 不合格：能力-5，经验-3
+      await supabase.from('subordinates').update({
+        ability: Math.max(0, sub.ability - 5),
+        experience: Math.max(0, sub.experience - 3),
+        last_assessed_day: currentDay,
+      }).eq('id', sub.id);
+    } else {
+      passed.push(sub.name);
+      // 合格：经验+3
+      await supabase.from('subordinates').update({
+        experience: Math.min(100, sub.experience + 3),
+        last_assessed_day: currentDay,
+      }).eq('id', sub.id);
+    }
+  }
+  return { failed, passed };
+}
+
+// ============ 删除存档 ============
+export async function deleteSave(saveId: string): Promise<boolean> {
+  // 按依赖顺序删除关联数据
+  await supabase.from('recruit_candidates').delete().eq('save_id', saveId);
+  await supabase.from('welfare_actions').delete().eq('save_id', saveId);
+  await supabase.from('city_finance').delete().eq('save_id', saveId);
+  await supabase.from('secretary').delete().eq('save_id', saveId);
+  await supabase.from('monthly_meetings').delete().eq('save_id', saveId);
+  await supabase.from('governing_areas').delete().eq('save_id', saveId);
+  await supabase.from('build_projects').delete().eq('save_id', saveId);
+  await supabase.from('family_members').delete().eq('save_id', saveId);
+  await supabase.from('police_cases').delete().eq('save_id', saveId);
+  await supabase.from('events').delete().eq('save_id', saveId);
+  await supabase.from('boss_tasks').delete().eq('save_id', saveId);
+  await supabase.from('subordinates').delete().eq('save_id', saveId);
+  const { error } = await supabase.from('player_saves').delete().eq('id', saveId);
+  return !error;
+}
+function rowToMeeting(row: Record<string, unknown>): MonthlyMeeting {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    monthKey: row.month_key as string,
+    heldDay: row.held_day as number,
+    tasks: (row.tasks as MeetingTask[]) ?? [],
+    createdAt: row.created_at as string,
+  };
+}
+
+export async function getMeetingByMonth(saveId: string, monthKey: string): Promise<MonthlyMeeting | null> {
+  const { data } = await supabase
+    .from('monthly_meetings')
+    .select('*')
+    .eq('save_id', saveId)
+    .eq('month_key', monthKey)
+    .maybeSingle();
+  if (!data) return null;
+  return rowToMeeting(data as Record<string, unknown>);
+}
+
+export async function createMeeting(saveId: string, userId: string, monthKey: string, heldDay: number, tasks: MeetingTask[]): Promise<MonthlyMeeting | null> {
+  const { data, error } = await supabase
+    .from('monthly_meetings')
+    .insert({ save_id: saveId, user_id: userId, month_key: monthKey, held_day: heldDay, tasks })
+    .select('*')
+    .single();
+  if (error || !data) return null;
+  return rowToMeeting(data as Record<string, unknown>);
+}
+
+export async function getRecentMeetings(saveId: string, limit = 6): Promise<MonthlyMeeting[]> {
+  const { data } = await supabase
+    .from('monthly_meetings')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('held_day', { ascending: false })
+    .limit(limit);
+  if (!data) return [];
+  return (data as Record<string, unknown>[]).map(rowToMeeting);
+}
+
+// 检查会议KPI任务完成情况（推进时间时调用）
+export async function resolveMeetingTasks(saveId: string, gameDays: number): Promise<{ meritBonus: number; failedSubIds: string[] }> {
+  const { data } = await supabase
+    .from('monthly_meetings')
+    .select('*')
+    .eq('save_id', saveId);
+  if (!data || data.length === 0) return { meritBonus: 0, failedSubIds: [] };
+
+  let meritBonus = 0;
+  const failedSubIds: string[] = [];
+
+  for (const row of data as Record<string, unknown>[]) {
+    const meeting = rowToMeeting(row);
+    let changed = false;
+    const updatedTasks = meeting.tasks.map(t => {
+      if (t.status !== 'pending') return t;
+      if (gameDays >= t.deadlineDay) {
+        // 简单模拟：60%概率完成
+        const done = Math.random() < 0.6;
+        changed = true;
+        if (done) {
+          meritBonus += t.targetValue * 2;
+          return { ...t, status: 'done' as const, completedDay: gameDays };
+        } else {
+          failedSubIds.push(t.subordinateId);
+          return { ...t, status: 'failed' as const, completedDay: null };
+        }
+      }
+      return t;
+    });
+    if (changed) {
+      await supabase.from('monthly_meetings').update({ tasks: updatedTasks }).eq('id', meeting.id);
+    }
+  }
+  return { meritBonus, failedSubIds };
+}
+
+// ============ 秘书 ============
+function rowToSecretary(row: Record<string, unknown>): Secretary {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    name: row.name as string,
+    avatarId: (row.avatar_id as number) ?? 1,
+    ability: (row.ability as number) ?? 60,
+    lastDocworkDay: (row.last_docwork_day as number) ?? 0,
+    dailySchedule: row.daily_schedule as string | null,
+    createdAt: row.created_at as string,
+    subId: (row.sub_id as string) ?? null,
+    isAppointed: (row.is_appointed as boolean) ?? false,
+  };
+}
+
+export async function getOrCreateSecretary(saveId: string, userId: string): Promise<Secretary | null> {
+  const { data: existing } = await supabase
+    .from('secretary')
+    .select('*')
+    .eq('save_id', saveId)
+    .maybeSingle();
+  if (existing) {
+    const sec = rowToSecretary(existing as Record<string, unknown>);
+    // 兼容旧存档：迁移前自动生成的 NPC 秘书（ability>0 且非待任命占位）自动升级为已任命
+    if (!sec.isAppointed && sec.ability > 0 && sec.name !== '（待任命）') {
+      await supabase.from('secretary').update({ is_appointed: true }).eq('id', sec.id);
+      sec.isAppointed = true;
+    }
+    return sec;
+  }
+
+  // 未有记录时创建待任命占位
+  const { data, error } = await supabase
+    .from('secretary')
+    .insert({ save_id: saveId, user_id: userId, name: '（待任命）', avatar_id: 1, ability: 0, is_appointed: false })
+    .select('*')
+    .single();
+  if (error || !data) return null;
+  return rowToSecretary(data as Record<string, unknown>);
+}
+
+/** 任命某下属为专属秘书 */
+export async function appointSubAsSecretary(
+  saveId: string, sub: { id: string; name: string; avatarId: number; ability: number }
+): Promise<boolean> {
+  // 更新secretary行，绑定该下属
+  const { error } = await supabase
+    .from('secretary')
+    .update({
+      sub_id: sub.id,
+      name: sub.name,
+      avatar_id: sub.avatarId,
+      ability: Math.min(sub.ability, 100),
+      is_appointed: true,
+    })
+    .eq('save_id', saveId);
+  if (error) return false;
+  // 同步更新下属岗位标注
+  await supabase
+    .from('subordinates')
+    .update({ appointed_role: '专属秘书', is_appointed: true })
+    .eq('id', sub.id);
+  return true;
+}
+
+/** 解除秘书任命（还原为待任命状态）*/
+export async function recallSecretary(saveId: string, subId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('secretary')
+    .update({ sub_id: null, name: '（待任命）', avatar_id: 1, ability: 0, is_appointed: false })
+    .eq('save_id', saveId);
+  if (error) return false;
+  // 解除下属的秘书岗位标注
+  await supabase
+    .from('subordinates')
+    .update({ appointed_role: null, is_appointed: false })
+    .eq('id', subId);
+  return true;
+}
+
+export async function doDocwork(secretaryId: string, gameDays: number): Promise<{ meritGain: number } | null> {
+  const { data } = await supabase.from('secretary').select('ability,last_docwork_day').eq('id', secretaryId).maybeSingle();
+  if (!data) return null;
+  const row = data as Record<string, unknown>;
+  const ability = (row.ability as number) ?? 60;
+  if (ability < 20) return null; // 能力不足
+  const gain = 5 + Math.floor(ability / 20);
+  const newAbility = Math.max(10, ability - 10); // 整理公文消耗能力值
+  await supabase.from('secretary').update({ ability: newAbility, last_docwork_day: gameDays }).eq('id', secretaryId);
+  return { meritGain: gain };
+}
+
+export async function updateSecretarySchedule(secretaryId: string, schedule: string): Promise<boolean> {
+  const { error } = await supabase.from('secretary').update({ daily_schedule: schedule }).eq('id', secretaryId);
+  return !error;
+}
+
+export async function restoreSecretaryAbility(secretaryId: string): Promise<void> {
+  const { data } = await supabase.from('secretary').select('ability').eq('id', secretaryId).maybeSingle();
+  if (!data) return;
+  const ability = (data as Record<string, unknown>).ability as number;
+  if (ability < 100) {
+    await supabase.from('secretary').update({ ability: Math.min(100, ability + 5) }).eq('id', secretaryId);
+  }
+}
+
+// ============ 城市金融 ============
+function rowToFinance(row: Record<string, unknown>): CityFinance {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    userId: row.user_id as string,
+    fundBalance: (row.fund_balance as number) ?? 0,
+    debtTotal: (row.debt_total as number) ?? 0,
+    loans: (row.loans as LoanRecord[]) ?? [],
+    investments: (row.investments as InvestmentRecord[]) ?? [],
+    investGroupEstDay: row.invest_group_est_day as number | null,
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
+  };
+}
+
+export async function getOrCreateFinance(saveId: string, userId: string): Promise<CityFinance | null> {
+  const { data: existing } = await supabase
+    .from('city_finance')
+    .select('*')
+    .eq('save_id', saveId)
+    .maybeSingle();
+  if (existing) return rowToFinance(existing as Record<string, unknown>);
+
+  const { data, error } = await supabase
+    .from('city_finance')
+    .insert({ save_id: saveId, user_id: userId, fund_balance: 0, debt_total: 0, loans: [], investments: [] })
+    .select('*')
+    .single();
+  if (error || !data) return null;
+  return rowToFinance(data as Record<string, unknown>);
+}
+
+/** 直接扣减城市财政余额（万元单位，delta 为负数表示扣减）
+ *  player_saves.fund_balance 是月度结算的唯一权威来源，此处直接更新该表。
+ */
+export async function updateCityFinanceFund(saveId: string, deltaWan: number): Promise<boolean> {
+  const { data: row } = await supabase.from('player_saves').select('fund_balance').eq('id', saveId).maybeSingle();
+  if (!row) return false;
+  const current = (row.fund_balance as number) ?? 0;
+  const next = Math.max(0, current + deltaWan);
+  const { error } = await supabase.from('player_saves')
+    .update({ fund_balance: next, updated_at: new Date().toISOString() })
+    .eq('id', saveId);
+  return !error;
+}
+
+export async function applyLoan(saveId: string, loan: LoanRecord): Promise<boolean> {
+  const finance = await getOrCreateFinance(saveId, '');
+  if (!finance) return false;
+  const { data: row } = await supabase.from('city_finance').select('*').eq('save_id', saveId).maybeSingle();
+  if (!row) return false;
+  const current = rowToFinance(row as Record<string, unknown>);
+  const newLoans = [...current.loans, loan];
+  const newBalance = current.fundBalance + loan.amount;
+  const newDebt = current.debtTotal + loan.amount;
+  const { error } = await supabase.from('city_finance').update({ loans: newLoans, fund_balance: newBalance, debt_total: newDebt, updated_at: new Date().toISOString() }).eq('save_id', saveId);
+  return !error;
+}
+
+export async function startInvestment(saveId: string, inv: InvestmentRecord): Promise<boolean> {
+  const { data: row } = await supabase.from('city_finance').select('*').eq('save_id', saveId).maybeSingle();
+  if (!row) return false;
+  const current = rowToFinance(row as Record<string, unknown>);
+  if (current.fundBalance < inv.amount) return false;
+  const newInvs = [...current.investments, inv];
+  const newBalance = current.fundBalance - inv.amount;
+  const { error } = await supabase.from('city_finance').update({ investments: newInvs, fund_balance: newBalance, updated_at: new Date().toISOString() }).eq('save_id', saveId);
+  return !error;
+}
+
+export async function establishInvestGroup(saveId: string, gameDays: number): Promise<boolean> {
+  const { error } = await supabase.from('city_finance').update({ invest_group_est_day: gameDays, updated_at: new Date().toISOString() }).eq('save_id', saveId);
+  return !error;
+}
+
+// 每月处理贷款还款和到期投资（时间推进时调用）
+export async function processFinanceMonth(saveId: string, userId: string, gameDays: number): Promise<{ meritBonus: number; gdpBonus: number; bizBonus: number; liveBonus: number; ecoBonus: number; penaltyMerit: number }> {
+  const result = { meritBonus: 0, gdpBonus: 0, bizBonus: 0, liveBonus: 0, ecoBonus: 0, penaltyMerit: 0 };
+  const { data: row } = await supabase.from('city_finance').select('*').eq('save_id', saveId).maybeSingle();
+  if (!row) return result;
+  const finance = rowToFinance(row as Record<string, unknown>);
+
+  let newBalance = finance.fundBalance;
+  let newDebt = finance.debtTotal;
+  const updatedLoans = finance.loans.map(l => {
+    if (l.status !== 'active') return l;
+    if (gameDays >= l.dueDay) {
+      if (newBalance >= l.monthlyPay) {
+        newBalance -= l.monthlyPay;
+        newDebt = Math.max(0, newDebt - l.monthlyPay);
+        return { ...l, status: 'paid' as const };
+      } else {
+        result.penaltyMerit += 20; // 逾期罚款
+        return l;
+      }
+    }
+    // 正常月供
+    if (newBalance >= l.monthlyPay) {
+      newBalance -= l.monthlyPay;
+      newDebt = Math.max(0, newDebt - l.monthlyPay);
+    } else {
+      result.penaltyMerit += 5;
+    }
+    return l;
+  });
+
+  const updatedInvs = finance.investments.map(inv => {
+    if (inv.status !== 'running') return inv;
+    if (gameDays >= inv.endDay) {
+      result.meritBonus += 30;
+      if (inv.effectType === 'gdp') result.gdpBonus += inv.effectValue;
+      if (inv.effectType === 'business') result.bizBonus += inv.effectValue;
+      if (inv.effectType === 'livelihood') result.liveBonus += inv.effectValue;
+      if (inv.effectType === 'ecology') result.ecoBonus += inv.effectValue;
+      return { ...inv, status: 'done' as const };
+    }
+    return inv;
+  });
+
+  await supabase.from('city_finance').update({
+    fund_balance: newBalance, debt_total: newDebt,
+    loans: updatedLoans, investments: updatedInvs,
+    updated_at: new Date().toISOString(),
+  }).eq('save_id', saveId);
+  // 同步player_saves资金余额
+  await supabase.from('player_saves').update({ fund_balance: newBalance }).eq('id', saveId);
+  return result;
+}
+
+// ============ 民生操作 ============
+export async function doWelfareAction(
+  saveId: string, userId: string,
+  actionType: 'welfare' | 'education' | 'healthcare' | 'housing',
+  costMerit: number, effectValue: number, gameDays: number,
+  costFund = 0
+): Promise<boolean> {
+  const { error } = await supabase.from('welfare_actions').insert({
+    save_id: saveId, user_id: userId,
+    action_type: actionType, cost_merit: costMerit,
+    effect_value: effectValue, done_day: gameDays,
+    cost_fund: costFund,
+  });
+  return !error;
+}
+
+export interface WelfareRecord {
+  id: string;
+  actionType: string;
+  costMerit: number;
+  costFund: number;
+  effectValue: number;
+  doneDay: number;
+}
+
+export async function getWelfareHistory(saveId: string, limit = 5): Promise<WelfareRecord[]> {
+  const { data, error } = await supabase
+    .from('welfare_actions')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('done_day', { ascending: false })
+    .limit(limit);
+  if (error || !data) return [];
+  return (data as Record<string, unknown>[]).map(r => ({
+    id: r.id as string,
+    actionType: r.action_type as string,
+    costMerit: r.cost_merit as number,
+    costFund: (r.cost_fund as number) ?? 0,
+    effectValue: r.effect_value as number,
+    doneDay: r.done_day as number,
+  }));
+}
+
+// ============ 年度招募（每年2次：春招约第90天/国考批次 & 秋招约第270天/省考批次）============
+//
+// 现实依据：
+//   • 国家公务员考试（国考）：每年10-11月报名笔试，次年春季录用 → 游戏映射为第1批（前半年）
+//   • 省级公务员考试（省考）：每年3-4月笔试，5-6月面试录用 → 游戏映射为第2批（后半年）
+//   • 主管机构：人力资源和社会保障局（人社局）组织笔试，
+//               县/市/省委组织部负责政治考察与录用审批
+//   • rank 1-3（乡镇/科员级）：参加省考/国考，录用科员~副科级人员
+//   • rank 4-6（县级）：组织部统一分配科员~正科级人员（不再手动选择，改为自动录用并分配）
+//   • rank 7+：由上级组织部统筹分配，无需手动招募
+//
+// yearKey 编码：year * 10 + round（round=0春招, round=1秋招）
+
+/** 计算当前招募批次 key（year * 10 + round），每年2次：前半年0、后半年1 */
+export function getCurrentRecruitKey(gameDays: number): number {
+  const year = Math.floor(gameDays / 365);
+  const dayInYear = gameDays % 365;
+  const round = dayInYear < 182 ? 0 : 1; // 0=春招(国考), 1=秋招(省考)
+  return year * 10 + round;
+}
+
+/** 批次描述 */
+export function getRecruitRoundLabel(recruitKey: number): string {
+  const round = recruitKey % 10;
+  const year = Math.floor(recruitKey / 10);
+  return round === 0
+    ? `第${year + 1}年 · 春季招录（参照国家公务员考试）`
+    : `第${year + 1}年 · 秋季招录（参照省级公务员考试）`;
+}
+
+/** 候选人主管机构（按职级） */
+export function getRecruitOrg(rankLevel: number): string {
+  if (rankLevel <= 3) return '县委组织部 & 人社局';
+  if (rankLevel <= 6) return '市委组织部';
+  if (rankLevel <= 9) return '省委组织部';
+  return '中央组织部';
+}
+
+export async function getOrCreateQuarterCandidates(
+  saveId: string, userId: string, recruitKey: number, rankLevel = 3
+): Promise<RecruitCandidate[]> {
+  const { data: existing } = await supabase
+    .from('recruit_candidates')
+    .select('*')
+    .eq('save_id', saveId)
+    .eq('year_key', recruitKey)
+    .order('created_at', { ascending: true });
+  if (existing && existing.length > 0) return (existing as Record<string, unknown>[]).map(rowToRecruit);
+
+  // 候选人数：国考批次12人，省考批次8人
+  const isNationalExam = recruitKey % 10 === 0;
+  const count = isNationalExam ? 12 : 8;
+  // 游戏年份（用于推算出生年份）
+  const gameYear = Math.floor(recruitKey / 10) + 2000;
+
+  const EXTRA_NAMES_MALE = ['徐明', '许浩', '袁磊', '戴刚', '蒋辉', '沈俊', '程远', '卢凯', '潘锋'];
+  const EXTRA_NAMES_FEMALE = ['许晴', '袁雪', '戴婷', '蒋娜', '沈琪'];
+  const allMale = [...RECRUIT_NAMES_MALE, ...EXTRA_NAMES_MALE];
+  const allFemale = [...RECRUIT_NAMES_FEMALE, ...EXTRA_NAMES_FEMALE];
+
+  // 院校分层：985/211/普本/大专
+  const UNIV_985 = ['北京大学', '清华大学', '复旦大学', '中国人民大学', '武汉大学', '浙江大学', '南京大学', '中山大学', '吉林大学', '四川大学', '华中科技大学', '中南大学'];
+  const UNIV_211 = ['郑州大学', '河北大学', '湖南大学', '西南大学', '华南理工大学', '苏州大学', '扬州大学', '安徽大学', '广西大学', '云南大学', '贵州大学', '兰州大学'];
+  const UNIV_NORMAL = ['湖南师范大学', '河南工业大学', '广西师范大学', '安徽师范大学', '江西师范大学', '辽宁大学', '西北师范大学', '内蒙古大学', '山西大学', '青海大学'];
+  const UNIV_COLLEGE = ['某某职业技术学院', '某省行政管理学院', '某市干部培训学校'];
+
+  // 专业池（公务员常见）
+  const MAJORS = ['行政管理', '公共管理', '法学', '经济学', '财政学', '会计学', '金融学', '计算机科学与技术', '土木工程', '农学', '中文（汉语言文学）', '历史学', '社会学'];
+
+  // 籍贯省份
+  const HOMETOWNS = ['楚南省', '楚北省', '蜀州省', '粤海省', '瓯越省', '汉东省', '中原省', '齐鲁省', '皖淮省', '秦陕省', '洪都省', '渝江市', '辽东省', '冀州省', '闽南省', '南桂壮族自治区', '滇南省', '黔贵省'];
+
+  // 教育背景配置
+  const EDU_POOL: { label: string; abilityBonus: number; loyaltyBonus: number; univPool: string[]; weight: number }[] = [
+    { label: '博士研究生', abilityBonus: 18, loyaltyBonus: 2, univPool: UNIV_985, weight: 5 },
+    { label: '硕士研究生', abilityBonus: 10, loyaltyBonus: 3, univPool: [...UNIV_985, ...UNIV_211], weight: 25 },
+    { label: '本科（985/211）', abilityBonus: 5, loyaltyBonus: 2, univPool: [...UNIV_985, ...UNIV_211], weight: 30 },
+    { label: '本科', abilityBonus: 0, loyaltyBonus: 0, univPool: UNIV_NORMAL, weight: 30 },
+    { label: '大专', abilityBonus: -5, loyaltyBonus: 5, univPool: UNIV_COLLEGE, weight: 10 },
+  ];
+
+  function pickEdu() {
+    const total = EDU_POOL.reduce((s, e) => s + e.weight, 0);
+    let r = Math.random() * total;
+    for (const e of EDU_POOL) { r -= e.weight; if (r <= 0) return e; }
+    return EDU_POOL[2];
+  }
+
+  const rows = Array.from({ length: count }, () => {
+    const isMale = Math.random() > 0.4;
+    const names = isMale ? allMale : allFemale;
+    const name = names[Math.floor(Math.random() * names.length)];
+    const trait = SUB_TRAITS[Math.floor(Math.random() * SUB_TRAITS.length)];
+    const edu = pickEdu();
+    const univ = edu.univPool[Math.floor(Math.random() * edu.univPool.length)];
+    const major = MAJORS[Math.floor(Math.random() * MAJORS.length)];
+    const hometown = HOMETOWNS[Math.floor(Math.random() * HOMETOWNS.length)];
+    // 入职年龄22-28岁（博士最大到32），出生年份由此推算
+    const entryAge = edu.label === '博士研究生' ? 27 + Math.floor(Math.random() * 5)
+      : edu.label === '硕士研究生' ? 24 + Math.floor(Math.random() * 4)
+      : 22 + Math.floor(Math.random() * 4);
+    const birthYear = gameYear - entryAge;
+
+    const baseAbility = rankLevel <= 3
+      ? 42 + Math.floor(Math.random() * 35)
+      : 50 + Math.floor(Math.random() * 35);
+    const ability = Math.min(99, baseAbility + edu.abilityBonus);
+    const loyalty = Math.min(99, 45 + Math.floor(Math.random() * 40) + edu.loyaltyBonus);
+    const integrity = 50 + Math.floor(Math.random() * 38);
+    const experience = rankLevel <= 3 ? 5 + Math.floor(Math.random() * 20) : 15 + Math.floor(Math.random() * 30);
+    // 综合评分：能力60% + 廉洁25% + 忠诚15%
+    const score = Math.round(ability * 0.6 + integrity * 0.25 + loyalty * 0.15);
+
+    return {
+      save_id: saveId,
+      user_id: userId,
+      year_key: recruitKey,
+      name,
+      gender: isMale ? '男' : '女',
+      avatar_id: Math.floor(Math.random() * 8),
+      ability,
+      loyalty,
+      integrity,
+      experience,
+      trait,
+      rank_order: null,
+      status: 'pending',
+      birth_year: birthYear,
+      university: univ,
+      major,
+      hometown,
+      score,
+    };
+  });
+
+  const { data: created } = await supabase.from('recruit_candidates').insert(rows).select('*');
+  if (!created) return [];
+  return (created as Record<string, unknown>[]).map(rowToRecruit);
+}
+
+/**
+ * 系统自动招募：按综合评分选出前N名直接录用并分配部门。
+ * 调用后无需玩家手动确认，直接完成本批次招募。
+ */
+export async function triggerAutoRecruit(
+  saveId: string, userId: string, recruitKey: number, rankLevel: number
+): Promise<{ count: number; assignments: { name: string; dept: string; position: string }[]; recruited: RecruitCandidate[]; recruitType: 'national' | 'provincial' }> {
+  const isNationalExam = recruitKey % 10 === 0; // true=国考(春季), false=省考(秋季)
+
+  // 1. 生成候选人（如果已存在则直接取）
+  const allCandidates = await getOrCreateQuarterCandidates(saveId, userId, recruitKey, rankLevel);
+
+  // 2. 按综合评分排序
+  const sorted = [...allCandidates].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+
+  // 3. 录取名额差异化：
+  //    国考（精英通道）：1-2名，竞争激烈
+  //    省考（编制补充）：按空缺填满，最多6名
+  let recruitCount: number;
+  if (isNationalExam) {
+    // 国考：高职级多一名（因为选调生项目更强），但总体名额少
+    recruitCount = rankLevel <= 3 ? 1 : 2;
+  } else {
+    // 省考：查现有编制空缺，按空缺数录用（至少2名，最多6名）
+    const { data: currentStaff } = await supabase
+      .from('subordinates')
+      .select('id')
+      .eq('save_id', saveId)
+      .eq('is_appointed', true)
+      .is('transferred_city', null);
+    const currentCount = (currentStaff ?? []).length;
+    const quotaBase = rankLevel <= 3 ? 8 : rankLevel <= 6 ? 20 : rankLevel <= 9 ? 50 : 120;
+    const vacancy = Math.max(0, quotaBase - currentCount);
+    recruitCount = Math.max(2, Math.min(6, vacancy));
+  }
+
+  const toRecruit = sorted.slice(0, recruitCount);
+
+  if (toRecruit.length === 0) return { count: 0, assignments: [], recruited: [], recruitType: isNationalExam ? 'national' : 'provincial' };
+
+  // 3. 标记录取状态（selected），其余 dismissed
+  for (let i = 0; i < toRecruit.length; i++) {
+    await supabase.from('recruit_candidates').update({ status: 'selected', rank_order: i + 1 }).eq('id', toRecruit[i].id);
+  }
+  await supabase.from('recruit_candidates')
+    .update({ status: 'dismissed' })
+    .eq('save_id', saveId).eq('year_key', recruitKey).eq('status', 'pending');
+
+  // 4. 将录取人员插入下属表（含完整档案）
+  //    国考前1名（或唯一录用者）标记为选调生角色
+  const rows = toRecruit.map((r, idx) => {
+    const isZhuandiaosheng = isNationalExam && idx === 0 && (r.score ?? 0) >= 80;
+    return {
+      save_id: saveId,
+      user_id: userId,
+      name: r.name,
+      position: isZhuandiaosheng ? '选调生（重要岗位预备）' : '待分配',
+      role: isZhuandiaosheng ? '中央选调生' : '新录用干部',
+      avatar_id: r.avatarId,
+      gender: r.gender,
+      ability: r.ability,
+      loyalty: r.loyalty,
+      integrity: r.integrity,
+      experience: r.experience,
+      sub_level: isZhuandiaosheng ? 2 : 1, // 选调生直接定副科级起步
+      is_appointed: false,
+      appointed_role: null,
+      appointed_dept: null,
+      dept_position: 'deputy',
+      transferred_city: null,
+      last_assessed_day: 0,
+      birth_year: r.birthYear,
+      university: r.university,
+      major: r.major,
+      hometown: r.hometown,
+    };
+  });
+  const { data: inserted } = await supabase.from('subordinates').insert(rows).select('id');
+  const newIds = (inserted ?? []).map((r: Record<string, unknown>) => r.id as string);
+
+  // 5. 自动分配部门
+  //    国考：选调生优先分配到重要岗位（ndrc/finance/organization）
+  //    省考：按编制最空缺分配
+  const assignments = await autoAssignNewRecruits(saveId, newIds, isNationalExam);
+
+  // 6. 更新 last_recruit_quarter，完成本批次
+  await supabase.from('player_saves').update({ last_recruit_quarter: recruitKey }).eq('id', saveId);
+
+  return { count: toRecruit.length, assignments, recruited: toRecruit, recruitType: isNationalExam ? 'national' : 'provincial' };
+}
+
+/** 招募完成后自动将新录用干部分配到编制最空缺的部门
+ *  isNationalExam=true 时：前1名（选调生）优先分配到重要岗位
+ */
+export async function autoAssignNewRecruits(
+  saveId: string,
+  newSubIds: string[],
+  isNationalExam = false,
+): Promise<{ name: string; dept: string; position: string }[]> {
+  if (newSubIds.length === 0) return [];
+
+  // 查询各部门已有下属数量（未调任，已任命）
+  const { data: appointed } = await supabase
+    .from('subordinates')
+    .select('appointed_dept')
+    .eq('save_id', saveId)
+    .eq('is_appointed', true)
+    .is('transferred_city', null);
+
+  const deptCount: Record<string, number> = {};
+  (appointed ?? []).forEach((r: Record<string, unknown>) => {
+    const d = r.appointed_dept as string;
+    if (d) deptCount[d] = (deptCount[d] ?? 0) + 1;
+  });
+
+  // 按需求量从高到低排序部门（人少的优先）
+  const DEPT_KEYS_LIST = ['police', 'ndrc', 'finance', 'urban', 'education', 'health',
+    'ecology', 'market', 'agriculture', 'personnel', 'invest', 'tax'] as const;
+  const sortedDepts = [...DEPT_KEYS_LIST].sort((a, b) => (deptCount[a] ?? 0) - (deptCount[b] ?? 0));
+
+  // 国考选调生优先岗位（按重要性排序）
+  const KEY_DEPTS_NATIONAL: (typeof DEPT_KEYS_LIST[number])[] = ['ndrc', 'finance', 'organization' as never, 'personnel', 'ecology', 'police'];
+
+  // 查新录用干部
+  const { data: newSubs } = await supabase
+    .from('subordinates')
+    .select('*')
+    .in('id', newSubIds);
+  if (!newSubs || newSubs.length === 0) return [];
+
+  const assignmentLog: { name: string; dept: string; position: string }[] = [];
+  const { DEPT_CONFIG: DC } = await import('@/types/game');
+
+  for (let i = 0; i < newSubs.length; i++) {
+    const sub = newSubs[i] as Record<string, unknown>;
+    // 选调生（国考第1名）分配至重要岗位
+    let deptKey: typeof DEPT_KEYS_LIST[number];
+    if (isNationalExam && i === 0) {
+      // 选最空缺的重要岗位
+      const keyAvailable = KEY_DEPTS_NATIONAL.filter(d => DEPT_KEYS_LIST.includes(d as typeof DEPT_KEYS_LIST[number]));
+      const keyWithCount = keyAvailable.map(d => ({ d, cnt: deptCount[d] ?? 0 })).sort((a, b) => a.cnt - b.cnt);
+      deptKey = (keyWithCount[0]?.d ?? sortedDepts[0]) as typeof DEPT_KEYS_LIST[number];
+    } else {
+      deptKey = sortedDepts[i % sortedDepts.length];
+    }
+    const cfg = DC[deptKey];
+    if (!cfg) continue;
+    const isZhuandiaosheng = (sub.role as string) === '中央选调生';
+    const position = isZhuandiaosheng ? `${cfg.name}${cfg.headTitle}助理（选调生）` : `${cfg.name}科员`;
+    await supabase
+      .from('subordinates')
+      .update({
+        appointed_dept: deptKey,
+        is_appointed: true,
+        dept_position: isZhuandiaosheng ? 'deputy' : 'staff',
+        position,
+        role: isZhuandiaosheng ? `${cfg.name}选调生` : `${cfg.name}工作人员`,
+      })
+      .eq('id', sub.id as string);
+    assignmentLog.push({ name: sub.name as string, dept: cfg.name, position });
+    deptCount[deptKey] = (deptCount[deptKey] ?? 0) + 1;
+  }
+  return assignmentLog;
+}
+
+// ============ 月度工作报告 ============
+function rowToMonthlyReport(row: Record<string, unknown>): MonthlyReport {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    monthKey: row.month_key as number,
+    yearKey: row.year_key as number,
+    deptKey: row.dept_key as string,
+    title: row.title as string,
+    content: row.content as string,
+    gdpChange: (row.gdp_change as number) ?? 0,
+    livelihoodChange: (row.livelihood_change as number) ?? 0,
+    ecologyChange: (row.ecology_change as number) ?? 0,
+    businessChange: (row.business_change as number) ?? 0,
+    meritReward: (row.merit_reward as number) ?? 0,
+    isRead: (row.is_read as boolean) ?? false,
+    createdAt: row.created_at as string,
+  };
+}
+
+const DEPT_REPORT_TEMPLATES: Record<string, { titles: string[]; contents: string[][] }> = {
+  police: {
+    titles: ['公安局月度工作报告', '治安专项整治通报', '打击违法犯罪工作简报'],
+    contents: [
+      ['本月共破获刑事案件{n}起', '治安案件处置{m}起', '开展扫黄打非专项行动，查处违法人员{k}名'],
+      ['本月实施街面巡逻{h}次，有效震慑犯罪', '新设社区警务站{s}个', '治安满意度提升{p}个百分点'],
+    ],
+  },
+  ndrc: {
+    titles: ['发改委月度工作报告', '招商引资工作简报', '重大项目推进通报'],
+    contents: [
+      ['本月新签约投资项目{n}个，合同金额{m}亿元', '推进重点项目{k}个，完成投资{h}亿元'],
+      ['本月举办招商推介会{s}次，吸引意向投资{p}亿元'],
+    ],
+  },
+  ecology: {
+    titles: ['生态环保局月度工作报告', '环保专项整治通报', '生态环境执法简报'],
+    contents: [
+      ['本月开展企业环保检查{n}次，责令整改{m}家', '处以环保罚款共{k}万元'],
+      ['本月关停不达标污染企业{s}家，生态指数提升{p}个百分点'],
+    ],
+  },
+  market: {
+    titles: ['市场监管局月度简报', '招商政策落实通报', '营商环境优化工作报告'],
+    contents: [
+      ['本月新增市场主体{n}家，注销{m}家', '办理营业执照{k}件，平均办理时限{h}个工作日'],
+      ['本月开展食品安全检查{s}次，处罚违规商户{p}家'],
+    ],
+  },
+  education: {
+    titles: ['教育局月度工作报告', '师资队伍建设通报', '教育质量提升简报'],
+    contents: [
+      ['本月完成教师培训{n}人次，新引进优秀教师{m}名'],
+      ['本月中小学在校生总数{k}人，出勤率达{h}%'],
+    ],
+  },
+  health: {
+    titles: ['卫健委月度工作报告', '基层医疗服务通报', '公共卫生工作简报'],
+    contents: [
+      ['本月完成居民健康档案建档{n}人次，开展义诊活动{m}场'],
+      ['本月卫生监督抽检{k}次，无重大食品安全事故'],
+    ],
+  },
+  finance: {
+    titles: ['财政局月度工作报告', '预算执行情况通报', '政府债务管理简报'],
+    contents: [
+      ['本月税收入库{n}万元，财政支出{m}万元，收支结余{k}万元'],
+      ['本月完成专项债资金拨付{h}万元'],
+    ],
+  },
+  urban: {
+    titles: ['住建局月度工作报告', '城市建设推进通报', '住房保障工作简报'],
+    contents: [
+      ['本月新开工建设项目{n}个，竣工验收{m}个'],
+      ['本月保障性住房申请受理{k}户，完成审核{h}户'],
+    ],
+  },
+  agriculture: {
+    titles: ['农业农村局月度工作报告', '乡村振兴工作通报', '农业生产情况简报'],
+    contents: [
+      ['本月农业生产总值{n}万元，同比增长{m}%'],
+      ['本月开展农技培训{k}场次，参训农民{h}人'],
+    ],
+  },
+};
+
+function generateReportContent(deptKey: string): { title: string; content: string; gdpChange: number; livelihoodChange: number; ecologyChange: number; businessChange: number; meritReward: number } {
+  const tpl = DEPT_REPORT_TEMPLATES[deptKey] ?? DEPT_REPORT_TEMPLATES['finance'];
+  const title = tpl.titles[Math.floor(Math.random() * tpl.titles.length)];
+  const block = tpl.contents[Math.floor(Math.random() * tpl.contents.length)];
+  const content = block.map(line =>
+    line
+      .replace('{n}', String(5 + Math.floor(Math.random() * 20)))
+      .replace('{m}', String(3 + Math.floor(Math.random() * 15)))
+      .replace('{k}', String(2 + Math.floor(Math.random() * 10)))
+      .replace('{h}', String(10 + Math.floor(Math.random() * 20)))
+      .replace('{s}', String(1 + Math.floor(Math.random() * 5)))
+      .replace('{p}', String(1 + Math.floor(Math.random() * 8)))
+  ).join('；') + '。';
+
+  const deptEffects: Record<string, Partial<{ gdpChange: number; livelihoodChange: number; ecologyChange: number; businessChange: number }>> = {
+    police: { livelihoodChange: 0.5 },
+    ndrc: { gdpChange: 0.8 },
+    ecology: { ecologyChange: 0.8 },
+    market: { businessChange: 0.6 },
+    education: { livelihoodChange: 0.5 },
+    health: { livelihoodChange: 0.4 },
+    finance: { gdpChange: 0.3 },
+    urban: { gdpChange: 0.4, livelihoodChange: 0.3 },
+    agriculture: { gdpChange: 0.3, livelihoodChange: 0.3 },
+  };
+  const fx = deptEffects[deptKey] ?? {};
+  return {
+    title, content,
+    gdpChange: fx.gdpChange ?? 0,
+    livelihoodChange: fx.livelihoodChange ?? 0,
+    ecologyChange: fx.ecologyChange ?? 0,
+    businessChange: fx.businessChange ?? 0,
+    meritReward: 8 + Math.floor(Math.random() * 12),
+  };
+}
+
+export async function generateMonthlyReports(
+  saveId: string, userId: string, gameDays: number
+): Promise<MonthlyReport[]> {
+  const monthKey = Math.floor(gameDays / 30);
+  const yearKey = Math.floor(gameDays / 365);
+
+  // 获取已任命部门
+  const { data: subs } = await supabase
+    .from('subordinates')
+    .select('appointed_dept, dept_position, is_appointed')
+    .eq('save_id', saveId)
+    .eq('is_appointed', true);
+
+  const activeDepts = [...new Set((subs ?? []).map(s => s.appointed_dept as string).filter(Boolean))];
+  if (activeDepts.length === 0) return [];
+
+  // 查是否已生成本月报告
+  const { data: existing } = await supabase
+    .from('monthly_reports')
+    .select('id')
+    .eq('save_id', saveId)
+    .eq('month_key', monthKey);
+  if (existing && existing.length > 0) return [];
+
+  const rows = activeDepts.map(dk => {
+    const gen = generateReportContent(dk);
+    return {
+      save_id: saveId, user_id: userId,
+      month_key: monthKey, year_key: yearKey,
+      dept_key: dk, title: gen.title, content: gen.content,
+      gdp_change: gen.gdpChange, livelihood_change: gen.livelihoodChange,
+      ecology_change: gen.ecologyChange, business_change: gen.businessChange,
+      merit_reward: gen.meritReward, is_read: false,
+    };
+  });
+
+  const { data: created } = await supabase.from('monthly_reports').insert(rows).select('*');
+  if (!created) return [];
+  return (created as Record<string, unknown>[]).map(rowToMonthlyReport);
+}
+
+export async function getUnreadReports(saveId: string): Promise<MonthlyReport[]> {
+  const { data } = await supabase
+    .from('monthly_reports')
+    .select('*')
+    .eq('save_id', saveId)
+    .eq('is_read', false)
+    .order('created_at', { ascending: false })
+    .limit(20);
+  return (data ?? []).map(r => rowToMonthlyReport(r as Record<string, unknown>));
+}
+
+export async function markReportsRead(saveId: string, monthKey: number): Promise<void> {
+  await supabase.from('monthly_reports').update({ is_read: true })
+    .eq('save_id', saveId).eq('month_key', monthKey);
+}
+
+export async function getAllReports(saveId: string): Promise<MonthlyReport[]> {
+  const { data } = await supabase
+    .from('monthly_reports')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: false })
+    .limit(50);
+  return (data ?? []).map(r => rowToMonthlyReport(r as Record<string, unknown>));
+}
+
+// ============ 领导班子 ============
+function rowToLeadership(row: Record<string, unknown>): LeadershipMember {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    subId: (row.sub_id as string) ?? null,
+    roleKey: row.role_key as string,
+    roleLabel: row.role_label as string,
+    subName: (row.sub_name as string) ?? '',
+    subAvatar: (row.sub_avatar as number) ?? 0,
+    subGender: (row.sub_gender as string) ?? '男',
+    assignedDay: (row.assigned_day as number) ?? 0,
+  };
+}
+
+export async function getLeadershipBand(saveId: string): Promise<LeadershipMember[]> {
+  const { data } = await supabase
+    .from('leadership_band')
+    .select('*')
+    .eq('save_id', saveId)
+    .order('created_at', { ascending: true });
+  return (data ?? []).map(r => rowToLeadership(r as Record<string, unknown>));
+}
+
+export async function assignLeadershipRole(
+  saveId: string, userId: string,
+  subId: string, roleKey: string, roleLabel: string,
+  subName: string, subAvatar: number, subGender: string, gameDays: number
+): Promise<boolean> {
+  // 先删除该角色已有的任命
+  await supabase.from('leadership_band').delete().eq('save_id', saveId).eq('role_key', roleKey);
+  const { error } = await supabase.from('leadership_band').insert({
+    save_id: saveId, user_id: userId, sub_id: subId,
+    role_key: roleKey, role_label: roleLabel,
+    sub_name: subName, sub_avatar: subAvatar, sub_gender: subGender,
+    assigned_day: gameDays,
+  });
+  return !error;
+}
+
+export async function removeLeadershipRole(saveId: string, roleKey: string): Promise<boolean> {
+  const { error } = await supabase.from('leadership_band').delete()
+    .eq('save_id', saveId).eq('role_key', roleKey);
+  return !error;
+}
+
+// ============ 下属履历 ============
+import type { SubResume, Enterprise } from '@/types/game';
+
+function rowToSubResume(row: Record<string, unknown>): SubResume {
+  return {
+    id: row.id as string,
+    saveId: row.save_id as string,
+    subId: row.sub_id as string,
+    position: row.position as string,
+    deptName: (row.dept_name as string) ?? '',
+    startDay: (row.start_day as number) ?? 0,
+    endDay: (row.end_day as number) ?? null,
+    note: (row.note as string) ?? '',
+    createdAt: row.created_at as string,
+  };
+}
+
+export async function getSubResumes(subId: string): Promise<SubResume[]> {
+  const { data } = await supabase
+    .from('subordinate_resumes')
+    .select('*')
+    .eq('sub_id', subId)
+    .order('start_day', { ascending: false });
+  if (!data) return [];
+  return (data as Record<string, unknown>[]).map(rowToSubResume);
+}
+
+export async function addSubResume(
+  saveId: string, subId: string, position: string,
+  deptName: string, startDay: number, note = ''
+): Promise<void> {
+  await supabase.from('subordinate_resumes').insert({
+    save_id: saveId, sub_id: subId,
+    position, dept_name: deptName,
+    start_day: startDay, end_day: null, note,
+  });
+}
+
+export async function closeSubResume(subId: string, endDay: number): Promise<void> {
+  // 关闭当前在职履历
+  await supabase.from('subordinate_resumes')
+    .update({ end_day: endDay })
+    .eq('sub_id', subId)
+    .is('end_day', null);
+}
+
+// ============ 年度晋升候选人查询 ============
+/** 每年初查询符合晋升条件的下属，同时遵守金字塔职级人数上限 */
+export async function getAnnualPromoEligible(saveId: string, currentDay: number, playerRankLevel: number): Promise<{
+  id: string; name: string; subLevel: number; ability: number; experience: number;
+  appointedDept: string | null; deptPosition: string; reason: string;
+}[]> {
+  const { SUB_LEVEL_MAX_COUNT } = await import('@/types/game');
+
+  const { data } = await supabase
+    .from('subordinates')
+    .select('id, name, sub_level, ability, experience, last_assessed_day, appointed_dept, dept_position')
+    .eq('save_id', saveId)
+    .is('transferred_city', null);
+  if (!data) return [];
+
+  const rows = data as { id: string; name: string; sub_level: number; ability: number; experience: number; last_assessed_day: number; appointed_dept: string | null; dept_position: string }[];
+
+  // 统计当前各职级人数
+  const levelCount: Record<number, number> = {};
+  for (const s of rows) levelCount[s.sub_level] = (levelCount[s.sub_level] ?? 0) + 1;
+
+  const maxSubLevel = Math.min(12, playerRankLevel - 1); // 下属最多比玩家低一级
+  return rows
+    .filter(s => s.sub_level < maxSubLevel)
+    .map(s => {
+      const daysInPost = currentDay - (s.last_assessed_day ?? 0);
+      // 越高职级任职年限要求越长
+      const yearThreshold = s.sub_level <= 3 ? 365 * 2 : s.sub_level <= 6 ? 365 * 3 : 365 * 4;
+      const tenureReached = daysInPost >= yearThreshold;
+      // KPI 标准随职级提高而更严格
+      const kpiAbility = s.sub_level <= 3 ? 72 : s.sub_level <= 6 ? 76 : 80;
+      const kpiExp    = s.sub_level <= 3 ? 55 : s.sub_level <= 6 ? 65 : 75;
+      const kpiReached = s.ability >= kpiAbility && s.experience >= kpiExp;
+      if (!tenureReached && !kpiReached) return null;
+
+      // 检查目标职级是否已达金字塔上限
+      const targetLevel = s.sub_level + 1;
+      const cap = SUB_LEVEL_MAX_COUNT[targetLevel] ?? 999;
+      const currentAtTarget = levelCount[targetLevel] ?? 0;
+      if (currentAtTarget >= cap) return null; // 名额已满，此轮不推荐晋升
+
+      const reason = tenureReached && kpiReached ? '年限到达 + KPI优秀' : tenureReached ? '在职年限已满' : 'KPI考核优秀';
+      return { id: s.id, name: s.name, subLevel: s.sub_level, ability: s.ability, experience: s.experience, appointedDept: s.appointed_dept, deptPosition: s.dept_position, reason };
+    })
+    .filter((s): s is NonNullable<typeof s> => s !== null);
+}
+
+// ============ 下属晋升/降级 ============
+export async function promoteSubordinate(
+  saveId: string, subId: string, currentLevel: number, gameDays: number,
+  currentPosition: string, deptName: string
+): Promise<boolean> {
+  const newLevel = Math.min(12, currentLevel + 1);
+  if (newLevel === currentLevel) return false;
+  const { error } = await supabase
+    .from('subordinates')
+    .update({ sub_level: newLevel })
+    .eq('id', subId);
+  if (!error) {
+    await closeSubResume(subId, gameDays);
+    await addSubResume(saveId, subId, currentPosition, deptName, gameDays, '晋升');
+  }
+  return !error;
+}
+
+export async function demoteSubordinate(
+  saveId: string, subId: string, currentLevel: number, gameDays: number,
+  currentPosition: string, deptName: string
+): Promise<boolean> {
+  const newLevel = Math.max(1, currentLevel - 1);
+  if (newLevel === currentLevel) return false;
+  const { error } = await supabase
+    .from('subordinates')
+    .update({ sub_level: newLevel })
+    .eq('id', subId);
+  if (!error) {
+    await closeSubResume(subId, gameDays);
+    await addSubResume(saveId, subId, currentPosition, deptName, gameDays, '降级');
+  }
+  return !error;
+}
+
+// ============ 人事局年底晋升评审 ============
+// 返回符合晋升条件的下属列表（能力>=60，经验>=50）
+export async function getPersonnelCandidates(saveId: string): Promise<Subordinate[]> {
+  const { data } = await supabase
+    .from('subordinates')
+    .select('*')
+    .eq('save_id', saveId)
+    .gte('ability', 60)
+    .gte('experience', 50)
+    .lt('sub_level', 12)
+    .order('ability', { ascending: false })
+    .limit(8);
+  if (!data) return [];
+  return (data as Record<string, unk

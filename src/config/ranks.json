@@ -1,0 +1,597 @@
+{
+  "RANK_CONFIG": {
+    "1": {
+      "name": "乡镇科员",
+      "cityType": "乡镇",
+      "requiredMerit": 80,
+      "requiredTenureYears": 2,
+      "maxTenureYears": 3,
+      "randomCity": false,
+      "bossTitle": "乡镇党委书记",
+      "bossTitle2": "乡镇长",
+      "bossTitle3": "县委党政人事院院长",
+      "department": "乡镇人民政府"
+    },
+    "2": {
+      "name": "副乡镇长",
+      "cityType": "乡镇",
+      "requiredMerit": 180,
+      "requiredTenureYears": 2,
+      "maxTenureYears": 3,
+      "randomCity": false,
+      "bossTitle": "乡镇长",
+      "bossTitle2": "乡镇党委书记",
+      "bossTitle3": "县委书记",
+      "department": "乡镇人民政府"
+    },
+    "3": {
+      "name": "乡镇长",
+      "cityType": "乡镇",
+      "requiredMerit": 320,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": false,
+      "bossTitle": "县委书记",
+      "bossTitle2": "县长",
+      "bossTitle3": "县委党政人事院院长",
+      "department": "乡镇人民政府"
+    },
+    "4": {
+      "name": "县委常委/副县长",
+      "cityType": "县（区）",
+      "requiredMerit": 550,
+      "requiredTenureYears": 2,
+      "maxTenureYears": 3,
+      "randomCity": false,
+      "bossTitle": "县长",
+      "bossTitle2": "县委书记",
+      "bossTitle3": "市委党政人事院院长",
+      "department": "县级人民政府"
+    },
+    "5": {
+      "name": "县长/区长",
+      "cityType": "县（区）",
+      "requiredMerit": 900,
+      "requiredTenureYears": 2,
+      "maxTenureYears": 3,
+      "randomCity": true,
+      "bossTitle": "市委书记",
+      "bossTitle2": "市长",
+      "bossTitle3": "县委书记",
+      "department": "县级人民政府"
+    },
+    "6": {
+      "name": "县委书记/区委书记",
+      "cityType": "县（区）",
+      "requiredMerit": 1300,
+      "requiredTenureYears": 2,
+      "maxTenureYears": 3,
+      "randomCity": true,
+      "bossTitle": "市委书记",
+      "bossTitle2": "市长",
+      "bossTitle3": "省执政委党政人事院院长",
+      "department": "县委"
+    },
+    "7": {
+      "name": "副市长/市政府秘书长",
+      "cityType": "地级市",
+      "requiredMerit": 1800,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": false,
+      "bossTitle": "市长",
+      "bossTitle2": "市委书记",
+      "bossTitle3": "省执政委党政人事院院长",
+      "department": "市人民政府"
+    },
+    "8": {
+      "name": "市长",
+      "cityType": "地级市",
+      "requiredMerit": 2500,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": true,
+      "bossTitle": "省执政委书记",
+      "bossTitle2": "省长",
+      "bossTitle3": "市委书记",
+      "department": "市人民政府"
+    },
+    "9": {
+      "name": "市委书记",
+      "cityType": "地级市",
+      "requiredMerit": 3500,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": true,
+      "bossTitle": "省执政委书记",
+      "bossTitle2": "省长",
+      "bossTitle3": "党政人事院副院长",
+      "department": "市委"
+    },
+    "10": {
+      "name": "省长/副省长",
+      "cityType": "省级",
+      "requiredMerit": 5500,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": true,
+      "bossTitle": "省执政委书记",
+      "bossTitle2": "联邦副总统",
+      "bossTitle3": "党政人事院院长",
+      "department": "省人民政府"
+    },
+    "11": {
+      "name": "省执政委书记",
+      "cityType": "省级",
+      "requiredMerit": 8000,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": true,
+      "bossTitle": "党政人事院院长",
+      "bossTitle2": "联邦内阁总理",
+      "bossTitle3": "联邦政务委员",
+      "department": "省执政委"
+    },
+    "12": {
+      "name": "内阁部长",
+      "cityType": "国家级",
+      "requiredMerit": 12000,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": false,
+      "bossTitle": "联邦内阁总理",
+      "bossTitle2": "联邦副总统",
+      "bossTitle3": "内阁秘书长",
+      "department": "联邦国家机关（正部级）"
+    },
+    "13": {
+      "name": "联邦副总统",
+      "cityType": "国家级",
+      "requiredMerit": 20000,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": false,
+      "bossTitle": "联邦内阁总理",
+      "bossTitle2": "联邦政务常委",
+      "bossTitle3": "内阁秘书长",
+      "department": "联邦政务常委会（副国级）"
+    },
+    "14": {
+      "name": "联邦内阁总理",
+      "cityType": "国家级",
+      "requiredMerit": 35000,
+      "requiredTenureYears": 3,
+      "maxTenureYears": 5,
+      "randomCity": false,
+      "bossTitle": "联邦政务常委",
+      "bossTitle2": "联邦国会议长",
+      "bossTitle3": "肃宪院长",
+      "department": "联邦政务常委会（正国级）"
+    },
+    "15": {
+      "name": "联邦总统·执政党主席·枢武府主席",
+      "cityType": "国家级",
+      "requiredMerit": 50000,
+      "requiredTenureYears": 4,
+      "maxTenureYears": 10,
+      "randomCity": false,
+      "bossTitle": "联邦政务常委会",
+      "bossTitle2": "联邦国会常委会",
+      "bossTitle3": "枢武府",
+      "department": "执政党中央·联邦内阁·枢武府"
+    }
+  },
+  "RANK_SALARY": {
+    "1": 5500,
+    "2": 7000,
+    "3": 9000,
+    "4": 13000,
+    "5": 16000,
+    "6": 20000,
+    "7": 26000,
+    "8": 32000,
+    "9": 38000,
+    "10": 50000,
+    "11": 65000,
+    "12": 80000,
+    "13": 100000,
+    "14": 120000,
+    "15": 150000
+  },
+  "RANK_INITIAL_FUND": {
+    "1": 30,
+    "2": 50,
+    "3": 80,
+    "4": 500,
+    "5": 800,
+    "6": 1200,
+    "7": 5000,
+    "8": 10000,
+    "9": 15000,
+    "10": 80000,
+    "11": 120000,
+    "12": 500000,
+    "13": 1000000,
+    "14": 5000000,
+    "15": 10000000
+  },
+  "RANK_FUND_MULTIPLIER": {
+    "1": 0.05,
+    "2": 0.08,
+    "3": 0.12,
+    "4": 0.8,
+    "5": 1.2,
+    "6": 1.8,
+    "7": 8,
+    "8": 15,
+    "9": 22,
+    "10": 80,
+    "11": 130,
+    "12": 500,
+    "13": 1200,
+    "14": 3000,
+    "15": 8000
+  },
+  "RANK_GROSS_SALARY": {
+    "1": 6800,
+    "2": 8700,
+    "3": 11200,
+    "4": 16200,
+    "5": 20000,
+    "6": 25000,
+    "7": 32500,
+    "8": 40000,
+    "9": 47500,
+    "10": 62500,
+    "11": 81250,
+    "12": 100000,
+    "13": 125000,
+    "14": 150000,
+    "15": 187500
+  },
+  "RANK_PERSONAL_SOCIAL_INSURANCE": {
+    "1": 714,
+    "2": 914,
+    "3": 1176,
+    "4": 1701,
+    "5": 2100,
+    "6": 2625,
+    "7": 3413,
+    "8": 4200,
+    "9": 4988,
+    "10": 6563,
+    "11": 8531,
+    "12": 10500,
+    "13": 13125,
+    "14": 15750,
+    "15": 19688
+  },
+  "RANK_PERSONAL_HPF": {
+    "1": 816,
+    "2": 1044,
+    "3": 1344,
+    "4": 1944,
+    "5": 2400,
+    "6": 3000,
+    "7": 3900,
+    "8": 4800,
+    "9": 5700,
+    "10": 7500,
+    "11": 9750,
+    "12": 12000,
+    "13": 15000,
+    "14": 18000,
+    "15": 22500
+  },
+  "RANK_MONTHLY_ALLOWANCE": {
+    "1": 500,
+    "2": 650,
+    "3": 900,
+    "4": 1500,
+    "5": 2000,
+    "6": 2500,
+    "7": 4000,
+    "8": 5500,
+    "9": 6500,
+    "10": 10000,
+    "11": 14000,
+    "12": 18000,
+    "13": 25000,
+    "14": 35000,
+    "15": 50000
+  },
+  "RANK_ANNUAL_BONUS_MONTHS": {
+    "1": 1,
+    "2": 1,
+    "3": 1.2,
+    "4": 1.5,
+    "5": 1.5,
+    "6": 1.8,
+    "7": 2,
+    "8": 2,
+    "9": 2.2,
+    "10": 2.5,
+    "11": 2.5,
+    "12": 3,
+    "13": 3,
+    "14": 3,
+    "15": 3
+  },
+  "RANK_ALLOWANCE_DETAIL": {
+    "1": [
+      {
+        "label": "通讯补贴",
+        "amount": 100
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 200
+      },
+      {
+        "label": "其他补贴",
+        "amount": 200
+      }
+    ],
+    "2": [
+      {
+        "label": "车辆补贴",
+        "amount": 200
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 100
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 200
+      },
+      {
+        "label": "其他补贴",
+        "amount": 150
+      }
+    ],
+    "3": [
+      {
+        "label": "车辆补贴",
+        "amount": 300
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 150
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 250
+      },
+      {
+        "label": "其他补贴",
+        "amount": 200
+      }
+    ],
+    "4": [
+      {
+        "label": "车辆补贴",
+        "amount": 700
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 200
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 350
+      },
+      {
+        "label": "其他补贴",
+        "amount": 250
+      }
+    ],
+    "5": [
+      {
+        "label": "车辆补贴",
+        "amount": 1000
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 250
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 450
+      },
+      {
+        "label": "其他补贴",
+        "amount": 300
+      }
+    ],
+    "6": [
+      {
+        "label": "车辆补贴",
+        "amount": 1200
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 300
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 500
+      },
+      {
+        "label": "秘书保障",
+        "amount": 500
+      }
+    ],
+    "7": [
+      {
+        "label": "车辆补贴",
+        "amount": 2000
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 500
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 800
+      },
+      {
+        "label": "岗位津贴",
+        "amount": 700
+      }
+    ],
+    "8": [
+      {
+        "label": "车辆补贴",
+        "amount": 3000
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 700
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 1000
+      },
+      {
+        "label": "岗位津贴",
+        "amount": 800
+      }
+    ],
+    "9": [
+      {
+        "label": "车辆补贴",
+        "amount": 3500
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 800
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 1200
+      },
+      {
+        "label": "专职司机保障",
+        "amount": 1000
+      }
+    ],
+    "10": [
+      {
+        "label": "车辆补贴",
+        "amount": 5000
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 1500
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 2000
+      },
+      {
+        "label": "岗位津贴",
+        "amount": 1500
+      }
+    ],
+    "11": [
+      {
+        "label": "车辆补贴",
+        "amount": 7000
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 2000
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 3000
+      },
+      {
+        "label": "岗位津贴",
+        "amount": 2000
+      }
+    ],
+    "12": [
+      {
+        "label": "车辆补贴",
+        "amount": 8000
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 3000
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 4000
+      },
+      {
+        "label": "政务保障",
+        "amount": 3000
+      }
+    ],
+    "13": [
+      {
+        "label": "车辆补贴",
+        "amount": 10000
+      },
+      {
+        "label": "通讯补贴",
+        "amount": 5000
+      },
+      {
+        "label": "餐费补贴",
+        "amount": 5000
+      },
+      {
+        "label": "专机使用保障",
+        "amount": 5000
+      }
+    ],
+    "14": [
+      {
+        "label": "安保出行保障",
+        "amount": 15000
+      },
+      {
+        "label": "通讯保障",
+        "amount": 8000
+      },
+      {
+        "label": "政务接待保障",
+        "amount": 12000
+      }
+    ],
+    "15": [
+      {
+        "label": "中南海专属保障",
+        "amount": 30000
+      },
+      {
+        "label": "通讯安全保障",
+        "amount": 10000
+      },
+      {
+        "label": "国家领导人待遇",
+        "amount": 10000
+      }
+    ]
+  },
+  "RANK_HOUSING": {
+    "1": null,
+    "2": "乡镇工作宿舍",
+    "3": "乡镇干部公寓",
+    "4": "县级干部住房（两居室）",
+    "5": "县级单位住宅（三居室）",
+    "6": "县委独栋小院",
+    "7": "市级干部公寓（精装修）",
+    "8": "市长官邸（四居室+车库）",
+    "9": "市委书记官邸（附属庭院）",
+    "10": "省级干部别墅区",
+    "11": "省执政委专属官邸",
+    "12": "部委配套豪华官邸",
+    "13": "国家配备别墅（中南海附近）",
+    "14": "总理专属官邸",
+    "15": "中南海专属居所"
+  }
+}

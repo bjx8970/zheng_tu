@@ -1,0 +1,92 @@
+{
+  "PLAN_PROJECTS": [
+    {
+      "id": "master_plan",
+      "title": "城市总体规划修编",
+      "icon": "🗺️",
+      "category": "总规",
+      "desc": "修编城市总体规划，优化城市空间布局，提升城市发展可持续性",
+      "cooldownDays": 180,
+      "rankRequire": 1,
+      "cost": 0,
+      "rewards": { "merit": 18, "cityGdp": 3, "cityLivelihood": 2, "lineKpi": 8 }
+    },
+    {
+      "id": "industrial_zone",
+      "title": "工业园区规划建设",
+      "icon": "🏭",
+      "category": "产业",
+      "desc": "规划建设现代化工业园区，引进优质企业，推动产业集聚发展",
+      "cooldownDays": 120,
+      "rankRequire": 2,
+      "cost": 500,
+      "rewards": { "merit": 14, "cityGdp": 5, "lineKpi": 6, "bossFavor": 2 }
+    },
+    {
+      "id": "residential_dev",
+      "title": "保障房开发建设",
+      "icon": "🏘️",
+      "category": "住房",
+      "desc": "推进保障性住房项目建设，改善低收入群体居住条件",
+      "cooldownDays": 90,
+      "rankRequire": 1,
+      "cost": 300,
+      "rewards": { "merit": 10, "cityLivelihood": 5, "publicOpinion": 6 }
+    },
+    {
+      "id": "transport_plan",
+      "title": "综合交通专项规划",
+      "icon": "🛤️",
+      "category": "交通",
+      "desc": "编制城市综合交通专项规划，优化路网结构，缓解交通拥堵",
+      "cooldownDays": 150,
+      "rankRequire": 2,
+      "cost": 200,
+      "rewards": { "merit": 12, "cityGdp": 2, "cityLivelihood": 3, "lineKpi": 5 }
+    },
+    {
+      "id": "ecology_corridor",
+      "title": "生态廊道规划建设",
+      "icon": "🌳",
+      "category": "生态",
+      "desc": "规划城市生态廊道，打造绿色空间网络，提升城市生态品质",
+      "cooldownDays": 120,
+      "rankRequire": 2,
+      "cost": 150,
+      "rewards": { "merit": 11, "cityEcology": 8, "publicOpinion": 5 }
+    },
+    {
+      "id": "smart_city",
+      "title": "智慧城市顶层设计",
+      "icon": "💡",
+      "category": "智慧",
+      "desc": "制定智慧城市建设顶层方案，推进城市数字化转型",
+      "cooldownDays": 180,
+      "rankRequire": 3,
+      "cost": 400,
+      "rewards": { "merit": 20, "cityGdp": 4, "lineKpi": 10, "bossFavor": 4 }
+    },
+    {
+      "id": "cultural_zone",
+      "title": "文化旅游区规划",
+      "icon": "🏛️",
+      "category": "文旅",
+      "desc": "整合文化旅游资源，规划建设特色文旅示范区，打响城市品牌",
+      "cooldownDays": 150,
+      "rankRequire": 3,
+      "cost": 300,
+      "rewards": { "merit": 16, "cityGdp": 3, "cityBusiness": 4, "publicOpinion": 8 }
+    },
+    {
+      "id": "region_strategy",
+      "title": "区域协同发展战略",
+      "icon": "🌐",
+      "category": "战略",
+      "desc": "谋划跨行政区域协同发展，参与都市圈建设，提升区域竞争力",
+      "cooldownDays": 240,
+      "rankRequire": 4,
+      "cost": 0,
+      "rewards": { "merit": 28, "cityGdp": 6, "lineKpi": 15, "bossFavor": 6 }
+    }
+  ]
+}

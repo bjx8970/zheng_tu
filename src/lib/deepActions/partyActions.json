@@ -1,0 +1,276 @@
+[
+  {
+    "key": "org_party_dev",
+    "icon": "🎖️",
+    "category": "组织建设",
+    "title": "发展党员",
+    "subtitle": "审核入党积极分子申请",
+    "desc": "严格审查入党积极分子材料，推荐优秀人选入党，充实党员队伍。",
+    "baseCost": 5,
+    "cooldownDays": 30,
+    "successRate": 92,
+    "successOutcome": {
+      "merit": 18,
+      "lineKpi": 12,
+      "bossFavor": 3,
+      "publicOpinion": 2,
+      "desc": "本期发展党员4名，均通过组织部审核，队伍结构优化"
+    },
+    "failOutcome": {
+      "merit": 5,
+      "lineKpi": 0,
+      "desc": "推荐人员审核不严，有人存在问题被退回，被通报批评"
+    }
+  },
+  {
+    "key": "org_branch_build",
+    "icon": "🏗️",
+    "category": "组织建设",
+    "title": "基层党支部建设",
+    "subtitle": "强化基层党支部战斗堡垒",
+    "desc": "指导基层党支部规范化建设，完善\"三会一课\"制度，提升组织力。",
+    "baseCost": 12,
+    "cooldownDays": 45,
+    "successRate": 88,
+    "successOutcome": {
+      "merit": 28,
+      "lineKpi": 20,
+      "bossFavor": 4,
+      "publicOpinion": 5,
+      "desc": "指导建设党支部15个，全部达标，被评为基层党建示范县"
+    },
+    "failOutcome": {
+      "merit": 8,
+      "lineKpi": 5,
+      "desc": "建设工作不扎实，检查时发现制度落实不到位"
+    }
+  },
+  {
+    "key": "org_rotation",
+    "icon": "🔄",
+    "category": "组织建设",
+    "title": "干部轮岗交流",
+    "subtitle": "推动干部跨部门轮岗",
+    "desc": "推动县处级以下干部跨部门、跨区域交流轮岗，激发队伍活力。",
+    "baseCost": 25,
+    "cooldownDays": 60,
+    "successRate": 82,
+    "successOutcome": {
+      "merit": 42,
+      "lineKpi": 30,
+      "bossFavor": 7,
+      "networkValue": 5,
+      "desc": "本批交流干部18人，队伍活力显著提升，市委给予充分肯定"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "lineKpi": 8,
+      "desc": "轮岗方案阻力较大，部分干部不愿意，进展不顺"
+    }
+  },
+  {
+    "key": "org_reserve",
+    "icon": "📋",
+    "category": "组织建设",
+    "title": "后备干部库建设",
+    "subtitle": "建立年轻干部培养体系",
+    "desc": "建立后备干部名单，对优秀年轻干部实施跟踪培养和重点推荐。",
+    "baseCost": 18,
+    "cooldownDays": 60,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 35,
+      "lineKpi": 25,
+      "bossFavor": 8,
+      "desc": "后备干部库纳入68人，35岁以下占比达45%，市委组织部高度认可"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 8,
+      "desc": "后备干部遴选标准不严，质量参差不齐，上级提出改进意见"
+    }
+  },
+  {
+    "key": "cadre_assess",
+    "icon": "🧐",
+    "category": "干部工作",
+    "title": "干部考察",
+    "subtitle": "对拟提拔干部全面考察",
+    "desc": "组织考察组赴干部任职单位及生活圈全面考察，听取多方意见。",
+    "baseCost": 22,
+    "cooldownDays": 45,
+    "successRate": 85,
+    "successOutcome": {
+      "merit": 45,
+      "lineKpi": 32,
+      "bossFavor": 8,
+      "desc": "考察组走访13个单位，候选人口碑良好，考察报告获上级认可"
+    },
+    "failOutcome": {
+      "merit": 10,
+      "lineKpi": 5,
+      "desc": "考察发现候选人存在问题，提拔计划暂缓，工作被动"
+    }
+  },
+  {
+    "key": "cadre_public_select",
+    "icon": "🎯",
+    "category": "干部工作",
+    "title": "公开选拔",
+    "subtitle": "面向社会公开选拔领导干部",
+    "desc": "通过笔试面试公开竞选方式选拔领导干部，提升选人用人公信度。",
+    "baseCost": 40,
+    "cooldownDays": 90,
+    "successRate": 78,
+    "successOutcome": {
+      "merit": 65,
+      "lineKpi": 48,
+      "bossFavor": 10,
+      "publicOpinion": 10,
+      "desc": "公选工作严格透明，3名优秀干部脱颖而出，社会反响良好"
+    },
+    "failOutcome": {
+      "merit": 15,
+      "publicOpinion": -8,
+      "desc": "选拔过程被指不透明，舆论质疑，公信度受损"
+    }
+  },
+  {
+    "key": "cadre_talk",
+    "icon": "💬",
+    "category": "干部工作",
+    "title": "组织谈话",
+    "subtitle": "与重点干部开展思想谈话",
+    "desc": "对拟提拔、重点培养及有苗头性问题的干部进行组织谈话。",
+    "baseCost": 8,
+    "cooldownDays": 20,
+    "successRate": 92,
+    "successOutcome": {
+      "merit": 22,
+      "lineKpi": 15,
+      "moralValue": 3,
+      "bossFavor": 4,
+      "desc": "谈话涉及干部10人，发现并处理苗头性问题2起，防患未然"
+    },
+    "failOutcome": {
+      "merit": 6,
+      "lineKpi": 5,
+      "desc": "谈话效果不佳，被谈话干部态度消极，问题未能解决"
+    }
+  },
+  {
+    "key": "prop_theory",
+    "icon": "📖",
+    "category": "宣传思想",
+    "title": "理论学习",
+    "subtitle": "组织开展习近平新时代思想学习",
+    "desc": "组织党员干部系统学习习近平新时代中国特色社会主义思想，提升理论素养。",
+    "baseCost": 6,
+    "cooldownDays": 21,
+    "successRate": 95,
+    "successOutcome": {
+      "merit": 20,
+      "lineKpi": 14,
+      "bossFavor": 3,
+      "moralValue": 2,
+      "publicOpinion": 3,
+      "desc": "学习活动覆盖全体党员，测试合格率99%，典型经验被省委推广"
+    },
+    "failOutcome": {
+      "merit": 5,
+      "lineKpi": 4,
+      "desc": "学习流于形式，考核参与率偏低，被上级点名"
+    }
+  },
+  {
+    "key": "prop_media",
+    "icon": "📢",
+    "category": "宣传思想",
+    "title": "舆论引导工程",
+    "subtitle": "加强正面宣传和舆论引导",
+    "desc": "策划系列正面宣传报道，加强网络舆情监控，维护稳定的舆论环境。",
+    "baseCost": 20,
+    "cooldownDays": 45,
+    "successRate": 80,
+    "successOutcome": {
+      "merit": 32,
+      "lineKpi": 22,
+      "publicOpinion": 12,
+      "bossFavor": 5,
+      "desc": "正面宣传系列报道被多家媒体转载，舆论环境明显好转"
+    },
+    "failOutcome": {
+      "merit": 8,
+      "publicOpinion": -6,
+      "desc": "宣传内容被网友批评作秀，舆论反弹，适得其反"
+    }
+  },
+  {
+    "key": "prop_culture",
+    "icon": "🎨",
+    "category": "宣传思想",
+    "title": "文化建设工程",
+    "subtitle": "推进党建文化品牌打造",
+    "desc": "打造党建文化展示基地，推出系列党建文化品牌活动，提升党的形象。",
+    "baseCost": 30,
+    "cooldownDays": 60,
+    "successRate": 82,
+    "successOutcome": {
+      "merit": 48,
+      "lineKpi": 35,
+      "publicOpinion": 8,
+      "bossFavor": 6,
+      "desc": "党建文化基地建成，全年接待参观2万余人次，影响力显著提升"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "lineKpi": 8,
+      "desc": "文化建设被指铺张浪费，与民众期待脱节，引发质疑"
+    }
+  },
+  {
+    "key": "disc_check",
+    "icon": "🔎",
+    "category": "党纪党规",
+    "title": "纪律检查",
+    "subtitle": "对支部成员作风纪律专项检查",
+    "desc": "开展党员干部作风纪律专项检查，发现问题及时处置，维护党纪严肃性。",
+    "baseCost": 10,
+    "cooldownDays": 30,
+    "successRate": 90,
+    "successOutcome": {
+      "merit": 25,
+      "inspectionRisk": -8,
+      "lineKpi": 16,
+      "desc": "检查发现一般性违规3起，均已督促整改，支部纪律风气明显好转"
+    },
+    "failOutcome": {
+      "merit": 8,
+      "lineKpi": 5,
+      "desc": "检查工作不够深入，问题漏查，被上级批评敷衍了事"
+    }
+  },
+  {
+    "key": "disc_assess",
+    "icon": "📊",
+    "category": "党纪党规",
+    "title": "年度党建考核",
+    "subtitle": "对各支部开展年度考核打分",
+    "desc": "组织年度党建考核，对优秀支部予以表彰，对落后支部提出整改要求。",
+    "baseCost": 15,
+    "cooldownDays": 90,
+    "successRate": 88,
+    "successOutcome": {
+      "merit": 40,
+      "lineKpi": 30,
+      "bossFavor": 8,
+      "publicOpinion": 5,
+      "desc": "年度考核得分87分，位居全市第一，省委组织部下发通报表扬"
+    },
+    "failOutcome": {
+      "merit": 12,
+      "lineKpi": 10,
+      "desc": "考核评分存在争议，部分支部不服，申诉影响工作秩序"
+    }
+  }
+]

@@ -1,0 +1,1 @@
+ALTER TABLE player_saves ADD COLUMN IF NOT EXISTS initial_dept_key TEXT DEFAULT NULL;

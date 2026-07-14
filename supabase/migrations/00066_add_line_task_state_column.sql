@@ -1,0 +1,2 @@
+ALTER TABLE player_saves
+  ADD COLUMN IF NOT EXISTS line_task_state TEXT NOT NULL DEFAULT '{}';

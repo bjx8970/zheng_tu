@@ -1,0 +1,4 @@
+
+ALTER TABLE player_saves
+  ADD COLUMN IF NOT EXISTS boss_faction TEXT NOT NULL DEFAULT '实干派',
+  ADD COLUMN IF NOT EXISTS sec_auto_consecutive_months INTEGER NOT NULL DEFAULT 0;

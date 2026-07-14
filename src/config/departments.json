@@ -1,0 +1,1129 @@
+{
+  "DEPT_CONFIG": {
+    "police": {
+      "key": "police",
+      "name": "公安局",
+      "fullName": "公安局",
+      "icon": "🚔",
+      "headTitle": "公安局长",
+      "deputyTitle": "公安副局长",
+      "affectIndex": "治安→民生",
+      "desc": "维护社会治安，侦破刑事案件，保障人民群众生命财产安全。",
+      "functions": [
+        "治安管理",
+        "刑事侦查",
+        "户籍管理",
+        "交通管理"
+      ],
+      "autoActionName": "日常巡逻执勤",
+      "autoEffect": {
+        "securityIndex": 2,
+        "cityLivelihood": 1,
+        "meritPoints": 2
+      },
+      "subInstitutions": [
+        {
+          "name": "看守所",
+          "icon": "🔒",
+          "desc": "羁押犯罪嫌疑人及短期服刑人员",
+          "staffCount": 30
+        },
+        {
+          "name": "拘留所",
+          "icon": "🚧",
+          "desc": "执行行政拘留及司法拘留",
+          "staffCount": 20
+        },
+        {
+          "name": "强制隔离戒毒所",
+          "icon": "💊",
+          "desc": "收治吸毒人员开展强制戒治",
+          "staffCount": 25
+        },
+        {
+          "name": "车辆管理所",
+          "icon": "🚗",
+          "desc": "机动车登记、驾驶证业务",
+          "staffCount": 18
+        },
+        {
+          "name": "交警大队",
+          "icon": "🚦",
+          "desc": "道路交通秩序管理与执法",
+          "staffCount": 35
+        },
+        {
+          "name": "警察训练基地",
+          "icon": "🎯",
+          "desc": "民辅警培训与实战演练",
+          "staffCount": 15
+        }
+      ]
+    },
+    "ndrc": {
+      "key": "ndrc",
+      "name": "发展改革委",
+      "fullName": "发展和改革委员会",
+      "icon": "📈",
+      "headTitle": "发改委主任",
+      "deputyTitle": "发改委副主任",
+      "affectIndex": "GDP发展",
+      "desc": "统筹谋划经济发展，审批重大投资项目，推进重点改革举措。",
+      "functions": [
+        "经济规划",
+        "项目审批",
+        "价格管理",
+        "产业政策"
+      ],
+      "autoActionName": "项目审批推进",
+      "autoEffect": {
+        "cityGdp": 1,
+        "meritPoints": 2
+      },
+      "subInstitutions": [
+        {
+          "name": "价格监督检查局",
+          "icon": "💲",
+          "desc": "监督市场价格秩序，查处价格违法行为",
+          "staffCount": 12
+        },
+        {
+          "name": "社会信用服务中心",
+          "icon": "📋",
+          "desc": "归集信用数据，推进社会信用体系建设",
+          "staffCount": 10
+        },
+        {
+          "name": "重大项目推进办",
+          "icon": "🏗️",
+          "desc": "统筹协调重大投资项目落地推进",
+          "staffCount": 8
+        },
+        {
+          "name": "战略规划研究院",
+          "icon": "🔬",
+          "desc": "开展中长期经济发展战略研究",
+          "staffCount": 6
+        }
+      ]
+    },
+    "finance": {
+      "key": "finance",
+      "name": "财政局",
+      "fullName": "财政局",
+      "icon": "💰",
+      "headTitle": "财政局长",
+      "deputyTitle": "财政副局长",
+      "affectIndex": "综合指数",
+      "desc": "管理财政收支，优化预算分配，保障重大项目资金来源。",
+      "functions": [
+        "预算编制",
+        "资金拨付",
+        "财务监督",
+        "政府债务"
+      ],
+      "autoActionName": "财政资金管理",
+      "autoEffect": {
+        "fundBalance": 8,
+        "meritPoints": 2
+      },
+      "subInstitutions": [
+        {
+          "name": "国库科",
+          "icon": "🏦",
+          "desc": "管理国库资金收付，保障财政资金安全",
+          "staffCount": 12
+        },
+        {
+          "name": "预算科",
+          "icon": "📊",
+          "desc": "编制年度财政预算，统筹资金分配",
+          "staffCount": 10
+        },
+        {
+          "name": "政府采购中心",
+          "icon": "🛒",
+          "desc": "统一组织政府采购活动，规范采购行为",
+          "staffCount": 8
+        },
+        {
+          "name": "会计核算中心",
+          "icon": "🧮",
+          "desc": "集中核算行政单位财务账目",
+          "staffCount": 10
+        },
+        {
+          "name": "非税收入管理局",
+          "icon": "💴",
+          "desc": "征收管理非税收入，堵塞收入漏洞",
+          "staffCount": 8
+        }
+      ]
+    },
+    "urban": {
+      "key": "urban",
+      "name": "住建局",
+      "fullName": "住房和城乡建设局",
+      "icon": "🏗️",
+      "headTitle": "住建局长",
+      "deputyTitle": "住建副局长",
+      "affectIndex": "GDP+民生",
+      "desc": "推进城市建设与基础设施建设，改善居住环境。",
+      "functions": [
+        "房地产管理",
+        "城镇建设",
+        "市政设施",
+        "工程质量"
+      ],
+      "autoActionName": "市政工程督查",
+      "autoEffect": {
+        "cityGdp": 1,
+        "cityLivelihood": 2,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "城市规划设计院",
+          "icon": "📐",
+          "desc": "编制城市总规、控规，承接规划技术论证",
+          "staffCount": 15
+        },
+        {
+          "name": "工程质量安全监督站",
+          "icon": "🔧",
+          "desc": "监督建设工程质量与施工安全",
+          "staffCount": 12
+        },
+        {
+          "name": "物业管理中心",
+          "icon": "🏘️",
+          "desc": "监管辖区物业服务企业，处理业主纠纷",
+          "staffCount": 8
+        },
+        {
+          "name": "市政工程处",
+          "icon": "🚰",
+          "desc": "负责市政道路、排水、照明维护",
+          "staffCount": 20
+        },
+        {
+          "name": "住房保障服务中心",
+          "icon": "🏠",
+          "desc": "受理保障性住房申请，管理公租房分配",
+          "staffCount": 10
+        }
+      ]
+    },
+    "education": {
+      "key": "education",
+      "name": "教育局",
+      "fullName": "教育局",
+      "icon": "📚",
+      "headTitle": "教育局长",
+      "deputyTitle": "教育副局长",
+      "affectIndex": "民生满意",
+      "desc": "发展教育事业，均衡教育资源，提升民生满意度。",
+      "functions": [
+        "学校管理",
+        "师资建设",
+        "教育资源配置",
+        "职业教育"
+      ],
+      "autoActionName": "教学质量督导",
+      "autoEffect": {
+        "cityLivelihood": 2,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "教育教学研究室",
+          "icon": "🔬",
+          "desc": "开展教学科研，推进课程改革与师资培训",
+          "staffCount": 12
+        },
+        {
+          "name": "招生考试中心",
+          "icon": "📝",
+          "desc": "组织中高考报名、考场安排及成绩管理",
+          "staffCount": 10
+        },
+        {
+          "name": "校外培训监管科",
+          "icon": "⚠️",
+          "desc": "监管校外学科培训机构，维护教育秩序",
+          "staffCount": 8
+        },
+        {
+          "name": "学生资助管理中心",
+          "icon": "💰",
+          "desc": "落实各类助学金、减免学费政策",
+          "staffCount": 6
+        },
+        {
+          "name": "特殊教育指导中心",
+          "icon": "♿",
+          "desc": "指导残障学生随班就读及特教学校管理",
+          "staffCount": 5
+        }
+      ]
+    },
+    "health": {
+      "key": "health",
+      "name": "卫健委",
+      "fullName": "卫生健康委员会",
+      "icon": "🏥",
+      "headTitle": "卫健委主任",
+      "deputyTitle": "卫健委副主任",
+      "affectIndex": "民生满意",
+      "desc": "推进医疗卫生事业发展，保障群众基本医疗需求。",
+      "functions": [
+        "医疗服务",
+        "公共卫生",
+        "卫生监督",
+        "医改推进"
+      ],
+      "autoActionName": "医疗卫生巡查",
+      "autoEffect": {
+        "cityLivelihood": 2,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "疾病预防控制中心",
+          "icon": "🦠",
+          "desc": "监测传染病疫情，开展公共卫生防控",
+          "staffCount": 25
+        },
+        {
+          "name": "妇幼保健院",
+          "icon": "👶",
+          "desc": "提供妇女儿童专科医疗保健服务",
+          "staffCount": 60
+        },
+        {
+          "name": "卫生监督所",
+          "icon": "🔍",
+          "desc": "监督食品安全、公共场所及医疗机构卫生",
+          "staffCount": 15
+        },
+        {
+          "name": "120急救中心",
+          "icon": "🚑",
+          "desc": "统一调度院前急救资源，处置急危重症",
+          "staffCount": 20
+        },
+        {
+          "name": "中医药管理科",
+          "icon": "🌿",
+          "desc": "推广中医药适宜技术，指导中医馆建设",
+          "staffCount": 8
+        }
+      ]
+    },
+    "ecology": {
+      "key": "ecology",
+      "name": "生态环保局",
+      "fullName": "生态环境局",
+      "icon": "🌿",
+      "headTitle": "生态局长",
+      "deputyTitle": "生态副局长",
+      "affectIndex": "生态环境",
+      "desc": "保护生态环境，开展环保专项行动，推进绿色发展。",
+      "functions": [
+        "污染防治",
+        "生态修复",
+        "环境监测",
+        "绿化建设"
+      ],
+      "autoActionName": "环境巡查监测",
+      "autoEffect": {
+        "cityEcology": 2,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "环境监测站",
+          "icon": "📡",
+          "desc": "对大气、水体、土壤实施实时监测预警",
+          "staffCount": 18
+        },
+        {
+          "name": "生态修复办公室",
+          "icon": "🌱",
+          "desc": "组织矿山复绿、湿地修复等生态工程",
+          "staffCount": 10
+        },
+        {
+          "name": "环保综合执法大队",
+          "icon": "🚨",
+          "desc": "查处环境违法排污、非法倾倒废物案件",
+          "staffCount": 20
+        },
+        {
+          "name": "辐射环境监管站",
+          "icon": "☢️",
+          "desc": "监管放射源安全，防范辐射污染事故",
+          "staffCount": 8
+        }
+      ]
+    },
+    "market": {
+      "key": "market",
+      "name": "市场监管局",
+      "fullName": "市场监督管理局",
+      "icon": "⚖️",
+      "headTitle": "市监局长",
+      "deputyTitle": "市监副局长",
+      "affectIndex": "营商环境",
+      "desc": "加强市场监管，维护市场秩序，优化营商环境。",
+      "functions": [
+        "市场准入",
+        "质量监管",
+        "反垄断执法",
+        "食品安全"
+      ],
+      "autoActionName": "日常市场监查",
+      "autoEffect": {
+        "cityBusiness": 1,
+        "cityLivelihood": 1,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "食品安全检测中心",
+          "icon": "🥗",
+          "desc": "对食品进行抽样检测，保障消费安全",
+          "staffCount": 20
+        },
+        {
+          "name": "计量检定所",
+          "icon": "⚖️",
+          "desc": "开展计量标准器具检定，维护计量秩序",
+          "staffCount": 12
+        },
+        {
+          "name": "特种设备检验所",
+          "icon": "⚙️",
+          "desc": "检验电梯、锅炉、压力容器等特种设备",
+          "staffCount": 15
+        },
+        {
+          "name": "知识产权保护中心",
+          "icon": "©️",
+          "desc": "受理商标、专利投诉，打击假冒侵权",
+          "staffCount": 8
+        },
+        {
+          "name": "网络交易监督科",
+          "icon": "💻",
+          "desc": "监管电商平台与网络交易市场行为",
+          "staffCount": 6
+        }
+      ]
+    },
+    "agriculture": {
+      "key": "agriculture",
+      "name": "农业农村局",
+      "fullName": "农业农村局",
+      "icon": "🌾",
+      "headTitle": "农业局长",
+      "deputyTitle": "农业副局长",
+      "affectIndex": "GDP+民生",
+      "desc": "推进农业农村现代化，实施乡村振兴战略。",
+      "functions": [
+        "农业生产",
+        "农村建设",
+        "农民增收",
+        "农技推广"
+      ],
+      "autoActionName": "农业生产督导",
+      "autoEffect": {
+        "cityGdp": 1,
+        "cityLivelihood": 1,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "农业技术推广中心",
+          "icon": "🌱",
+          "desc": "推广农业新品种、新技术，提升粮食产量",
+          "staffCount": 20
+        },
+        {
+          "name": "动植物检疫站",
+          "icon": "🔬",
+          "desc": "检疫动植物及产品，防止疫病传入传出",
+          "staffCount": 12
+        },
+        {
+          "name": "农业综合执法大队",
+          "icon": "🚜",
+          "desc": "查处农资违法、土地违规等案件",
+          "staffCount": 15
+        },
+        {
+          "name": "农村经营管理站",
+          "icon": "📑",
+          "desc": "管理农村集体资产，推进土地流转",
+          "staffCount": 10
+        },
+        {
+          "name": "乡村振兴工作队",
+          "icon": "🏡",
+          "desc": "驻村帮扶，推进美丽乡村建设",
+          "staffCount": 8
+        }
+      ]
+    },
+    "personnel": {
+      "key": "personnel",
+      "name": "人事局",
+      "fullName": "人事局",
+      "icon": "🎓",
+      "headTitle": "人事局长",
+      "deputyTitle": "人事副局长",
+      "affectIndex": "干部培养",
+      "desc": "负责干部人事管理，开展年度晋升评审，组织在职培训。",
+      "functions": [
+        "干部考核",
+        "职级晋升",
+        "人才培养",
+        "绩效评估"
+      ],
+      "autoActionName": "干部日常考勤管理",
+      "autoEffect": {
+        "meritPoints": 2,
+        "bossFavor": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "公务员培训中心",
+          "icon": "📖",
+          "desc": "承办行政学院培训班，提升干部能力",
+          "staffCount": 15
+        },
+        {
+          "name": "事业单位登记管理局",
+          "icon": "📋",
+          "desc": "审批登记事业单位，核定人员编制",
+          "staffCount": 10
+        },
+        {
+          "name": "干部档案室",
+          "icon": "🗂️",
+          "desc": "集中管理党政干部人事档案资料",
+          "staffCount": 8
+        },
+        {
+          "name": "人才引进服务中心",
+          "icon": "🌟",
+          "desc": "招引高层次人才，落实人才激励政策",
+          "staffCount": 6
+        }
+      ]
+    },
+    "invest": {
+      "key": "invest",
+      "name": "招商局",
+      "fullName": "招商引资局",
+      "icon": "🏢",
+      "headTitle": "招商局长",
+      "deputyTitle": "招商副局长",
+      "affectIndex": "GDP+营商",
+      "desc": "负责招商引资工作，吸引企业入驻，发展地方经济。",
+      "functions": [
+        "招商引资",
+        "企业服务",
+        "项目跟踪",
+        "经济合作"
+      ],
+      "autoActionName": "在谈企业跟进",
+      "autoEffect": {
+        "cityGdp": 1,
+        "cityBusiness": 1,
+        "meritPoints": 1,
+        "taxRevenue": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "企业服务中心",
+          "icon": "🤝",
+          "desc": "为落户企业提供全周期帮办代办服务",
+          "staffCount": 12
+        },
+        {
+          "name": "投资促进中心",
+          "icon": "📈",
+          "desc": "策划招商活动，拓展投资合作渠道",
+          "staffCount": 10
+        },
+        {
+          "name": "产业园区管委会",
+          "icon": "🏭",
+          "desc": "统筹园区规划、基础配套与企业服务",
+          "staffCount": 15
+        },
+        {
+          "name": "外资引进服务科",
+          "icon": "🌐",
+          "desc": "对接外资项目，协助外企注册落地",
+          "staffCount": 8
+        }
+      ]
+    },
+    "tax": {
+      "key": "tax",
+      "name": "税务局",
+      "fullName": "税务局",
+      "icon": "🧾",
+      "headTitle": "税务局长",
+      "deputyTitle": "税务副局长",
+      "affectIndex": "城市资金",
+      "desc": "负责税收征管工作，确保税收收入，为城市发展提供资金支撑。",
+      "functions": [
+        "税收征管",
+        "纳税服务",
+        "税务稽查",
+        "税收政策执行"
+      ],
+      "autoActionName": "日常税收征管",
+      "autoEffect": {
+        "fundBalance": 10,
+        "taxRevenue": 1,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "纳税服务中心",
+          "icon": "🏦",
+          "desc": "提供申报辅导、发票管理等纳税服务",
+          "staffCount": 20
+        },
+        {
+          "name": "税务稽查局",
+          "icon": "🔎",
+          "desc": "对企业开展税务专项检查，查处逃税漏税",
+          "staffCount": 15
+        },
+        {
+          "name": "大企业税收管理科",
+          "icon": "🏗️",
+          "desc": "专项负责辖区大型企业税收风险管理",
+          "staffCount": 8
+        },
+        {
+          "name": "税收数据分析室",
+          "icon": "📊",
+          "desc": "分析税源结构，支撑税收政策制定",
+          "staffCount": 6
+        }
+      ]
+    },
+    "petition": {
+      "key": "petition",
+      "name": "信访办",
+      "fullName": "信访办公室",
+      "icon": "📮",
+      "headTitle": "信访办主任",
+      "deputyTitle": "信访办副主任",
+      "affectIndex": "上司满意度",
+      "desc": "负责接收群众来信来访，化解社会矛盾，维护社会稳定，是政府与群众沟通的重要桥梁。",
+      "functions": [
+        "信访接待",
+        "矛盾调解",
+        "维稳工作",
+        "舆情处理"
+      ],
+      "autoActionName": "日常信访接待化解",
+      "autoEffect": {
+        "meritPoints": 2,
+        "bossFavor": 1,
+        "cityLivelihood": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "矛盾纠纷调处中心",
+          "icon": "🤝",
+          "desc": "整合人民调解、行政调解等多元化解机制",
+          "staffCount": 15
+        },
+        {
+          "name": "网上信访平台",
+          "icon": "💻",
+          "desc": "处理网络信访投诉，实现在线督办闭环",
+          "staffCount": 8
+        },
+        {
+          "name": "联合接访站",
+          "icon": "🏢",
+          "desc": "多部门联合接访，一站式化解复杂矛盾",
+          "staffCount": 10
+        },
+        {
+          "name": "社会稳定风险评估室",
+          "icon": "📋",
+          "desc": "对重大决策开展维稳风险评估",
+          "staffCount": 6
+        }
+      ]
+    },
+    "organization": {
+      "key": "organization",
+      "name": "组织部",
+      "fullName": "中共×××委员会组织部",
+      "icon": "🏛️",
+      "headTitle": "组织部部长",
+      "deputyTitle": "组织部副部长",
+      "affectIndex": "干部队伍建设",
+      "desc": "负责干部选拔任用、党员管理与考核培训，是领导班子建设的核心职能部门。",
+      "functions": [
+        "干部考评",
+        "正职任命",
+        "党员管理",
+        "后备干部培养"
+      ],
+      "autoActionName": "定期干部考核登记",
+      "autoEffect": {
+        "meritPoints": 2,
+        "bossFavor": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "党员教育培训中心",
+          "icon": "🎓",
+          "desc": "组织党员教育培训，强化党性修养",
+          "staffCount": 10
+        },
+        {
+          "name": "干部考核考察室",
+          "icon": "📝",
+          "desc": "开展干部年度考核和提拔前组织考察",
+          "staffCount": 8
+        },
+        {
+          "name": "党务档案室",
+          "icon": "🗂️",
+          "desc": "集中管理党员档案，核实党籍信息",
+          "staffCount": 6
+        },
+        {
+          "name": "后备干部培养基地",
+          "icon": "⭐",
+          "desc": "遴选挂职锻炼干部，梯队化育才",
+          "staffCount": 5
+        }
+      ]
+    },
+    "propaganda": {
+      "key": "propaganda",
+      "name": "宣传部",
+      "fullName": "中共×××委员会宣传部",
+      "icon": "📢",
+      "headTitle": "宣传部部长",
+      "deputyTitle": "宣传部副部长",
+      "affectIndex": "社会稳定",
+      "desc": "负责意识形态工作，管理文化宣传事务，引导社会舆论，维护党的形象。",
+      "functions": [
+        "舆论引导",
+        "文化宣传",
+        "意识形态",
+        "新闻管理"
+      ],
+      "autoActionName": "日常舆论引导监管",
+      "autoEffect": {
+        "cityLivelihood": 1,
+        "bossFavor": 1,
+        "meritPoints": 2
+      },
+      "subInstitutions": [
+        {
+          "name": "新闻发布中心",
+          "icon": "📺",
+          "desc": "组织新闻发布会，管理媒体采访授权",
+          "staffCount": 8
+        },
+        {
+          "name": "文化活动中心",
+          "icon": "🎭",
+          "desc": "策划群众性文化活动，繁荣基层文化",
+          "staffCount": 15
+        },
+        {
+          "name": "意识形态工作室",
+          "icon": "🏛️",
+          "desc": "研判意识形态形势，部署阵地安全管理",
+          "staffCount": 6
+        },
+        {
+          "name": "网络舆情监控室",
+          "icon": "🖥️",
+          "desc": "实时监测网络舆情，及时处置负面信息",
+          "staffCount": 10
+        },
+        {
+          "name": "融媒体中心",
+          "icon": "📱",
+          "desc": "统筹党媒平台矩阵，创作主旋律内容",
+          "staffCount": 12
+        }
+      ]
+    },
+    "discipline": {
+      "key": "discipline",
+      "name": "纪检委",
+      "fullName": "中共×××纪律检查委员会",
+      "icon": "⚖️",
+      "headTitle": "纪检委书记",
+      "deputyTitle": "纪检委副书记",
+      "affectIndex": "廉洁治理",
+      "desc": "负责党风廉政建设和反腐败工作，监督党员干部依规用权、廉洁从政。",
+      "functions": [
+        "案件查处",
+        "廉政监督",
+        "巡视巡察",
+        "党纪审查"
+      ],
+      "autoActionName": "日常廉政教育督查",
+      "autoEffect": {
+        "bossFavor": 1,
+        "meritPoints": 2
+      },
+      "subInstitutions": [
+        {
+          "name": "案件审查调查室",
+          "icon": "🔎",
+          "desc": "立案调查党员干部违纪违法问题",
+          "staffCount": 20
+        },
+        {
+          "name": "巡察工作办公室",
+          "icon": "👁️",
+          "desc": "组织开展对下级单位的巡察工作",
+          "staffCount": 12
+        },
+        {
+          "name": "廉政教育基地",
+          "icon": "🏛️",
+          "desc": "开展廉政警示教育，筑牢拒腐防线",
+          "staffCount": 8
+        },
+        {
+          "name": "派驻纪检监察组",
+          "icon": "🕵️",
+          "desc": "常驻各职能部门，实施全面监督",
+          "staffCount": 15
+        },
+        {
+          "name": "举报中心",
+          "icon": "📞",
+          "desc": "受理群众举报，保护举报人合法权益",
+          "staffCount": 6
+        }
+      ]
+    },
+    "govoffice": {
+      "key": "govoffice",
+      "name": "政府办公室",
+      "fullName": "×××人民政府办公室",
+      "icon": "📋",
+      "headTitle": "政府办主任",
+      "deputyTitle": "政府办副主任",
+      "affectIndex": "综合协调",
+      "desc": "协助政府领导处理日常政务，负责综合协调、文件起草、会议组织等工作。",
+      "functions": [
+        "文件起草",
+        "会议组织",
+        "政务协调",
+        "信息报送"
+      ],
+      "autoActionName": "政务文件综合协调",
+      "autoEffect": {
+        "bossFavor": 2,
+        "meritPoints": 2
+      },
+      "subInstitutions": [
+        {
+          "name": "政务服务中心",
+          "icon": "🏢",
+          "desc": "集中办理行政审批，推进一网通办",
+          "staffCount": 25
+        },
+        {
+          "name": "政府信息公开办",
+          "icon": "📢",
+          "desc": "统筹政府信息主动公开与依申请公开",
+          "staffCount": 6
+        },
+        {
+          "name": "督查考核室",
+          "icon": "📝",
+          "desc": "督查政府决策部署落实，开展绩效考核",
+          "staffCount": 8
+        },
+        {
+          "name": "应急管理办公室",
+          "icon": "🚨",
+          "desc": "统筹突发事件应急处置与预案管理",
+          "staffCount": 10
+        }
+      ]
+    },
+    "industry": {
+      "key": "industry",
+      "name": "工信局",
+      "fullName": "工业和信息化局",
+      "icon": "🏭",
+      "headTitle": "工信局局长",
+      "deputyTitle": "工信局副局长",
+      "affectIndex": "工业GDP",
+      "desc": "推进工业发展和信息化建设，促进制造业转型升级，发展数字经济。",
+      "functions": [
+        "工业规划",
+        "数字经济",
+        "企业扶持",
+        "智能制造"
+      ],
+      "autoActionName": "工业园区巡查督导",
+      "autoEffect": {
+        "cityGdp": 2,
+        "cityBusiness": 1,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "中小企业服务中心",
+          "icon": "🏪",
+          "desc": "为中小微企业提供融资、政策咨询服务",
+          "staffCount": 12
+        },
+        {
+          "name": "信息化推进中心",
+          "icon": "💻",
+          "desc": "推动政务数字化转型，建设智慧城市",
+          "staffCount": 10
+        },
+        {
+          "name": "工业园区管委会",
+          "icon": "🏭",
+          "desc": "统筹工业园区规划建设与企业入驻管理",
+          "staffCount": 15
+        },
+        {
+          "name": "质量标准计量站",
+          "icon": "📏",
+          "desc": "推广先进质量标准，开展产品质量监督",
+          "staffCount": 8
+        }
+      ]
+    },
+    "naturalres": {
+      "key": "naturalres",
+      "name": "自然资源局",
+      "fullName": "自然资源和规划局",
+      "icon": "🌿",
+      "headTitle": "自然资源局长",
+      "deputyTitle": "自然资源副局长",
+      "affectIndex": "生态+发展",
+      "desc": "统一管理自然资源资产，负责土地规划、矿产资源、国土测绘等工作。",
+      "functions": [
+        "土地管理",
+        "矿产资源",
+        "国土规划",
+        "不动产登记"
+      ],
+      "autoActionName": "国土资源巡查管理",
+      "autoEffect": {
+        "cityEcology": 1,
+        "cityGdp": 1,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "国土测绘院",
+          "icon": "🗺️",
+          "desc": "开展地籍测量、城镇地籍调查工作",
+          "staffCount": 15
+        },
+        {
+          "name": "不动产登记中心",
+          "icon": "🏠",
+          "desc": "统一登记土地、房屋等不动产权利",
+          "staffCount": 20
+        },
+        {
+          "name": "矿产资源管理科",
+          "icon": "⛏️",
+          "desc": "审批矿业权，监管矿产开采活动",
+          "staffCount": 8
+        },
+        {
+          "name": "耕地保护监察大队",
+          "icon": "🌾",
+          "desc": "巡查耕地保护情况，查处违法占地",
+          "staffCount": 12
+        }
+      ]
+    },
+    "construction": {
+      "key": "construction",
+      "name": "住建局",
+      "fullName": "住房和城乡建设局",
+      "icon": "🏗️",
+      "headTitle": "住建局长",
+      "deputyTitle": "住建副局长",
+      "affectIndex": "城市建设",
+      "desc": "负责城乡建设管理，推进基础设施建设，改善人居环境和住房保障工作。",
+      "functions": [
+        "城镇建设",
+        "住房保障",
+        "工程质量",
+        "市政设施"
+      ],
+      "autoActionName": "在建项目质量督查",
+      "autoEffect": {
+        "cityGdp": 1,
+        "cityLivelihood": 2,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "建设工程质量监督站",
+          "icon": "🔧",
+          "desc": "监督房屋建筑工程质量与安全文明施工",
+          "staffCount": 15
+        },
+        {
+          "name": "住房保障服务中心",
+          "icon": "🏠",
+          "desc": "管理公租房、共有产权房申请与分配",
+          "staffCount": 12
+        },
+        {
+          "name": "城市园林绿化管理处",
+          "icon": "🌳",
+          "desc": "负责城市绿化养护与公园建设管理",
+          "staffCount": 20
+        },
+        {
+          "name": "城市照明管理所",
+          "icon": "💡",
+          "desc": "维护城市道路照明设施安全稳定运行",
+          "staffCount": 10
+        },
+        {
+          "name": "建筑业管理科",
+          "icon": "🏢",
+          "desc": "监管建筑施工企业资质与市场行为",
+          "staffCount": 8
+        }
+      ]
+    },
+    "transport": {
+      "key": "transport",
+      "name": "交通运输局",
+      "fullName": "交通运输局",
+      "icon": "🚗",
+      "headTitle": "交通局长",
+      "deputyTitle": "交通副局长",
+      "affectIndex": "营商+民生",
+      "desc": "负责交通运输规划与建设，推进公路、水路等基础设施发展，保障交通安全。",
+      "functions": [
+        "路网建设",
+        "运输管理",
+        "交通安全",
+        "物流保障"
+      ],
+      "autoActionName": "交通干线巡查维护",
+      "autoEffect": {
+        "cityBusiness": 1,
+        "cityLivelihood": 1,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "公路养护中心",
+          "icon": "🛣️",
+          "desc": "负责国省县乡道路日常养护与大修",
+          "staffCount": 30
+        },
+        {
+          "name": "道路运输管理所",
+          "icon": "🚌",
+          "desc": "监管道路运输经营行为，核发许可证件",
+          "staffCount": 15
+        },
+        {
+          "name": "交通综合执法大队",
+          "icon": "🚔",
+          "desc": "查处超限超载、非法营运等违法行为",
+          "staffCount": 20
+        },
+        {
+          "name": "交通工程检测中心",
+          "icon": "🔬",
+          "desc": "对公路桥梁工程质量进行专项检测",
+          "staffCount": 10
+        },
+        {
+          "name": "物流发展促进科",
+          "icon": "📦",
+          "desc": "培育物流市场主体，推进冷链物流建设",
+          "staffCount": 6
+        }
+      ]
+    },
+    "health2": {
+      "key": "health2",
+      "name": "卫健委",
+      "fullName": "卫生健康委员会",
+      "icon": "🏥",
+      "headTitle": "卫健委主任",
+      "deputyTitle": "卫健委副主任",
+      "affectIndex": "民生保障",
+      "desc": "推进医疗卫生事业改革发展，保障群众基本医疗需求，统筹公共卫生防控工作。",
+      "functions": [
+        "医疗服务",
+        "公共卫生",
+        "疾病防控",
+        "医改推进"
+      ],
+      "autoActionName": "医疗卫生专项督查",
+      "autoEffect": {
+        "cityLivelihood": 3,
+        "meritPoints": 1
+      },
+      "subInstitutions": [
+        {
+          "name": "疾病预防控制中心",
+          "icon": "🦠",
+          "desc": "开展传染病监测、免疫规划和健康教育",
+          "staffCount": 30
+        },
+        {
+          "name": "妇幼保健计划生育服务中心",
+          "icon": "👨‍👩‍👧",
+          "desc": "提供孕产妇、儿童保健及计生服务",
+          "staffCount": 40
+        },
+        {
+          "name": "卫生综合监督执法局",
+          "icon": "🔍",
+          "desc": "督查医疗机构、公共场所卫生及食品安全",
+          "staffCount": 20
+        },
+        {
+          "name": "120急救指挥中心",
+          "icon": "🚑",
+          "desc": "统一调度院前急救与紧急医学救援",
+          "staffCount": 15
+        },
+        {
+          "name": "医疗保障服务中心",
+          "icon": "💊",
+          "desc": "办理医保参保、报销及异地就医结算",
+          "staffCount": 12
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+ALTER TABLE player_saves
+  ADD COLUMN IF NOT EXISTS political_capital          INTEGER  DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS major_proposals            TEXT     DEFAULT '[]',
+  ADD COLUMN IF NOT EXISTS policy_tools               TEXT     DEFAULT '[]',
+  ADD COLUMN IF NOT EXISTS policy_field_bonus         TEXT     DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS five_year_plan_year        INTEGER  DEFAULT -1,
+  ADD COLUMN IF NOT EXISTS five_year_plan_topic       TEXT     DEFAULT '',
+  ADD COLUMN IF NOT EXISTS five_year_plan_passed      BOOLEAN  DEFAULT FALSE,
+  ADD COLUMN IF NOT EXISTS plan_project_bonus         TEXT     DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS historical_econ_score      INTEGER  DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS historical_livelihood_score INTEGER DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS historical_integrity_score INTEGER  DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS historical_reform_score    INTEGER  DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS historical_label           TEXT     DEFAULT '',
+  ADD COLUMN IF NOT EXISTS legacy_bonus               INTEGER  DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS retirement_forced          BOOLEAN  DEFAULT FALSE,
+  ADD COLUMN IF NOT EXISTS retired_voluntarily        BOOLEAN  DEFAULT FALSE;

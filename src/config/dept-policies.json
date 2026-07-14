@@ -1,0 +1,1719 @@
+{
+  "DEPT_POLICIES": {
+    "police": [
+      {
+        "id": "p1",
+        "title": "🚔 扫黄打非专项行动",
+        "desc": "集中警力开展扫黄打非，严厉打击黄赌毒，净化社会风气，提升治安指数",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "治安管控",
+        "effect": {
+          "securityIndex": 12,
+          "meritPoints": 18,
+          "bossFavor": 1
+        },
+        "tag": "↑治安指数",
+        "enhanceCondition": {
+          "label": "治安≥65",
+          "checkField": "securityIndex",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "p2",
+        "title": "🔍 刑侦专项攻坚战",
+        "desc": "集中优势兵力对积压案件开展专项攻坚，突破重大案件，提升破案率",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "案件侦破率",
+        "effect": {
+          "meritPoints": 22,
+          "securityIndex": 5
+        },
+        "tag": "↑破案率",
+        "enhanceCondition": {
+          "label": "警力≥60",
+          "checkField": "policeForce",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "p3",
+        "title": "📋 执法规范化达标建设",
+        "desc": "推进执法记录仪全覆盖，开展执法规范培训，压降群众投诉量，提升满意度",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "执法规范度",
+        "effect": {
+          "bossFavor": 5,
+          "meritPoints": 12
+        },
+        "tag": "↑执法满意度",
+        "enhanceCondition": {
+          "label": "上司好感≥65",
+          "checkField": "bossFavor",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "p4",
+        "title": "🏠 社区警务联防联治",
+        "desc": "推行网格化警务，密切警民关系，开展安全宣传进社区，提升群众安全感",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "群众安全感",
+        "effect": {
+          "cityLivelihood": 8,
+          "securityIndex": 4
+        },
+        "tag": "↑安全感",
+        "enhanceCondition": {
+          "label": "民生≥60",
+          "checkField": "cityLivelihood",
+          "checkValue": 60
+        }
+      }
+    ],
+    "ndrc": [
+      {
+        "id": "n1",
+        "title": "🏗 重大项目集中开工",
+        "desc": "组织重点项目集中开工仪式，协调用地、融资等关键要素，加快年度投资完成率",
+        "cost": 30,
+        "cooldownDays": 30,
+        "kpiDim": "重大项目推进",
+        "effect": {
+          "cityGdp": 10,
+          "meritPoints": 22,
+          "fundBalance": 100
+        },
+        "tag": "↑项目投资",
+        "enhanceCondition": {
+          "label": "GDP≥62",
+          "checkField": "cityGdp",
+          "checkValue": 62
+        }
+      },
+      {
+        "id": "n2",
+        "title": "⚡ 投资审批提速行动",
+        "desc": "推行\"一窗受理、并联审批\"，压缩投资项目审批时限，提升企业投资便利度",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "审批服务效率",
+        "effect": {
+          "cityBusiness": 8,
+          "bossFavor": 3,
+          "meritPoints": 15
+        },
+        "tag": "↑审批效率",
+        "enhanceCondition": {
+          "label": "营商≥60",
+          "checkField": "cityBusiness",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "n3",
+        "title": "🛡 价格稳控专项执法",
+        "desc": "对粮、油、猪肉等重要民生商品价格开展专项监测与执法，依法查处哄抬价格行为",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "价格秩序管控",
+        "effect": {
+          "securityIndex": 5,
+          "cityLivelihood": 5,
+          "meritPoints": 14
+        },
+        "tag": "↑价格秩序",
+        "enhanceCondition": {
+          "label": "民生≥58",
+          "checkField": "cityLivelihood",
+          "checkValue": 58
+        }
+      },
+      {
+        "id": "n4",
+        "title": "📊 规划落地督导推进",
+        "desc": "对中长期发展规划阶段目标开展督查考核，推动各部门按期完成任务",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "规划执行效果",
+        "effect": {
+          "meritPoints": 20,
+          "bossFavor": 2,
+          "cityGdp": 3
+        },
+        "tag": "↑规划完成率",
+        "enhanceCondition": {
+          "label": "政绩≥5000",
+          "checkField": "meritPoints",
+          "checkValue": 5000
+        }
+      }
+    ],
+    "finance": [
+      {
+        "id": "f1",
+        "title": "📊 年度预算执行优化",
+        "desc": "对滞后单位下达预算执行督促令，压缩年底突击花钱，提升年度预算执行率",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "预算执行率",
+        "effect": {
+          "taxRevenue": 3,
+          "meritPoints": 14,
+          "fundBalance": 50
+        },
+        "tag": "↑预算执行",
+        "enhanceCondition": {
+          "label": "税收指数≥50",
+          "checkField": "taxRevenue",
+          "checkValue": 50
+        }
+      },
+      {
+        "id": "f2",
+        "title": "💰 非税收入专项清缴",
+        "desc": "对行政事业性收费、罚款收入开展专项清缴，足额缴入财政，完成收入任务",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "财政收入完成",
+        "effect": {
+          "taxRevenue": 8,
+          "meritPoints": 18,
+          "fundBalance": 120
+        },
+        "tag": "↑财政收入",
+        "enhanceCondition": {
+          "label": "资金≥8000万",
+          "checkField": "fundBalance",
+          "checkValue": 8000
+        }
+      },
+      {
+        "id": "f3",
+        "title": "⚖️ 政府债务风险排查",
+        "desc": "开展债务风险专项摸底，对隐性债务进行登记台账，制定化债方案，守住债务红线",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "债务风险管控",
+        "effect": {
+          "moralValue": 6,
+          "meritPoints": 16,
+          "bossFavor": 2
+        },
+        "tag": "↑债务管控",
+        "enhanceCondition": {
+          "label": "道德≥65",
+          "checkField": "moralValue",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "f4",
+        "title": "🔒 财政资金全程监督",
+        "desc": "推行资金支付在线审核，对专项资金开展穿透式检查，严防违规挪用",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "资金安全运行",
+        "effect": {
+          "bossFavor": 4,
+          "moralValue": 3,
+          "meritPoints": 12
+        },
+        "tag": "↑资金合规",
+        "enhanceCondition": {
+          "label": "上司好感≥68",
+          "checkField": "bossFavor",
+          "checkValue": 68
+        }
+      }
+    ],
+    "urban": [
+      {
+        "id": "u1",
+        "title": "🔨 在建工程飞行检查",
+        "desc": "对辖区在建工程开展不定期飞行检查，重点核查主体结构质量，排查安全隐患",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "工程质量管理",
+        "effect": {
+          "cityGdp": 5,
+          "meritPoints": 16,
+          "securityIndex": 3
+        },
+        "tag": "↑质量合格率",
+        "enhanceCondition": {
+          "label": "GDP≥60",
+          "checkField": "cityGdp",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "u2",
+        "title": "🏠 保障性住房摇号分配",
+        "desc": "公开摇号分配一批经济适用房和公租房房源，解决困难家庭住房问题，提升群众满意度",
+        "cost": 25,
+        "cooldownDays": 30,
+        "kpiDim": "住房保障落实",
+        "effect": {
+          "cityLivelihood": 10,
+          "meritPoints": 20,
+          "bossFavor": 3
+        },
+        "tag": "↑住房保障",
+        "enhanceCondition": {
+          "label": "民生≥62",
+          "checkField": "cityLivelihood",
+          "checkValue": 62
+        }
+      },
+      {
+        "id": "u3",
+        "title": "🚧 市政设施专项修缮",
+        "desc": "集中修缮辖区破损道路、积水管网、失效路灯，提升市政设施完好率和城市形象",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "市政设施完好",
+        "effect": {
+          "cityBusiness": 7,
+          "cityLivelihood": 4,
+          "meritPoints": 14
+        },
+        "tag": "↑设施完好率",
+        "enhanceCondition": {
+          "label": "营商≥58",
+          "checkField": "cityBusiness",
+          "checkValue": 58
+        }
+      },
+      {
+        "id": "u4",
+        "title": "📐 违章建筑专项整治",
+        "desc": "对违规建设项目依法拆除或整改，强化规划执行刚性，维护城市规划秩序",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "规划执行合规",
+        "effect": {
+          "moralValue": 5,
+          "meritPoints": 15,
+          "bossFavor": 2
+        },
+        "tag": "↑规划合规",
+        "enhanceCondition": {
+          "label": "道德≥62",
+          "checkField": "moralValue",
+          "checkValue": 62
+        }
+      }
+    ],
+    "education": [
+      {
+        "id": "e1",
+        "title": "📚 教育教学质量提升工程",
+        "desc": "推行\"名校带薄弱校\"帮扶机制，开展课堂质量督导，提升全区教学水平",
+        "cost": 25,
+        "cooldownDays": 30,
+        "kpiDim": "教育教学质量",
+        "effect": {
+          "cityLivelihood": 9,
+          "meritPoints": 18
+        },
+        "tag": "↑教学质量",
+        "enhanceCondition": {
+          "label": "民生≥63",
+          "checkField": "cityLivelihood",
+          "checkValue": 63
+        }
+      },
+      {
+        "id": "e2",
+        "title": "🏫 农村学校定向帮扶",
+        "desc": "选派优秀教师定期赴农村学校支教，补充硬件设施，缩小城乡教育差距",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "资源均衡配置",
+        "effect": {
+          "cityEcology": 4,
+          "cityLivelihood": 5,
+          "meritPoints": 14
+        },
+        "tag": "↑城乡均衡",
+        "enhanceCondition": {
+          "label": "民生+生态≥120",
+          "checkExpr": "cityLivelihood+cityEcology",
+          "checkValue": 120
+        }
+      },
+      {
+        "id": "e3",
+        "title": "🛡 校园安全专项检查",
+        "desc": "对全区学校开展安全隐患排查，落实门卫管理制度，开展应急演练，降低校园事故率",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "校园安全管理",
+        "effect": {
+          "securityIndex": 6,
+          "meritPoints": 12,
+          "bossFavor": 1
+        },
+        "tag": "↑校园安全",
+        "enhanceCondition": {
+          "label": "治安≥60",
+          "checkField": "securityIndex",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "e4",
+        "title": "📞 家校沟通满意度行动",
+        "desc": "建立家长委员会制度，开放学校开放日，推行校长信箱，有效回应家长诉求",
+        "cost": 12,
+        "cooldownDays": 30,
+        "kpiDim": "家长满意度",
+        "effect": {
+          "bossFavor": 5,
+          "cityLivelihood": 4,
+          "meritPoints": 12
+        },
+        "tag": "↑家长满意度",
+        "enhanceCondition": {
+          "label": "上司好感≥65",
+          "checkField": "bossFavor",
+          "checkValue": 65
+        }
+      }
+    ],
+    "health": [
+      {
+        "id": "h1",
+        "title": "🏥 基层医疗能力提升",
+        "desc": "向基层卫生院下派医疗专家，配备先进诊疗仪器，压缩患者候诊时长",
+        "cost": 28,
+        "cooldownDays": 30,
+        "kpiDim": "医疗服务水平",
+        "effect": {
+          "cityLivelihood": 9,
+          "meritPoints": 16,
+          "fundBalance": -60
+        },
+        "tag": "↑医疗服务",
+        "enhanceCondition": {
+          "label": "民生≥60",
+          "checkField": "cityLivelihood",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "h2",
+        "title": "💉 传染病防控应急演练",
+        "desc": "开展重大传染病疫情应急演练，完善防控预案，提升突发公共卫生事件应对能力",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "公共卫生防控",
+        "effect": {
+          "securityIndex": 6,
+          "meritPoints": 14,
+          "bossFavor": 2
+        },
+        "tag": "↑疫情防控",
+        "enhanceCondition": {
+          "label": "治安≥58",
+          "checkField": "securityIndex",
+          "checkValue": 58
+        }
+      },
+      {
+        "id": "h3",
+        "title": "🏡 家庭医生签约推进",
+        "desc": "扩大家庭医生签约服务覆盖面，推进分级诊疗落地，减轻大医院就诊压力",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "医改推进成效",
+        "effect": {
+          "meritPoints": 18,
+          "cityLivelihood": 5,
+          "bossFavor": 2
+        },
+        "tag": "↑医改成效",
+        "enhanceCondition": {
+          "label": "民生+营商≥120",
+          "checkExpr": "cityLivelihood+cityBusiness",
+          "checkValue": 120
+        }
+      },
+      {
+        "id": "h4",
+        "title": "🔍 餐饮卫生专项执法",
+        "desc": "开展餐饮服务单位食品安全专项检查，吊销不合格餐饮证照，提升卫生合格率",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "卫生监督执法",
+        "effect": {
+          "bossFavor": 4,
+          "cityLivelihood": 4,
+          "meritPoints": 12
+        },
+        "tag": "↑卫生合规",
+        "enhanceCondition": {
+          "label": "营商≥60",
+          "checkField": "cityBusiness",
+          "checkValue": 60
+        }
+      }
+    ],
+    "ecology": [
+      {
+        "id": "ec1",
+        "title": "💨 大气污染攻坚行动",
+        "desc": "对重点排污企业实施错峰生产，强化扬尘管控，推动空气质量持续改善",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "大气环境质量",
+        "effect": {
+          "cityEcology": 12,
+          "meritPoints": 18
+        },
+        "tag": "↑大气质量",
+        "enhanceCondition": {
+          "label": "生态≥55",
+          "checkField": "cityEcology",
+          "checkValue": 55
+        }
+      },
+      {
+        "id": "ec2",
+        "title": "🌊 河流断面水质达标攻坚",
+        "desc": "对劣V类水体开展专项整治，清理入河排污口，推进污水管网提质增效",
+        "cost": 25,
+        "cooldownDays": 30,
+        "kpiDim": "水环境治理",
+        "effect": {
+          "cityEcology": 10,
+          "meritPoints": 16,
+          "bossFavor": 2
+        },
+        "tag": "↑水质达标",
+        "enhanceCondition": {
+          "label": "生态≥58",
+          "checkField": "cityEcology",
+          "checkValue": 58
+        }
+      },
+      {
+        "id": "ec3",
+        "title": "🔎 环保督察专项执法",
+        "desc": "对违规排污企业开展专项执法，按日计罚重大违规，查封不达标排放源",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "环保执法力度",
+        "effect": {
+          "meritPoints": 20,
+          "fundBalance": 80,
+          "cityEcology": 4
+        },
+        "tag": "↑执法力度",
+        "enhanceCondition": {
+          "label": "道德≥65",
+          "checkField": "moralValue",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "ec4",
+        "title": "🌳 矿山复绿生态修复",
+        "desc": "推进废弃矿山植被恢复，实施湿地修复工程，完成年度生态修复任务目标",
+        "cost": 28,
+        "cooldownDays": 30,
+        "kpiDim": "生态修复成效",
+        "effect": {
+          "cityEcology": 8,
+          "cityGdp": 3,
+          "meritPoints": 15,
+          "fundBalance": -80
+        },
+        "tag": "↑生态修复",
+        "enhanceCondition": {
+          "label": "生态≥52",
+          "checkField": "cityEcology",
+          "checkValue": 52
+        }
+      }
+    ],
+    "market": [
+      {
+        "id": "m1",
+        "title": "🍽 食品安全飞行检查",
+        "desc": "对餐饮、超市、冷链仓储开展不定期抽检，严查过期食品和添加剂滥用问题",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "食品安全保障",
+        "effect": {
+          "cityLivelihood": 7,
+          "meritPoints": 14,
+          "bossFavor": 1
+        },
+        "tag": "↑食品安全",
+        "enhanceCondition": {
+          "label": "民生≥60",
+          "checkField": "cityLivelihood",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "m2",
+        "title": "🚫 打假打劣市场整治",
+        "desc": "集中打击假冒伪劣、虚假广告、价格欺诈，净化消费市场，提升营商环境",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "市场秩序规范",
+        "effect": {
+          "cityBusiness": 8,
+          "cityLivelihood": 3,
+          "meritPoints": 14
+        },
+        "tag": "↑市场秩序",
+        "enhanceCondition": {
+          "label": "营商≥62",
+          "checkField": "cityBusiness",
+          "checkValue": 62
+        }
+      },
+      {
+        "id": "m3",
+        "title": "⚡ 企业开办全程网办",
+        "desc": "推行企业开办\"一网通办\"，将审批时限压缩至1个工作日内，提升企业满意度",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "企业登记服务",
+        "effect": {
+          "bossFavor": 5,
+          "cityBusiness": 5,
+          "meritPoints": 12
+        },
+        "tag": "↑登记便利",
+        "enhanceCondition": {
+          "label": "营商≥60",
+          "checkField": "cityBusiness",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "m4",
+        "title": "🛗 特种设备年度大检",
+        "desc": "对辖区电梯、锅炉、压力容器等特种设备开展年度全面检验，消除安全隐患",
+        "cost": 16,
+        "cooldownDays": 30,
+        "kpiDim": "特种设备安全",
+        "effect": {
+          "securityIndex": 5,
+          "meritPoints": 12,
+          "cityLivelihood": 3
+        },
+        "tag": "↑设备安全",
+        "enhanceCondition": {
+          "label": "治安≥58",
+          "checkField": "securityIndex",
+          "checkValue": 58
+        }
+      }
+    ],
+    "agriculture": [
+      {
+        "id": "ag1",
+        "title": "🌾 高标准农田建设",
+        "desc": "推进农田水利设施配套和土地平整，提升耕地质量等级，保障粮食产量任务",
+        "cost": 35,
+        "cooldownDays": 30,
+        "kpiDim": "粮食生产安全",
+        "effect": {
+          "cityGdp": 7,
+          "meritPoints": 18,
+          "fundBalance": -90
+        },
+        "tag": "↑粮食产量",
+        "enhanceCondition": {
+          "label": "GDP≥55",
+          "checkField": "cityGdp",
+          "checkValue": 55
+        }
+      },
+      {
+        "id": "ag2",
+        "title": "💰 农产品品牌化培育",
+        "desc": "扶持本地特色农产品申报地理标志，发展订单农业，拓宽增收渠道，提升农民收入",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "农民增收",
+        "effect": {
+          "cityLivelihood": 8,
+          "taxRevenue": 3,
+          "meritPoints": 15,
+          "fundBalance": 30
+        },
+        "tag": "↑农民收入",
+        "enhanceCondition": {
+          "label": "民生≥58",
+          "checkField": "cityLivelihood",
+          "checkValue": 58
+        }
+      },
+      {
+        "id": "ag3",
+        "title": "🏡 美丽乡村人居整治",
+        "desc": "集中开展农村厕所革命、垃圾分类和污水治理，打造洁美宜居的农村环境",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "美丽乡村建设",
+        "effect": {
+          "cityEcology": 8,
+          "cityLivelihood": 4,
+          "meritPoints": 14
+        },
+        "tag": "↑乡村生态",
+        "enhanceCondition": {
+          "label": "生态≥55",
+          "checkField": "cityEcology",
+          "checkValue": 55
+        }
+      },
+      {
+        "id": "ag4",
+        "title": "🤖 农业新技术推广季",
+        "desc": "举办农业技术推广培训，引进优良品种和智能农机，推动农业机械化率提升",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "农技推广成效",
+        "effect": {
+          "meritPoints": 16,
+          "cityGdp": 4,
+          "bossFavor": 2
+        },
+        "tag": "↑农技覆盖",
+        "enhanceCondition": {
+          "label": "GDP+民生≥115",
+          "checkExpr": "cityGdp+cityLivelihood",
+          "checkValue": 115
+        }
+      }
+    ],
+    "personnel": [
+      {
+        "id": "per1",
+        "title": "📝 公务员考录规范化建设",
+        "desc": "完善招录考试全流程纪律规定，推行全程录像监控，确保考试公平公正",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "考录组织工作",
+        "effect": {
+          "moralValue": 6,
+          "meritPoints": 14
+        },
+        "tag": "↑考录规范",
+        "enhanceCondition": {
+          "label": "道德≥65",
+          "checkField": "moralValue",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "per2",
+        "title": "🎓 干部综合能力培训",
+        "desc": "组织科级以上干部参加专题培训，强化习近平新时代中国特色社会主义思想学习",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "培训教育成效",
+        "effect": {
+          "meritPoints": 18,
+          "bossFavor": 2
+        },
+        "tag": "↑培训完成率",
+        "enhanceCondition": {
+          "label": "政绩≥5500",
+          "checkField": "meritPoints",
+          "checkValue": 5500
+        }
+      },
+      {
+        "id": "per3",
+        "title": "📊 年度绩效考核实施",
+        "desc": "推行精准差异化干部考核，拉开优秀与基本称职档次，奖优罚劣，激发干事活力",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "绩效考核落实",
+        "effect": {
+          "bossFavor": 5,
+          "meritPoints": 20
+        },
+        "tag": "↑考核精准",
+        "enhanceCondition": {
+          "label": "上司好感≥68",
+          "checkField": "bossFavor",
+          "checkValue": 68
+        }
+      },
+      {
+        "id": "per4",
+        "title": "🌟 高层次人才专项引进",
+        "desc": "赴重点高校和科研院所开展人才引进，出台安家补贴与科研经费保障政策",
+        "cost": 25,
+        "cooldownDays": 30,
+        "kpiDim": "人才引进效果",
+        "effect": {
+          "cityBusiness": 5,
+          "meritPoints": 16,
+          "bossFavor": 2,
+          "fundBalance": -40
+        },
+        "tag": "↑人才引进",
+        "enhanceCondition": {
+          "label": "营商≥60",
+          "checkField": "cityBusiness",
+          "checkValue": 60
+        }
+      }
+    ],
+    "invest": [
+      {
+        "id": "inv1",
+        "title": "🏭 工业园区重点招商",
+        "desc": "赴长三角、珠三角开展定向招商，向优质制造业企业发出入驻邀请，扩大总量",
+        "cost": 25,
+        "cooldownDays": 30,
+        "kpiDim": "招商引资总量",
+        "effect": {
+          "cityGdp": 10,
+          "meritPoints": 22,
+          "taxRevenue": 5,
+          "fundBalance": 100
+        },
+        "tag": "↑招商总量",
+        "enhanceCondition": {
+          "label": "GDP≥62",
+          "checkField": "cityGdp",
+          "checkValue": 62,
+          "multiplier": 2
+        }
+      },
+      {
+        "id": "inv2",
+        "title": "🤝 落户企业全程帮办",
+        "desc": "建立企业服务专员制度，主动上门解决落户企业用地、用工、融资等痛点问题",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "企业服务质量",
+        "effect": {
+          "cityBusiness": 8,
+          "bossFavor": 3,
+          "meritPoints": 15
+        },
+        "tag": "↑企业满意度",
+        "enhanceCondition": {
+          "label": "营商≥62",
+          "checkField": "cityBusiness",
+          "checkValue": 62,
+          "multiplier": 2
+        }
+      },
+      {
+        "id": "inv3",
+        "title": "💡 签约项目开工攻坚",
+        "desc": "对签约超6个月仍未开工项目逐一约谈，协调资源推动加速落地，提升项目开工率",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "项目落地率",
+        "effect": {
+          "meritPoints": 20,
+          "cityGdp": 5,
+          "bossFavor": 2
+        },
+        "tag": "↑项目开工率",
+        "enhanceCondition": {
+          "label": "GDP+营商≥120",
+          "checkExpr": "cityGdp+cityBusiness",
+          "checkValue": 120,
+          "multiplier": 2
+        }
+      },
+      {
+        "id": "inv4",
+        "title": "🧾 招商企业税收清缴",
+        "desc": "协同税务部门对招引企业开展税收情况专项辅导，推动应税尽税，提升税收贡献",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "税收贡献度",
+        "effect": {
+          "taxRevenue": 10,
+          "fundBalance": 80,
+          "meritPoints": 14
+        },
+        "tag": "↑税收贡献",
+        "enhanceCondition": {
+          "label": "税收指数≥45",
+          "checkField": "taxRevenue",
+          "checkValue": 45,
+          "multiplier": 2
+        }
+      }
+    ],
+    "tax": [
+      {
+        "id": "tax1",
+        "title": "💼 重点税源专项催缴",
+        "desc": "对规上企业欠缴税款依法下达催缴通知，集中清缴滞纳金，完成年度收入任务",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "税收任务完成",
+        "effect": {
+          "taxRevenue": 10,
+          "meritPoints": 18,
+          "fundBalance": 150
+        },
+        "tag": "↑税收任务",
+        "enhanceCondition": {
+          "label": "税收指数≥48",
+          "checkField": "taxRevenue",
+          "checkValue": 48
+        }
+      },
+      {
+        "id": "tax2",
+        "title": "📱 纳税服务便民升级",
+        "desc": "推广\"网上税务局\"，实现高频业务全程网办，压减企业办税时间，提升满意度",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "纳税服务水平",
+        "effect": {
+          "bossFavor": 5,
+          "cityBusiness": 5,
+          "meritPoints": 14
+        },
+        "tag": "↑纳税服务",
+        "enhanceCondition": {
+          "label": "营商≥60",
+          "checkField": "cityBusiness",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "tax3",
+        "title": "🔍 大数据精准稽查",
+        "desc": "运用大数据画像技术精准锁定风险企业，开展专项稽查，提高查补税款金额",
+        "cost": 25,
+        "cooldownDays": 30,
+        "kpiDim": "税务稽查效能",
+        "effect": {
+          "meritPoints": 20,
+          "fundBalance": 200,
+          "taxRevenue": 8
+        },
+        "tag": "↑稽查精准率",
+        "enhanceCondition": {
+          "label": "道德≥65",
+          "checkField": "moralValue",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "tax4",
+        "title": "⚖️ 执法风险自查自纠",
+        "desc": "组织征管人员开展执法风险自查，纠正不规范征管行为，守住廉洁征税底线",
+        "cost": 12,
+        "cooldownDays": 30,
+        "kpiDim": "依法诚信征管",
+        "effect": {
+          "moralValue": 6,
+          "meritPoints": 12,
+          "bossFavor": 2
+        },
+        "tag": "↑征管合规",
+        "enhanceCondition": {
+          "label": "道德≥68",
+          "checkField": "moralValue",
+          "checkValue": 68
+        }
+      }
+    ],
+    "petition": [
+      {
+        "id": "pet1",
+        "title": "📂 信访积案集中攻坚",
+        "desc": "对三年以上未解结信访积案开展专项化解，逐案制定方案，提升按期办结率",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "矛盾化解率",
+        "effect": {
+          "bossFavor": 5,
+          "meritPoints": 18,
+          "cityLivelihood": 3
+        },
+        "tag": "↑化解率",
+        "enhanceCondition": {
+          "label": "上司好感≥65",
+          "checkField": "bossFavor",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "pet2",
+        "title": "🛑 重点人员稳控管理",
+        "desc": "摸排有越级进京访倾向的重点人员，开展走访关怀，从源头压降越级上访",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "越级上访控制",
+        "effect": {
+          "securityIndex": 6,
+          "meritPoints": 16,
+          "bossFavor": 2
+        },
+        "tag": "↑压降越级",
+        "enhanceCondition": {
+          "label": "治安≥60",
+          "checkField": "securityIndex",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "pet3",
+        "title": "📞 领导接访下访活动",
+        "desc": "推行领导干部定期接访制度，主动下访听取群众诉求，提升信访群众满意度",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "信访群众满意度",
+        "effect": {
+          "cityLivelihood": 7,
+          "meritPoints": 14,
+          "bossFavor": 2
+        },
+        "tag": "↑群众满意",
+        "enhanceCondition": {
+          "label": "民生≥62",
+          "checkField": "cityLivelihood",
+          "checkValue": 62
+        }
+      },
+      {
+        "id": "pet4",
+        "title": "🕊 矛盾隐患排查化解",
+        "desc": "开展社会矛盾隐患\"大排查\"，对劳资纠纷、土地纠纷等重点领域进行预防性疏导",
+        "cost": 16,
+        "cooldownDays": 30,
+        "kpiDim": "维护社会稳定",
+        "effect": {
+          "securityIndex": 7,
+          "meritPoints": 15,
+          "cityLivelihood": 3
+        },
+        "tag": "↑社会稳定",
+        "enhanceCondition": {
+          "label": "治安+民生≥120",
+          "checkExpr": "securityIndex+cityLivelihood",
+          "checkValue": 120
+        }
+      }
+    ],
+    "organization": [
+      {
+        "id": "org1",
+        "title": "🏆 干部实绩综合考核",
+        "desc": "推行干部\"实地考察+民主测评+年度考核\"三位一体评价体系，优化队伍结构",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "干部队伍建设",
+        "effect": {
+          "bossFavor": 5,
+          "meritPoints": 20
+        },
+        "tag": "↑队伍建设",
+        "enhanceCondition": {
+          "label": "上司好感≥70",
+          "checkField": "bossFavor",
+          "checkValue": 70
+        }
+      },
+      {
+        "id": "org2",
+        "title": "🔴 党员组织生活规范化",
+        "desc": "落实\"三会一课\"制度，推行党员量化积分管理，提升党员先锋模范作用",
+        "cost": 12,
+        "cooldownDays": 30,
+        "kpiDim": "党员管理规范",
+        "effect": {
+          "moralValue": 6,
+          "meritPoints": 14,
+          "bossFavor": 1
+        },
+        "tag": "↑党员管理",
+        "enhanceCondition": {
+          "label": "道德≥68",
+          "checkField": "moralValue",
+          "checkValue": 68
+        }
+      },
+      {
+        "id": "org3",
+        "title": "🎓 高层次人才引进计划",
+        "desc": "出台\"优才引进15条\"，赴重点高校举办招才引智专场，给予安家补贴和科研经费",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "人才引进培育",
+        "effect": {
+          "meritPoints": 18,
+          "cityGdp": 3,
+          "bossFavor": 2
+        },
+        "tag": "↑人才引进",
+        "enhanceCondition": {
+          "label": "GDP≥60",
+          "checkField": "cityGdp",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "org4",
+        "title": "⭐ 后备干部挂职锻炼",
+        "desc": "从后备干部库中选派优秀人才赴基层和重点部门挂职，加快实践能力培养",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "后备干部培养",
+        "effect": {
+          "cityGdp": 2,
+          "meritPoints": 16,
+          "bossFavor": 3
+        },
+        "tag": "↑后备干部",
+        "enhanceCondition": {
+          "label": "上司好感+道德≥130",
+          "checkExpr": "bossFavor+moralValue",
+          "checkValue": 130
+        }
+      }
+    ],
+    "propaganda": [
+      {
+        "id": "prop1",
+        "title": "🛡 意识形态阵地专项整治",
+        "desc": "对网络媒体、文化阵地开展专项排查，清理有害信息，守牢意识形态安全底线",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "意识形态安全",
+        "effect": {
+          "moralValue": 7,
+          "meritPoints": 14,
+          "bossFavor": 2
+        },
+        "tag": "↑意识形态",
+        "enhanceCondition": {
+          "label": "道德≥68",
+          "checkField": "moralValue",
+          "checkValue": 68
+        }
+      },
+      {
+        "id": "prop2",
+        "title": "📢 重大舆情快速响应处置",
+        "desc": "建立舆情动态监测平台，对负面舆情24小时内发布权威回应，防止发酵扩散",
+        "cost": 16,
+        "cooldownDays": 30,
+        "kpiDim": "舆论引导效果",
+        "effect": {
+          "securityIndex": 5,
+          "meritPoints": 14,
+          "bossFavor": 2
+        },
+        "tag": "↑舆论引导",
+        "enhanceCondition": {
+          "label": "上司好感≥68",
+          "checkField": "bossFavor",
+          "checkValue": 68
+        }
+      },
+      {
+        "id": "prop3",
+        "title": "🎭 文化惠民活动月",
+        "desc": "组织送戏下乡、文化惠民演出、图书进社区等文化活动，丰富群众精神文化生活",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "文化活动覆盖",
+        "effect": {
+          "cityLivelihood": 6,
+          "meritPoints": 12,
+          "bossFavor": 1
+        },
+        "tag": "↑文化活动",
+        "enhanceCondition": {
+          "label": "民生≥60",
+          "checkField": "cityLivelihood",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "prop4",
+        "title": "📰 主流媒体发声集中行动",
+        "desc": "组织开展本地发展成就系列报道，扩大对外正面宣传声量，塑造良好城市形象",
+        "cost": 12,
+        "cooldownDays": 30,
+        "kpiDim": "新闻宣传管理",
+        "effect": {
+          "bossFavor": 4,
+          "meritPoints": 13,
+          "cityLivelihood": 2
+        },
+        "tag": "↑媒体管理",
+        "enhanceCondition": {
+          "label": "政绩≥5000",
+          "checkField": "meritPoints",
+          "checkValue": 5000
+        }
+      }
+    ],
+    "discipline": [
+      {
+        "id": "disc1",
+        "title": "⚖️ 专项巡察攻坚行动",
+        "desc": "对重点单位开展专项巡察，聚焦权力集中领域，严肃查处\"微腐败\"和\"一把手\"问题",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "案件查处力度",
+        "effect": {
+          "meritPoints": 22,
+          "bossFavor": 3
+        },
+        "tag": "↑案件查处",
+        "enhanceCondition": {
+          "label": "道德≥72",
+          "checkField": "moralValue",
+          "checkValue": 72
+        }
+      },
+      {
+        "id": "disc2",
+        "title": "🔎 派驻监督全覆盖",
+        "desc": "向所有市属单位派驻纪检监察组，推行日常监督清单制度，扩大监督覆盖率",
+        "cost": 16,
+        "cooldownDays": 30,
+        "kpiDim": "日常监督覆盖",
+        "effect": {
+          "bossFavor": 4,
+          "meritPoints": 16,
+          "moralValue": 2
+        },
+        "tag": "↑监督覆盖",
+        "enhanceCondition": {
+          "label": "道德≥70",
+          "checkField": "moralValue",
+          "checkValue": 70
+        }
+      },
+      {
+        "id": "disc3",
+        "title": "📋 三公经费专项审查",
+        "desc": "对各单位公务接待、公车使用、出国考察经费开展专项审计，严格核查违规行为",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "廉洁自律",
+        "effect": {
+          "moralValue": 8,
+          "meritPoints": 16,
+          "bossFavor": 2
+        },
+        "tag": "↑廉洁自律",
+        "enhanceCondition": {
+          "label": "道德≥68",
+          "checkField": "moralValue",
+          "checkValue": 68
+        }
+      },
+      {
+        "id": "disc4",
+        "title": "🎓 廉政警示教育月",
+        "desc": "以案说法组织全体干部开展廉政警示教育，发放廉洁承诺书，提升干部廉洁意识",
+        "cost": 10,
+        "cooldownDays": 30,
+        "kpiDim": "廉政教育成效",
+        "effect": {
+          "securityIndex": 3,
+          "meritPoints": 14,
+          "moralValue": 3,
+          "bossFavor": 1
+        },
+        "tag": "↑廉政教育",
+        "enhanceCondition": {
+          "label": "道德+上司好感≥130",
+          "checkExpr": "moralValue+bossFavor",
+          "checkValue": 130
+        }
+      }
+    ],
+    "govoffice": [
+      {
+        "id": "gov1",
+        "title": "🤝 重点工作联动协调机制",
+        "desc": "建立跨部门重点工作联席会议制度，推行\"每周碰头+月度通报\"，提升协调效率",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "政务协调效率",
+        "effect": {
+          "bossFavor": 5,
+          "meritPoints": 14,
+          "cityGdp": 1
+        },
+        "tag": "↑协调效率",
+        "enhanceCondition": {
+          "label": "上司好感≥68",
+          "checkField": "bossFavor",
+          "checkValue": 68
+        }
+      },
+      {
+        "id": "gov2",
+        "title": "📄 公文规范专项整改",
+        "desc": "开展公文格式和行文规范专项培训，纠正领导批示落实不到位问题，提升文件质量",
+        "cost": 10,
+        "cooldownDays": 30,
+        "kpiDim": "文件规范质量",
+        "effect": {
+          "meritPoints": 16,
+          "bossFavor": 3
+        },
+        "tag": "↑公文质量",
+        "enhanceCondition": {
+          "label": "政绩≥5000",
+          "checkField": "meritPoints",
+          "checkValue": 5000
+        }
+      },
+      {
+        "id": "gov3",
+        "title": "🖥 政务服务\"一网通办\"",
+        "desc": "推动100项高频政务事项全程网办，部署政务服务大厅\"综窗受理\"，提升群众满意度",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "政务服务水平",
+        "effect": {
+          "cityLivelihood": 6,
+          "bossFavor": 2,
+          "meritPoints": 14
+        },
+        "tag": "↑政务服务",
+        "enhanceCondition": {
+          "label": "营商≥60",
+          "checkField": "cityBusiness",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "gov4",
+        "title": "🚨 突发事件应急演练",
+        "desc": "组织开展防汛、地震、危化品泄漏等综合应急演练，检验政府应急体系处置能力",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "应急响应处置",
+        "effect": {
+          "securityIndex": 6,
+          "meritPoints": 15,
+          "bossFavor": 2
+        },
+        "tag": "↑应急能力",
+        "enhanceCondition": {
+          "label": "治安≥60",
+          "checkField": "securityIndex",
+          "checkValue": 60
+        }
+      }
+    ],
+    "industry": [
+      {
+        "id": "ind1",
+        "title": "🏭 百亿企业培育计划",
+        "desc": "遴选一批成长型制造业企业纳入培育库，重点支持其扩能技改，推动工业增加值增长",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "工业增加值",
+        "effect": {
+          "cityGdp": 8,
+          "meritPoints": 18,
+          "fundBalance": -60
+        },
+        "tag": "↑工业增加值",
+        "enhanceCondition": {
+          "label": "GDP≥63",
+          "checkField": "cityGdp",
+          "checkValue": 63
+        }
+      },
+      {
+        "id": "ind2",
+        "title": "💻 数字化转型专项扶持",
+        "desc": "出台数字经济扶持政策，补贴企业上云用数，推动大数据和人工智能产业集聚",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "数字经济发展",
+        "effect": {
+          "cityBusiness": 8,
+          "meritPoints": 15,
+          "bossFavor": 2
+        },
+        "tag": "↑数字经济",
+        "enhanceCondition": {
+          "label": "GDP+营商≥120",
+          "checkExpr": "cityGdp+cityBusiness",
+          "checkValue": 120
+        }
+      },
+      {
+        "id": "ind3",
+        "title": "⭐ 专精特新企业申报季",
+        "desc": "组织符合条件的中小企业申报省级和国家级专精特新称号，扩大规上企业数量",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "中小企业培育",
+        "effect": {
+          "meritPoints": 16,
+          "cityBusiness": 4,
+          "taxRevenue": 3
+        },
+        "tag": "↑企业培育",
+        "enhanceCondition": {
+          "label": "营商≥62",
+          "checkField": "cityBusiness",
+          "checkValue": 62
+        }
+      },
+      {
+        "id": "ind4",
+        "title": "⚡ 工业安全生产大排查",
+        "desc": "对化工、冶金、矿山等重点行业开展专项安全检查，督导完成隐患整改，降低事故率",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "工业安全生产",
+        "effect": {
+          "securityIndex": 5,
+          "meritPoints": 13,
+          "bossFavor": 2
+        },
+        "tag": "↑安全生产",
+        "enhanceCondition": {
+          "label": "治安≥58",
+          "checkField": "securityIndex",
+          "checkValue": 58
+        }
+      }
+    ],
+    "naturalres": [
+      {
+        "id": "nat1",
+        "title": "🌱 耕地\"非农化\"专项整治",
+        "desc": "开展耕地\"非农化\"专项检查，对违规占用耕地建设项目依法处罚，恢复农业用途",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "耕地保护",
+        "effect": {
+          "cityEcology": 7,
+          "meritPoints": 16,
+          "bossFavor": 1
+        },
+        "tag": "↑耕地保护",
+        "enhanceCondition": {
+          "label": "生态≥55",
+          "checkField": "cityEcology",
+          "checkValue": 55
+        }
+      },
+      {
+        "id": "nat2",
+        "title": "📐 国土空间规划执法",
+        "desc": "对违反国土空间规划批地建设行为开展专项执法，拆除违规建设，维护规划权威",
+        "cost": 16,
+        "cooldownDays": 30,
+        "kpiDim": "规划合规落地",
+        "effect": {
+          "moralValue": 5,
+          "meritPoints": 15,
+          "bossFavor": 2
+        },
+        "tag": "↑规划合规",
+        "enhanceCondition": {
+          "label": "道德≥65",
+          "checkField": "moralValue",
+          "checkValue": 65
+        }
+      },
+      {
+        "id": "nat3",
+        "title": "🏡 不动产登记提速行动",
+        "desc": "推行不动产登记\"一窗受理、并联审批\"，将登记时限压缩至3个工作日，提升满意度",
+        "cost": 13,
+        "cooldownDays": 30,
+        "kpiDim": "不动产登记服务",
+        "effect": {
+          "bossFavor": 5,
+          "cityLivelihood": 4,
+          "meritPoints": 12
+        },
+        "tag": "↑登记服务",
+        "enhanceCondition": {
+          "label": "民生≥60",
+          "checkField": "cityLivelihood",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "nat4",
+        "title": "🔨 非法采矿专项打击",
+        "desc": "联合公安开展打击非法采矿行动，吊销违规证照，追究法律责任，净化矿业秩序",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "矿产资源管理",
+        "effect": {
+          "securityIndex": 5,
+          "meritPoints": 14,
+          "moralValue": 2
+        },
+        "tag": "↑矿业合规",
+        "enhanceCondition": {
+          "label": "治安+道德≥125",
+          "checkExpr": "securityIndex+moralValue",
+          "checkValue": 125
+        }
+      }
+    ],
+    "construction": [
+      {
+        "id": "con1",
+        "title": "🔨 工程质量飞行检查",
+        "desc": "对在建工程开展随机飞行检查，重点核查主体结构、防水工程和消防设施质量",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "工程质量安全",
+        "effect": {
+          "cityGdp": 4,
+          "meritPoints": 16,
+          "securityIndex": 3
+        },
+        "tag": "↑工程质量",
+        "enhanceCondition": {
+          "label": "GDP≥58",
+          "checkField": "cityGdp",
+          "checkValue": 58
+        }
+      },
+      {
+        "id": "con2",
+        "title": "🏠 保障性住房加速开工",
+        "desc": "加快推进经济适用房、公租房开工建设，完成年度保障房开工任务，惠及困难群众",
+        "cost": 25,
+        "cooldownDays": 30,
+        "kpiDim": "保障性住房",
+        "effect": {
+          "cityLivelihood": 9,
+          "meritPoints": 20,
+          "bossFavor": 3,
+          "fundBalance": -100
+        },
+        "tag": "↑保障房",
+        "enhanceCondition": {
+          "label": "民生≥60",
+          "checkField": "cityLivelihood",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "con3",
+        "title": "🌳 城市绿化景观提升",
+        "desc": "推进主干道行道树补植、公共绿地建设和立体绿化工程，提升城市绿化覆盖率",
+        "cost": 16,
+        "cooldownDays": 30,
+        "kpiDim": "城市绿化美化",
+        "effect": {
+          "cityEcology": 7,
+          "cityLivelihood": 3,
+          "meritPoints": 13
+        },
+        "tag": "↑绿化美化",
+        "enhanceCondition": {
+          "label": "生态≥55",
+          "checkField": "cityEcology",
+          "checkValue": 55
+        }
+      },
+      {
+        "id": "con4",
+        "title": "💡 路灯完好率提升专项",
+        "desc": "对全区路灯设施开展全面体检，更换老旧灯具，扩大路灯覆盖范围，提升夜间安全",
+        "cost": 13,
+        "cooldownDays": 30,
+        "kpiDim": "市政照明完好",
+        "effect": {
+          "meritPoints": 13,
+          "cityLivelihood": 3,
+          "securityIndex": 2
+        },
+        "tag": "↑照明完好",
+        "enhanceCondition": {
+          "label": "治安≥58",
+          "checkField": "securityIndex",
+          "checkValue": 58
+        }
+      }
+    ],
+    "transport": [
+      {
+        "id": "tra1",
+        "title": "🛣️ 农村公路硬化攻坚",
+        "desc": "重点推进偏远自然村通硬化路工程，打通农村出行\"最后一公里\"，完成年度建设任务",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "路网建设进度",
+        "effect": {
+          "cityGdp": 5,
+          "cityLivelihood": 4,
+          "meritPoints": 16
+        },
+        "tag": "↑路网建设",
+        "enhanceCondition": {
+          "label": "GDP≥55",
+          "checkField": "cityGdp",
+          "checkValue": 55
+        }
+      },
+      {
+        "id": "tra2",
+        "title": "🔧 国省干线路面专项修缮",
+        "desc": "对破损国省干线路面开展集中修缮，提升路面平整度和桥梁安全状况，改善行车条件",
+        "cost": 20,
+        "cooldownDays": 30,
+        "kpiDim": "路况完好率",
+        "effect": {
+          "cityBusiness": 6,
+          "meritPoints": 15,
+          "bossFavor": 2
+        },
+        "tag": "↑路况完好",
+        "enhanceCondition": {
+          "label": "营商≥58",
+          "checkField": "cityBusiness",
+          "checkValue": 58
+        }
+      },
+      {
+        "id": "tra3",
+        "title": "⚠️ 交通安全专项整治",
+        "desc": "重点整治超速、超载、酒驾、货车违规等违法行为，推进隐患路段安全改造",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "交通安全管理",
+        "effect": {
+          "securityIndex": 7,
+          "meritPoints": 14,
+          "cityLivelihood": 2
+        },
+        "tag": "↑交通安全",
+        "enhanceCondition": {
+          "label": "治安≥60",
+          "checkField": "securityIndex",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "tra4",
+        "title": "🚛 重点物资运输保障",
+        "desc": "建立\"绿色通道\"制度，优先保障粮食、医药、能源等重要物资运输畅通",
+        "cost": 15,
+        "cooldownDays": 30,
+        "kpiDim": "物流保障能力",
+        "effect": {
+          "meritPoints": 16,
+          "cityBusiness": 4,
+          "cityGdp": 2
+        },
+        "tag": "↑物流保障",
+        "enhanceCondition": {
+          "label": "GDP+营商≥115",
+          "checkExpr": "cityGdp+cityBusiness",
+          "checkValue": 115
+        }
+      }
+    ],
+    "health2": [
+      {
+        "id": "hlt1",
+        "title": "🏥 基层医疗机构标准化建设",
+        "desc": "推进乡镇卫生院和村卫生室达标建设，配备基本诊疗设备，方便群众就近就医",
+        "cost": 22,
+        "cooldownDays": 30,
+        "kpiDim": "医疗服务水平",
+        "effect": {
+          "cityLivelihood": 8,
+          "meritPoints": 16,
+          "fundBalance": -60
+        },
+        "tag": "↑医疗服务",
+        "enhanceCondition": {
+          "label": "民生≥62",
+          "checkField": "cityLivelihood",
+          "checkValue": 62
+        }
+      },
+      {
+        "id": "hlt2",
+        "title": "💉 公共卫生防控体系完善",
+        "desc": "健全重大传染病疫情监测预警系统，完善应急物资储备，提升公共卫生防控能力",
+        "cost": 18,
+        "cooldownDays": 30,
+        "kpiDim": "公共卫生防控",
+        "effect": {
+          "securityIndex": 5,
+          "meritPoints": 14,
+          "bossFavor": 2
+        },
+        "tag": "↑防控体系",
+        "enhanceCondition": {
+          "label": "治安≥60",
+          "checkField": "securityIndex",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "hlt3",
+        "title": "🏡 分级诊疗推进行动",
+        "desc": "扩大家庭医生签约覆盖率，引导患者在社区首诊，缓解大医院就诊压力",
+        "cost": 16,
+        "cooldownDays": 30,
+        "kpiDim": "医改推进成效",
+        "effect": {
+          "meritPoints": 16,
+          "cityLivelihood": 4,
+          "bossFavor": 2
+        },
+        "tag": "↑医改成效",
+        "enhanceCondition": {
+          "label": "民生≥60",
+          "checkField": "cityLivelihood",
+          "checkValue": 60
+        }
+      },
+      {
+        "id": "hlt4",
+        "title": "🔎 重大疾病筛查与监督",
+        "desc": "开展高血压、糖尿病等重大疾病免费筛查，同步对医疗机构卫生条件开展执法检查",
+        "cost": 14,
+        "cooldownDays": 30,
+        "kpiDim": "卫生监督执法",
+        "effect": {
+          "cityLivelihood": 5,
+          "bossFavor": 3,
+          "meritPoints": 13
+        },
+        "tag": "↑卫生执法",
+        "enhanceCondition": {
+          "label": "民生+营商≥118",
+          "checkExpr": "cityLivelihood+cityBusiness",
+          "checkValue": 118
+        }
+      }
+    ]
+  }
+}

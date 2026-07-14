@@ -1,0 +1,4 @@
+ALTER TABLE player_saves
+  ADD COLUMN IF NOT EXISTS line_grant_fund_auto_month INTEGER NOT NULL DEFAULT -1,
+  ADD COLUMN IF NOT EXISTS secretary_candidates TEXT NOT NULL DEFAULT '[]',
+  ADD COLUMN IF NOT EXISTS secretary_candidate_rank INTEGER NOT NULL DEFAULT 0;

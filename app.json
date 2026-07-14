@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "从政之路(谁主沉浮)/政途人生",
+    "slug": "qing-yun-lu-career",
+    "version": "1.0.478",
+    "orientation": "portrait",
+    "icon": "https://miaoda-edit-image.cdn.bcebos.com/clnvk8mg04qp/IMG-cmaqj55a4hkx.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "buildNumber": "1",
+      "bundleIdentifier": "com.miaoda.appclnvk8mg04qp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "predictiveBackGestureEnabled": false,
+      "versionCode": 1,
+      "package": "com.miaoda.appclnvk8mg04qp"
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset",
+      "expo-sqlite",
+      "expo-font",
+      "expo-system-ui",
+      "expo-image",
+      "expo-secure-store",
+      "expo-audio",
+      "@react-native-async-storage/expo-with-async-storage"
+    ],
+    "router": {
+      "root": "src"
+    },
+    "experiments": {
+      "typedRoutes": true
+    },
+    "scheme": "appclnvk8mg04qp"
+  }
+}
