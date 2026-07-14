@@ -1,0 +1,12 @@
+node_modules/
+.expo/
+dist/
+web-build/
+.git/
+.gitignore
+*.md
+ios/
+android/
+.kotlin/
+.metro-cache/
+.native-wind-cache/

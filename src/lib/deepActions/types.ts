@@ -2,7 +2,7 @@
  * 城市治理深度玩法 — 公共类型定义
  */
 
-export interface DeepActionOutcome {
+interface DeepActionOutcome {
   desc: string;
   merit: number;
   fundDelta?: number;

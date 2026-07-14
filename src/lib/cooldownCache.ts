@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { PlayerSave } from '@/types/game';
 
 // ── 冷却相关字段列表（Record<string,number> 或 JSON string 类型）────────────
-export const COOLDOWN_FIELDS = [
+const COOLDOWN_FIELDS = [
   'careerPathCooldowns',
   'adminGovCooldowns',
   'judicialExtraCooldowns',
@@ -32,7 +32,7 @@ export const COOLDOWN_FIELDS = [
   'adminDeepResults',
 ] as const;
 
-export type CooldownFields = Pick<PlayerSave, typeof COOLDOWN_FIELDS[number]>;
+type CooldownFields = Pick<PlayerSave, typeof COOLDOWN_FIELDS[number]>;
 
 // AsyncStorage key 前缀
 const CACHE_KEY = (saveId: string) => `@cooldown_cache_${saveId}`;
@@ -72,17 +72,8 @@ export async function saveCooldownCache(
   }
 }
 
-// ── 清除本地缓存（存档被删除/重置时调用）──────────────────────────────────────
-export async function clearCooldownCache(saveId: string): Promise<void> {
-  try {
-    await AsyncStorage.multiRemove([CACHE_KEY(saveId), QUEUE_KEY(saveId)]);
-  } catch {
-    // 静默失败
-  }
-}
-
 // ── 离线队列：将 DB 写入失败的操作暂存 ──────────────────────────────────────
-export type OfflineOp = {
+type OfflineOp = {
   saveId: string;
   updates: Record<string, unknown>;
   timestamp: number;

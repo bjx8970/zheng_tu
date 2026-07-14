@@ -18,7 +18,7 @@ import type { DeptMonthlyEvent } from '@/lib/deptMonthlyEvents';
 import npcConfig from '@/config/npc.json';
 
 
-export interface AnnualPromoCandidate {
+interface AnnualPromoCandidate {
   id: string; name: string; subLevel: number;
   ability: number; experience: number;
   appointedDept: string | null; deptPosition: string; reason: string;
@@ -47,7 +47,7 @@ export interface LateralTransferTrigger {
 }
 
 // rank>=3 晋升/平调后展示5名新秘书候选人
-export interface SecretarySelectTrigger {
+interface SecretarySelectTrigger {
   saveId: string;
   userId: string;
   fromRankLevel: number;
@@ -78,7 +78,7 @@ export interface BossChangeEvent {
 }
 
 /** 路线KPI低分警告事件 */
-export interface LineKpiWarnEvent {
+interface LineKpiWarnEvent {
   line: string;            // 仕途路线名称（党务线/纪检线/团派线）
   dimLabel: string;        // 低分维度名称（如"案件查处"）
   score: number;           // 当前分数

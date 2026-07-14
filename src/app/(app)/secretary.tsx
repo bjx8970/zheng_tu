@@ -1031,7 +1031,6 @@ export default function SecretaryPage() {
       }
     } catch (e) {
       // 捕获异常，防止白屏闪退
-      console.warn('[secretary] load error:', e);
     }
     setLoading(false);
   }, [save]);

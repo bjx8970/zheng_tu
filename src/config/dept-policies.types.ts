@@ -9,7 +9,7 @@
 import type { DeptKey } from '@/types/game';
 
 /** 行动的效果字段（与 PlayerSave 字段对齐） */
-export interface PolicyEffect {
+interface PolicyEffect {
   cityGdp?: number;
   cityLivelihood?: number;
   cityEcology?: number;
@@ -31,7 +31,7 @@ export interface PolicyEffect {
  *  - 单字段：checkField + checkValue （例：securityIndex >= 60）
  *  - 表达式：checkExpr + checkValue  （例："cityGdp+cityBusiness" >= 120）
  */
-export type PolicyEnhanceConditionJSON =
+type PolicyEnhanceConditionJSON =
   | {
       label: string;
       /** PlayerSave 中的单个字段名 */
@@ -71,6 +71,6 @@ export interface PolicyActionConfig {
 }
 
 /** dept-policies.json 顶层结构 */
-export interface DeptPoliciesConfig {
+interface DeptPoliciesConfig {
   DEPT_POLICIES: Record<DeptKey, PolicyActionConfig[]>;
 }

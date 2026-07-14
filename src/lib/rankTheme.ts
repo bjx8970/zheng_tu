@@ -437,11 +437,4 @@ export function getRankThemeWithLine(rankLevel: number, careerLine?: string): Ra
   return base;
 }
 
-/** 根据职级返回级别标识色（用于小标签等简单场景） */
-export function getRankColor(rankLevel: number): string {
-  if (rankLevel >= 14) return '#DE2910';
-  if (rankLevel >= 11) return '#B8860B';
-  if (rankLevel >= 8)  return '#D4AF37';
-  if (rankLevel >= 4)  return '#1E3A5F';
-  return '#6B8F5E';
-}
+

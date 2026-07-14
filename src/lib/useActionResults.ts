@@ -62,12 +62,4 @@ export function useActionResults() {
   return { getResult, saveResult, getAllResults };
 }
 
-/** 结果气泡 UI 数据——供各页面统一渲染 */
-export function resultBg(ok: boolean) {
-  return {
-    bg:     ok ? '#ECFDF5' : '#FEF2F2',
-    border: ok ? '#BBF7D0' : '#FECACA',
-    label:  ok ? '#065F46' : '#B91C1C',
-    body:   ok ? '#047857' : '#DC2626',
-  };
-}
+

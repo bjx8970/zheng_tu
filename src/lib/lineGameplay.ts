@@ -7,7 +7,7 @@
 export type CareerLine = '党务线' | '行政线' | '纪检线' | '团派线';
 
 // ── 职级分组 ──────────────────────────────────────────────────────────────
-export type RankTier =
+type RankTier =
   | 'keyuan'   // 1-3  科员/副乡镇长/乡镇长
   | 'fuzhenke' // 4    县委常委/副县长
   | 'zhengke'  // 5-6  县长/县委书记
@@ -17,7 +17,7 @@ export type RankTier =
   | 'zhengting'// 11   省委书记
   | 'buji';    // 12-15 部级+
 
-export function getRankTier(rankLevel: number): RankTier {
+function getRankTier(rankLevel: number): RankTier {
   if (rankLevel <= 3) return 'keyuan';
   if (rankLevel === 4) return 'fuzhenke';
   if (rankLevel <= 6) return 'zhengke';
@@ -60,7 +60,7 @@ export interface LineAction {
 }
 
 // ── 部门定义 ─────────────────────────────────────────────────────────────
-export interface LineDepartment {
+interface LineDepartment {
   name: string;
   icon: string;
   desc: string;
@@ -69,7 +69,7 @@ export interface LineDepartment {
 }
 
 // ── KPI指标 ──────────────────────────────────────────────────────────────
-export interface LineKpiMetric {
+interface LineKpiMetric {
   key: string;
   name: string;
   unit: string;
@@ -98,7 +98,7 @@ export interface LineTask {
 // ─────────────────────────────────────────────────────────────────────────
 // ████████████████  党务线  ████████████████████████████████████████████████
 // ─────────────────────────────────────────────────────────────────────────
-export const PARTY_LINE_DEPARTMENTS: LineDepartment[] = [
+const PARTY_LINE_DEPARTMENTS: LineDepartment[] = [
   {
     name: '乡镇党支部',
     icon: '🏘️',
@@ -160,14 +160,14 @@ export const PARTY_LINE_DEPARTMENTS: LineDepartment[] = [
   },
 ];
 
-export const PARTY_LINE_KPI: LineKpiMetric[] = [
+const PARTY_LINE_KPI: LineKpiMetric[] = [
   { key: 'org_build', name: '组织建设率', unit: '%', icon: '🏗️', target: 90, weight: 0.30, desc: '基层党组织覆盖率与规范化程度' },
   { key: 'member_dev', name: '党员发展数', unit: '人', icon: '👥', target: 20, weight: 0.25, desc: '本考核期内新发展正式党员数量' },
   { key: 'ideol_edu', name: '思想教育分', unit: '分', icon: '📚', target: 85, weight: 0.25, desc: '理论学习考试平均得分' },
   { key: 'discipline', name: '纪律执行率', unit: '%', icon: '⚖️', target: 95, weight: 0.20, desc: '违纪案件查处及时率与处分执行率' },
 ];
 
-export const PARTY_LINE_TASKS: LineTask[] = [
+const PARTY_LINE_TASKS: LineTask[] = [
   { key: 'pt_inspect', name: '组织巡察任务', desc: '带队赴下级党组织开展专项巡察，排查党建隐患', icon: '🔍', durationDays: 30, unlockRank: 1, reward: { meritPoints: 50, bossFavor: 8, lineKpi: 40 }, story: ['巡察组历时一个月走访了全镇12个基层组织', '发现问题15个，已全部转交整改', '上级对巡察结果给予肯定'] },
   { key: 'pt_discipline_review', name: '党纪审查任务', desc: '依纪依规审查一起党员违纪线索，形成审查报告', icon: '📝', durationDays: 21, unlockRank: 2, reward: { meritPoints: 60, bossFavor: 10, lineKpi: 50 }, story: ['审查工作严格按照条规推进', '涉案党员受到党内警告处分', '纪律权威得到有效维护'] },
   { key: 'pt_cadre_talk', name: '干部谈话任务', desc: '对近期存在苗头性问题的干部开展警示谈话', icon: '💬', durationDays: 14, unlockRank: 3, reward: { meritPoints: 40, bossFavor: 6, lineKpi: 30 }, story: ['此次共谈话干部6人', '谈话后均表示认识到了自身问题', '党内风气进一步好转'] },
@@ -181,7 +181,7 @@ export const PARTY_LINE_TASKS: LineTask[] = [
 // ─────────────────────────────────────────────────────────────────────────
 // ████████████████  行政线  ████████████████████████████████████████████████
 // ─────────────────────────────────────────────────────────────────────────
-export const GOVT_LINE_DEPARTMENTS: LineDepartment[] = [
+const GOVT_LINE_DEPARTMENTS: LineDepartment[] = [
   {
     name: '乡镇人民政府',
     icon: '🏠',
@@ -242,14 +242,14 @@ export const GOVT_LINE_DEPARTMENTS: LineDepartment[] = [
   },
 ];
 
-export const GOVT_LINE_KPI: LineKpiMetric[] = [
+const GOVT_LINE_KPI: LineKpiMetric[] = [
   { key: 'gdp_growth', name: 'GDP增长率', unit: '%', icon: '📈', target: 6.5, weight: 0.30, desc: '辖区GDP年增长率，高于全省平均为优秀' },
   { key: 'fiscal_rev', name: '财政收入', unit: '亿元', icon: '💰', target: 50, weight: 0.25, desc: '年度地方财政一般预算收入' },
   { key: 'project_done', name: '项目完成率', unit: '%', icon: '🏗️', target: 90, weight: 0.25, desc: '年度重点项目按期完工比例' },
   { key: 'livelihood', name: '民生满意度', unit: '分', icon: '😊', target: 80, weight: 0.20, desc: '群众对政府民生工作满意度调查得分' },
 ];
 
-export const GOVT_LINE_TASKS: LineTask[] = [
+const GOVT_LINE_TASKS: LineTask[] = [
   { key: 'gt_gdp', name: 'GDP攻坚任务', desc: '完成年度GDP增长目标考核，确保高于省均水平', icon: '📊', durationDays: 90, unlockRank: 1, reward: { meritPoints: 80, bossFavor: 12, lineKpi: 60 }, story: ['经过一季度奋战，GDP增速达6.9%', '超额完成上级下达的6.5%目标', '被省统计局列为优秀案例'] },
   { key: 'gt_project', name: '重大项目推进任务', desc: '督促年度重点项目按期完工，确保项目完成率≥90%', icon: '🏗️', durationDays: 60, unlockRank: 2, reward: { meritPoints: 90, bossFavor: 14, lineKpi: 70 }, story: ['启动重点项目督查机制', '本年度12个重点项目全部按期完工', '省级评优中排名全省第二'] },
   { key: 'gt_invest', name: '招商引资任务', desc: '完成年度招商引资目标，引进落地项目≥3个', icon: '💼', durationDays: 45, unlockRank: 3, reward: { meritPoints: 100, bossFavor: 15, lineKpi: 80 }, story: ['赴粤港澳大湾区开展精准招商', '引进先进制造业项目3个，到位资金12亿', '市委书记专程出席签约仪式'] },
@@ -261,7 +261,7 @@ export const GOVT_LINE_TASKS: LineTask[] = [
 // ─────────────────────────────────────────────────────────────────────────
 // ████████████████  纪检线  ████████████████████████████████████████████████
 // ─────────────────────────────────────────────────────────────────────────
-export const DISCIPLINE_LINE_DEPARTMENTS: LineDepartment[] = [
+const DISCIPLINE_LINE_DEPARTMENTS: LineDepartment[] = [
   {
     name: '乡镇纪检委',
     icon: '⚖️',
@@ -318,14 +318,14 @@ export const DISCIPLINE_LINE_DEPARTMENTS: LineDepartment[] = [
   },
 ];
 
-export const DISCIPLINE_LINE_KPI: LineKpiMetric[] = [
+const DISCIPLINE_LINE_KPI: LineKpiMetric[] = [
   { key: 'case_handle', name: '违纪查处率', unit: '%', icon: '⚖️', target: 95, weight: 0.30, desc: '纪检线索查处率与案件办结率' },
   { key: 'integrity', name: '廉洁度评分', unit: '分', icon: '🌟', target: 85, weight: 0.30, desc: '辖区党政干部廉洁度综合评价' },
   { key: 'report_resp', name: '举报响应率', unit: '%', icon: '📥', target: 100, weight: 0.20, desc: '群众举报线索在规定时限内响应处理的比例' },
   { key: 'case_close', name: '案件办结率', unit: '%', icon: '✅', target: 90, weight: 0.20, desc: '当期立案案件在规定期限内办结的比例' },
 ];
 
-export const DISCIPLINE_LINE_TASKS: LineTask[] = [
+const DISCIPLINE_LINE_TASKS: LineTask[] = [
   { key: 'dt_anti_corrupt', name: '反腐专项任务', desc: '在重点领域开展一轮反腐败专项排查行动', icon: '🔍', durationDays: 45, unlockRank: 1, reward: { meritPoints: 70, bossFavor: 10, lineKpi: 56 }, story: ['专项排查覆盖8个重点部门', '发现问题线索14条', '5条已移交查办，反腐态势有效遏制'] },
   { key: 'dt_patrol_coop', name: '巡视配合任务', desc: '接受上级巡视组巡视，提供全面翔实的材料配合', icon: '📋', durationDays: 30, unlockRank: 2, reward: { meritPoints: 60, bossFavor: 9, lineKpi: 48 }, story: ['巡视材料准备工作历时1个月', '共提供各类佐证材料600余份', '巡视组评价配合工作"扎实有效"'] },
   { key: 'dt_case_crack', name: '案件侦破任务', desc: '完成一起重大违纪违法案件的侦查取证工作', icon: '🔦', durationDays: 60, unlockRank: 3, reward: { meritPoints: 90, bossFavor: 13, lineKpi: 72 }, story: ['历时60天，关键证据全部收集到位', '案件事实清楚，证据链完整', '当事人认罪认罚，移送检察院审查起诉'] },
@@ -337,7 +337,7 @@ export const DISCIPLINE_LINE_TASKS: LineTask[] = [
 // ─────────────────────────────────────────────────────────────────────────
 // ████████████████  团派线  ████████████████████████████████████████████████
 // ─────────────────────────────────────────────────────────────────────────
-export const LEAGUE_LINE_DEPARTMENTS: LineDepartment[] = [
+const LEAGUE_LINE_DEPARTMENTS: LineDepartment[] = [
   {
     name: '乡镇团支部',
     icon: '🌱',
@@ -393,14 +393,14 @@ export const LEAGUE_LINE_DEPARTMENTS: LineDepartment[] = [
   },
 ];
 
-export const LEAGUE_LINE_KPI: LineKpiMetric[] = [
+const LEAGUE_LINE_KPI: LineKpiMetric[] = [
   { key: 'youth_engage', name: '青年参与度', unit: '%', icon: '👥', target: 80, weight: 0.30, desc: '辖区青年参与团组织活动的比例' },
   { key: 'employ_aid', name: '就业帮扶率', unit: '%', icon: '💼', target: 85, weight: 0.25, desc: '需帮扶青年中成功实现就业或创业的比例' },
   { key: 'public_satis', name: '群众满意度', unit: '分', icon: '😊', target: 82, weight: 0.25, desc: '群众对青年工作满意度调查综合得分' },
   { key: 'activity_impact', name: '活动影响力', unit: '分', icon: '🌟', target: 75, weight: 0.20, desc: '重大活动的社会影响力评估得分' },
 ];
 
-export const LEAGUE_LINE_TASKS: LineTask[] = [
+const LEAGUE_LINE_TASKS: LineTask[] = [
   { key: 'lt_youth_work', name: '青年工作专项任务', desc: '开展一次大型青年公益活动，扩大团组织影响力', icon: '🎯', durationDays: 21, unlockRank: 1, reward: { meritPoints: 50, bossFavor: 8, lineKpi: 40 }, story: ['大型公益活动参与青年超过500人', '活动内容丰富，社会反响热烈', '被县委宣传部评为年度优秀社会活动'] },
   { key: 'lt_poverty', name: '扶贫帮困任务', desc: '带领青年志愿者开展扶贫帮困活动', icon: '❤️', durationDays: 30, unlockRank: 2, reward: { meritPoints: 60, bossFavor: 9, lineKpi: 48 }, story: ['深入偏远山区开展帮扶活动', '为32户困难家庭送去物资和关爱', '村民自发为志愿者送来锦旗'] },
   { key: 'lt_research', name: '基层调研任务', desc: '带领调研团队深入基层，了解青年诉求与困难', icon: '📋', durationDays: 20, unlockRank: 3, reward: { meritPoints: 45, bossFavor: 7, lineKpi: 36 }, story: ['调研覆盖12个乡镇，访谈青年360人', '形成8000字调研报告', '省团委将调研成果作为政策制定重要参考'] },
@@ -484,12 +484,7 @@ export const LINE_PITCH: Record<CareerLine, { tagline: string; advantages: strin
   },
 };
 
-/** 每日线KPI分数（用于GameContext月度自动更新时给线KPI小幅增长） */
-export function getMonthlyLineKpiGain(line: CareerLine, rankLevel: number): number {
-  const base = rankLevel * 3;
-  const lineBonus: Record<CareerLine, number> = { '党务线': 5, '行政线': 8, '纪检线': 6, '团派线': 4 };
-  return base + lineBonus[line];
-}
+
 
 // ─────────────────────────────────────────────────────────────────────────
 // ████  路线行动动态花费 & 名额职数  ████████████████████████████████████████
@@ -560,7 +555,7 @@ export function getDeptQuota(dept: LineDepartment, rankLevel: number, gameDays: 
 // ████  专项资金来源渠道  ███████████████████████████████████████████████████
 // ─────────────────────────────────────────────────────────────────────────
 
-export interface FundChannel {
+interface FundChannel {
   key: 'grant_application' | 'performance_reward' | 'annual_budget' | 'emergency_fund' | 'special_project';
   title: string;
   icon: string;
@@ -579,7 +574,7 @@ export interface FundChannel {
   bgColor: string;
 }
 
-export const FUND_CHANNELS: FundChannel[] = [
+const FUND_CHANNELS: FundChannel[] = [
   {
     key: 'grant_application',
     title: '上级专项拨款申请',
@@ -635,7 +630,7 @@ export const FUND_CHANNELS: FundChannel[] = [
  * 计算路线KPI晋升加成分数（0-100）
  * 综合 lineKpiScore + 各维度表现，影响晋升概率
  */
-export function calcLineKpiBonus(
+function calcLineKpiBonus(
   careerPath: string,
   lineKpiScore: number,
   meritPoints: number,
@@ -660,7 +655,7 @@ export function calcLineKpiBonus(
  * 路线专属高级职称（rank 10-15）
  * 返回该路线该职级的中文职位名称（用于 RANK_CONFIG name 覆盖显示）
  */
-export const HIGH_RANK_TITLES: Record<string, Record<number, string>> = {
+const HIGH_RANK_TITLES: Record<string, Record<number, string>> = {
   government: {
     10: '副省长 / 省长助理',
     11: '省长 / 省执政委书记',
@@ -695,8 +690,7 @@ export const HIGH_RANK_TITLES: Record<string, Record<number, string>> = {
   },
 };
 
-/** 获取某路线某职级的专属显示名（rank10以下回退到通用RANK_CONFIG.name） */
-export function getHighRankTitle(careerPath: string, rankLevel: number): string | null {
+function getHighRankTitle(careerPath: string, rankLevel: number): string | null {
   if (rankLevel < 10) return null;
   return HIGH_RANK_TITLES[careerPath]?.[rankLevel] ?? null;
 }
