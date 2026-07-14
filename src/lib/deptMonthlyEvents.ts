@@ -1746,7 +1746,7 @@ const MILITARY_TRANSFER_EVENTS: DeptMonthlyEvent[] = [
 ];
 
 /** 全量事件池（按 deptKey 索引） */
-export const ALL_DEPT_EVENTS: DeptMonthlyEvent[] = [
+const ALL_DEPT_EVENTS: DeptMonthlyEvent[] = [
   ...POLICE_EVENTS,
   ...FINANCE_EVENTS,
   ...NDRC_EVENTS,

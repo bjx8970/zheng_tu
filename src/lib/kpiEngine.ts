@@ -18,7 +18,7 @@
 // ─── 类型定义 ────────────────────────────────────────────────────────────────
 
 /** 单个考核维度 */
-export interface KpiDimension {
+interface KpiDimension {
   /** 维度唯一key */
   key: string;
   /** 显示名称 */
@@ -38,7 +38,7 @@ export interface KpiDimension {
 }
 
 /** 一票否决项 */
-export interface VetoItem {
+interface VetoItem {
   label: string;
   desc: string;
   triggered: boolean;
@@ -106,7 +106,7 @@ interface TierConfig {
 }
 
 /** 传入 KPI 引擎所需的存档字段快照 */
-export interface KpiSaveSnapshot {
+interface KpiSaveSnapshot {
   rankLevel: number;
   moralValue: number;
   securityIndex: number;
@@ -638,7 +638,7 @@ export function computeKpi(s: KpiSaveSnapshot): KpiResult {
 }
 
 // ─── 获取当前层级的核心考核指标（用于主界面面板） ─────────────────────────
-export interface KpiPanelItem {
+interface KpiPanelItem {
   key: string;
   label: string;
   desc: string;
@@ -679,7 +679,7 @@ export function getPromotionSummary(kpi: KpiResult, tenureYears: number, require
 // ═══════════════════════════════════════════════════════════════════════
 
 /** 部门KPI考核维度 */
-export interface DeptKpiDim {
+interface DeptKpiDim {
   key: string;
   label: string;     // 指标名称
   desc: string;      // 考核说明
@@ -985,7 +985,7 @@ export function getDeptKpiResult(deptKey: string, s: KpiSaveSnapshot): DeptKpiRe
 // 综合路线积分 + 路线特化维度，输出 0-100 加成分影响晋升概率
 // ═══════════════════════════════════════════════════════════════════════
 
-export interface LineKpiSystem {
+interface LineKpiSystem {
   lineName: string;
   totalBonus: number;       // 综合加成分 0-100
   bonusLabel: string;       // 等级标签

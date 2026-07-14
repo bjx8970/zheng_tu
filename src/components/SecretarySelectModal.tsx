@@ -10,7 +10,7 @@ import { ActivityIndicator, Modal, Pressable, ScrollView, Text, View } from 'rea
 import { appointSubAsSecretary, getOrCreateSecretary } from '@/db/gameApi';
 import type { PlayerSave } from '@/types/game';
 
-export interface SecretarySelectTrigger {
+interface SecretarySelectTrigger {
   saveId: string;
   userId: string;
   fromRankLevel: number;
@@ -23,7 +23,7 @@ interface Props {
   onConfirm: (selected: SecretaryCandidate | null) => void;
 }
 
-export interface SecretaryCandidate {
+interface SecretaryCandidate {
   name: string;
   gender: '男' | '女';
   age: number;

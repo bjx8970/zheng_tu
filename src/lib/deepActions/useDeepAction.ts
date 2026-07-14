@@ -13,8 +13,8 @@ import { useGame } from '@/ctx/GameContext';
 import { getRankCostMultiplier } from '@/lib/lineGameplay';
 import type { DeepAction, ActionResult, DeepActionOption } from './types';
 
-export type CooldownsField = 'discDeepCooldowns' | 'partyDeepCooldowns' | 'leagueDeepCooldowns' | 'adminDeepCooldowns';
-export type ResultsField   = 'discDeepResults'   | 'partyDeepResults'   | 'leagueDeepResults'   | 'adminDeepResults';
+type CooldownsField = 'discDeepCooldowns' | 'partyDeepCooldowns' | 'leagueDeepCooldowns' | 'adminDeepCooldowns';
+type ResultsField   = 'discDeepResults'   | 'partyDeepResults'   | 'leagueDeepResults'   | 'adminDeepResults';
 
 interface UseDeepActionOptions {
   cooldownsField: CooldownsField;

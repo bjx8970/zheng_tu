@@ -32,7 +32,7 @@ interface ReviewResult {
 }
 
 // ── 组件 Props ─────────────────────────────────────────────────
-export interface DemocraticReviewProps {
+interface DemocraticReviewProps {
   visible: boolean;
   /** 候选人信息 */
   candidate: {

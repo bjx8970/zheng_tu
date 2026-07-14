@@ -56,7 +56,7 @@ export function getTopLeaders(saveId: string, playerName = '') {
 // ───────────────────────────────────────────────────
 // 联邦内阁各部委部长（24个部委）
 // ───────────────────────────────────────────────────
-export const MINISTRY_LEADER_KEYS = [
+const MINISTRY_LEADER_KEYS = [
   { id: 'min_fa',      title: '外交部部长',                  shortTitle: '外交部' },
   { id: 'min_def',     title: '国防部部长',                  shortTitle: '国防部' },
   { id: 'min_ndrc',    title: '国家发展改革委主任',          shortTitle: '发改委' },
@@ -96,7 +96,7 @@ export function getMinistryLeaders(saveId: string): Record<string, string> {
 // ───────────────────────────────────────────────────
 // 省执政委书记 & 省长（24个省/直辖市/自治区）
 // ───────────────────────────────────────────────────
-export const PROVINCE_LIST = [
+const PROVINCE_LIST = [
   '京都', '津门', '沪海', '渝江',
   '粤海', '瓯越', '汉东', '齐鲁',
   '蜀州', '中原', '楚北', '楚南',
@@ -105,7 +105,7 @@ export const PROVINCE_LIST = [
   '南桂', '滇南', '黔贵', '西域',
 ] as const;
 
-export type ProvinceName = typeof PROVINCE_LIST[number];
+type ProvinceName = typeof PROVINCE_LIST[number];
 
 export function getProvinceLeaders(saveId: string): Record<string, { secretary: string; governor: string }> {
   const result: Record<string, { secretary: string; governor: string }> = {};
@@ -121,7 +121,7 @@ export function getProvinceLeaders(saveId: string): Record<string, { secretary: 
 // ───────────────────────────────────────────────────
 // 枢武府委员 & 各战区司令/政委
 // ───────────────────────────────────────────────────
-export const THEATER_LIST = [
+const THEATER_LIST = [
   { id: 'east',   name: '东部战区',   location: '南京',   emoji: '⚔️' },
   { id: 'south',  name: '南部战区',   location: '广州',   emoji: '🌊' },
   { id: 'west',   name: '西部战区',   location: '成都',   emoji: '🏔️' },
@@ -129,7 +129,7 @@ export const THEATER_LIST = [
   { id: 'center', name: '中部战区',   location: '京都',   emoji: '🏯' },
 ] as const;
 
-export function getTheaterLeaders(saveId: string): Record<string, { commander: string; commissar: string }> {
+function getTheaterLeaders(saveId: string): Record<string, { commander: string; commissar: string }> {
   const result: Record<string, { commander: string; commissar: string }> = {};
   THEATER_LIST.forEach(t => {
     result[t.id] = {
@@ -143,7 +143,7 @@ export function getTheaterLeaders(saveId: string): Record<string, { commander: s
 // ───────────────────────────────────────────────────
 // 快捷获取：专线电话对象（副总理/部长/省执政委书记）
 // ───────────────────────────────────────────────────
-export interface HotlineEntry {
+interface HotlineEntry {
   id: string;
   name: string;
   title: string;

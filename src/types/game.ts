@@ -6,7 +6,6 @@ export type TaskStatus = 'active' | 'completed' | 'failed' | 'expired';
 export type CaseStatus = 'pending' | 'solving' | 'solved' | 'failed';
 export type EventType = 'disaster' | 'corruption' | 'opinion' | 'economic' | 'security';
 export type CaseType = 'criminal' | 'corruption' | 'drug' | 'fraud';
-export type FactionType = 'reform' | 'pragmatic';
 export type MarriageStatus = 'single' | 'married';
 export type MemberType = 'spouse' | 'child';
 
@@ -36,13 +35,10 @@ export const RANK_CONFIG = _ranksJson.RANK_CONFIG as unknown as Record<number, R
 export const RANK_SALARY = _ranksJson.RANK_SALARY as unknown as Record<number, number>;
 export const RANK_INITIAL_FUND = _ranksJson.RANK_INITIAL_FUND as unknown as Record<number, number>;
 export const RANK_FUND_MULTIPLIER = _ranksJson.RANK_FUND_MULTIPLIER as unknown as Record<number, number>;
-export const RANK_GROSS_SALARY = _ranksJson.RANK_GROSS_SALARY as unknown as Record<number, number>;
-export const RANK_PERSONAL_SOCIAL_INSURANCE = _ranksJson.RANK_PERSONAL_SOCIAL_INSURANCE as unknown as Record<number, number>;
 export const RANK_PERSONAL_HPF = _ranksJson.RANK_PERSONAL_HPF as unknown as Record<number, number>;
 export const RANK_MONTHLY_ALLOWANCE = _ranksJson.RANK_MONTHLY_ALLOWANCE as unknown as Record<number, number>;
 export const RANK_ANNUAL_BONUS_MONTHS = _ranksJson.RANK_ANNUAL_BONUS_MONTHS as unknown as Record<number, number>;
-export const RANK_ALLOWANCE_DETAIL = _ranksJson.RANK_ALLOWANCE_DETAIL as unknown as Record<number, Array<{ label: string; amount: number }>>;
-export const RANK_HOUSING = _ranksJson.RANK_HOUSING as unknown as Record<number, string | null>;
+
 
 // MinistryInfo 显式声明（JSON 导入后不能用 typeof MINISTRY_POOL[number] 自推断）
 export type MinistryInfo = { name: string; focus: string; emoji: string };
@@ -51,9 +47,6 @@ export type MinistryInfo = { name: string; focus: string; emoji: string };
 export const CITY_POOLS = _citiesJson.CITY_POOLS as Record<string, string[]>;
 export const MINISTRY_POOL = _citiesJson.MINISTRY_POOL as MinistryInfo[];
 export const DEFAULT_CITY_BY_LEVEL = _citiesJson.DEFAULT_CITY_BY_LEVEL as unknown as Record<number, string>;
-
-// ── 商城物品 ──────────────────────────────────────────────────
-export const PURCHASABLE_ITEMS = _shopJson.PURCHASABLE_ITEMS as unknown as PurchasableItem[];
 
 // ── 官员职位表 ────────────────────────────────────────────────
 export const COUNTY_OFFICIAL_POSITIONS = _positionsJson.COUNTY_OFFICIAL_POSITIONS as unknown as CountyPosition[];
@@ -158,11 +151,6 @@ export function getAvatarBgColor(avatarId: number, faction: string): string {
   return pool[avatarId % pool.length];
 }
 
-/** 文字首字（备用占位符） */
-export function getAvatarChar(name: string): string {
-  return name ? name[0] : '员';
-}
-
 // ============ 学校影响 ============
 export const SCHOOL_BONUS: Record<string, number> = {
   '985院校': 10,
@@ -178,13 +166,6 @@ export type DegreeType = '本科' | '硕士' | '博士';
 /** 判断是否满足中央选调条件 */
 export function canApplyZhongXuanDiao(school: string, degree: DegreeType): boolean {
   return school === '985院校' && (degree === '硕士' || degree === '博士');
-}
-
-/** 中央选调最低入职年龄（985硕士≥23岁，博士≥25岁）*/
-export function getZhongXuanDiaoMinAge(degree: DegreeType): number {
-  if (degree === '博士') return 25;
-  if (degree === '硕士') return 23;
-  return 22;
 }
 
 /** 选调生起始职级（硕士→副科/rank2，博士→正科/rank3）*/
@@ -322,25 +303,6 @@ export interface SubProvincePosition {
   highProfileNote?: string;
 }
 
-export function getCountyPositionsByTier(tier: CountyPosition['tier']): CountyPosition[] {
-  return COUNTY_OFFICIAL_POSITIONS.filter(p => p.tier === tier);
-}
-
-// ============ 市级官职完整数据（正厅/副厅/正处/副处）============
-export function getCityPositionsByTier(tier: CityPosition['tier']): CityPosition[] {
-  return CITY_OFFICIAL_POSITIONS.filter(p => p.tier === tier);
-}
-
-// ============ 省级官职完整数据（正部/副部/正厅/副厅）============
-export function getProvincePositionsByTier(tier: ProvincePosition['tier']): ProvincePosition[] {
-  return PROVINCE_OFFICIAL_POSITIONS.filter(p => p.tier === tier);
-}
-
-// ============ 副省级城市官职架构（副部/正厅/副厅/正处）============
-export function getSubProvincePositionsByTier(tier: SubProvincePosition['tier']): SubProvincePosition[] {
-  return SUB_PROVINCE_CITY_POSITIONS.filter(p => p.tier === tier);
-}
-
 /** 重要人事任命的逐级审批层级 */
 export type ApprovalLevel = '本级决定' | '县级联邦国会/组织部审批' | '地市级审批' | '省级审批' | '中央审批';
 
@@ -374,8 +336,6 @@ export const SUB_LEVEL_NAMES = [
   '正处级', '副厅级', '正厅级', '副部级',
   '正部级', '副国级', '正国级', '副总理级',
 ];
-export const SUB_LEVEL_COUNT = 12;
-
 /**
  * 各职级下属的全局人数上限（金字塔结构）
  * 防止反复晋升导致大量高级别干部堆积
@@ -1425,94 +1385,6 @@ export interface DeptPromotionPath {
   pathType?: DeptPromotionPathType; // 默认 dept
 }
 
-/** 各职级可选的22部门正职晋升路径（含部门内和线上双轨） */
-export function getDeptPromotionPaths(rankLevel: number): DeptPromotionPath[] {
-  // 乡镇级（rank1-3）：乡镇科室负责人
-  if (rankLevel >= 1 && rankLevel <= 3) {
-    return [
-      { deptKey: 'police',       deptName: '派出所',   icon: '🚔', headTitle: '派出所所长',     desc: '维护乡镇治安，户籍管理',   pathType: 'dept' },
-      { deptKey: 'finance',      deptName: '财政所',   icon: '💰', headTitle: '财政所所长',     desc: '乡镇财政预算管理',         pathType: 'dept' },
-      { deptKey: 'agriculture',  deptName: '农业站',   icon: '🌾', headTitle: '农业站站长',     desc: '农业技术推广、乡村振兴',   pathType: 'dept' },
-      { deptKey: 'education',    deptName: '教育办',   icon: '📚', headTitle: '教育办主任',     desc: '管理辖区中小学校',         pathType: 'dept' },
-      { deptKey: 'health2',      deptName: '卫生站',   icon: '🏥', headTitle: '卫生站站长',     desc: '基层医疗卫生服务',         pathType: 'dept' },
-      { deptKey: 'transport',    deptName: '交通站',   icon: '🚗', headTitle: '交通站站长',     desc: '道路养护、运输管理',       pathType: 'dept' },
-      { deptKey: 'ecology',      deptName: '环保站',   icon: '🌿', headTitle: '环保站站长',     desc: '环境保护与监测',           pathType: 'dept' },
-      { deptKey: 'petition',     deptName: '信访室',   icon: '📮', headTitle: '信访室主任',     desc: '群众来信来访处置',         pathType: 'dept' },
-      { deptKey: 'govoffice',    deptName: '政务办',   icon: '📋', headTitle: '政务办主任',     desc: '综合协调、文件起草',       pathType: 'dept' },
-      { deptKey: 'market',       deptName: '市监所',   icon: '⚖️', headTitle: '市监所所长',     desc: '市场监管、食品安全',       pathType: 'dept' },
-      // 线上路径：直接升镇党委委员/副镇长
-      { deptKey: 'linecadre_deputy_town',  deptName: '副乡镇长', icon: '🏛️', headTitle: '副乡镇长（综合线）', desc: '进入乡镇政府领导班子，分管综合事务', pathType: 'linecadre' },
-      { deptKey: 'linecadre_party_town',   deptName: '党委委员', icon: '🎖️', headTitle: '镇党委委员（党务线）', desc: '进入乡镇党委班子，分管党建组织工作', pathType: 'linecadre' },
-    ];
-  }
-  // 县处级（rank4-6）：县/区下属局局长
-  if (rankLevel >= 4 && rankLevel <= 6) {
-    return [
-      { deptKey: 'organization', deptName: '组织部',   icon: '🏛️', headTitle: '县委组织部部长', desc: '管理干部人事，党建工作',   pathType: 'dept' },
-      { deptKey: 'propaganda',   deptName: '宣传部',   icon: '📢', headTitle: '县委宣传部部长', desc: '意识形态、文化宣传工作',   pathType: 'dept' },
-      { deptKey: 'discipline',   deptName: '纪检委',   icon: '⚖️', headTitle: '县纪检委书记',   desc: '党风廉政、反腐败工作',   pathType: 'dept' },
-      { deptKey: 'govoffice',    deptName: '政府办公室', icon: '📋', headTitle: '县政府办公室主任', desc: '综合协调、行政管理',   pathType: 'dept' },
-      { deptKey: 'ndrc',         deptName: '发改委',   icon: '📊', headTitle: '县发展改革局局长', desc: 'GDP发展、项目审批',     pathType: 'dept' },
-      { deptKey: 'finance',      deptName: '财政局',   icon: '💰', headTitle: '县财政局局长',   desc: '财政收支、预算管理',     pathType: 'dept' },
-      { deptKey: 'police',       deptName: '公安局',   icon: '🚔', headTitle: '县公安局局长',   desc: '治安管理、刑事侦查',     pathType: 'dept' },
-      { deptKey: 'agriculture',  deptName: '农业局',   icon: '🌾', headTitle: '县农业农村局局长', desc: '农业生产、乡村振兴',   pathType: 'dept' },
-      { deptKey: 'education',    deptName: '教育局',   icon: '🎓', headTitle: '县教育局局长',   desc: '教育资源、学校管理',     pathType: 'dept' },
-      { deptKey: 'health2',      deptName: '卫健局',   icon: '🏥', headTitle: '县卫生健康局局长', desc: '医疗卫生、公共健康',   pathType: 'dept' },
-      { deptKey: 'industry',     deptName: '工业信息化局', icon: '🏭', headTitle: '县工信局局长', desc: '工业发展、数字经济',   pathType: 'dept' },
-      { deptKey: 'naturalres',   deptName: '自然资源局', icon: '🌿', headTitle: '县自然资源局局长', desc: '土地管理、矿产资源', pathType: 'dept' },
-      { deptKey: 'construction', deptName: '住建局',   icon: '🏗️', headTitle: '县住房城乡建设局局长', desc: '城市建设、住房管理', pathType: 'dept' },
-      { deptKey: 'transport',    deptName: '交通运输局', icon: '🚗', headTitle: '县交通运输局局长', desc: '交通基础设施建设', pathType: 'dept' },
-      // 线上路径：直接升副县长/县政协副主席
-      { deptKey: 'linecadre_deputy_county', deptName: '副县长',    icon: '🏛️', headTitle: '副县长（综合线）',   desc: '进入县政府领导班子，分管经济社会事务', pathType: 'linecadre' },
-      { deptKey: 'linecadre_standing',      deptName: '县委常委',  icon: '🎖️', headTitle: '县委常委（党务线）', desc: '进入县委常委班子，分管组织人事党务', pathType: 'linecadre' },
-    ];
-  }
-  // 市厅级（rank7-9）：市直属局/委正职
-  if (rankLevel >= 7 && rankLevel <= 9) {
-    return [
-      { deptKey: 'organization', deptName: '组织部',     icon: '🏛️', headTitle: '市委组织部部长', desc: '管理市级干部人事',   pathType: 'dept' },
-      { deptKey: 'propaganda',   deptName: '宣传部',     icon: '📢', headTitle: '市委宣传部部长', desc: '意识形态、文化宣传', pathType: 'dept' },
-      { deptKey: 'discipline',   deptName: '纪检委',     icon: '⚖️', headTitle: '市纪检委书记',   desc: '党纪监督、反腐工作', pathType: 'dept' },
-      { deptKey: 'govoffice',    deptName: '政府办公室', icon: '📋', headTitle: '市政府秘书长',   desc: '市级综合协调',       pathType: 'dept' },
-      { deptKey: 'ndrc',         deptName: '发改委',     icon: '📊', headTitle: '市发展改革委主任', desc: '城市经济规划',     pathType: 'dept' },
-      { deptKey: 'finance',      deptName: '财政局',     icon: '💰', headTitle: '市财政局局长',   desc: '市级财政管理',       pathType: 'dept' },
-      { deptKey: 'police',       deptName: '公安局',     icon: '🚔', headTitle: '市公安局局长',   desc: '城市治安、刑侦',     pathType: 'dept' },
-      { deptKey: 'agriculture',  deptName: '农业农村委', icon: '🌾', headTitle: '市农业农村委主任', desc: '农业农村发展',     pathType: 'dept' },
-      { deptKey: 'education',    deptName: '教育局',     icon: '🎓', headTitle: '市教育局局长',   desc: '市级教育管理',       pathType: 'dept' },
-      { deptKey: 'health2',      deptName: '卫健委',     icon: '🏥', headTitle: '市卫生健康委主任', desc: '市级医疗卫生',     pathType: 'dept' },
-      { deptKey: 'industry',     deptName: '工业信息化局', icon: '🏭', headTitle: '市工业和信息化局局长', desc: '工业信息化', pathType: 'dept' },
-      { deptKey: 'naturalres',   deptName: '自然资源局', icon: '🌿', headTitle: '市自然资源局局长', desc: '土地资源管理',   pathType: 'dept' },
-      { deptKey: 'construction', deptName: '住建局',     icon: '🏗️', headTitle: '市住房城乡建设局局长', desc: '城市建设规划', pathType: 'dept' },
-      { deptKey: 'transport',    deptName: '交通运输局', icon: '🚗', headTitle: '市交通运输局局长', desc: '交通运输管理',   pathType: 'dept' },
-      // 线上路径：直接升副市长/市委常委
-      { deptKey: 'linecadre_deputy_city',  deptName: '副市长',   icon: '🏛️', headTitle: '副市长（综合线）',   desc: '进入市政府领导班子，分管重点专项工作', pathType: 'linecadre' },
-      { deptKey: 'linecadre_city_standing',deptName: '市委常委', icon: '🎖️', headTitle: '市委常委（党务线）', desc: '进入市委常委班子，负责重大决策协商', pathType: 'linecadre' },
-    ];
-  }
-  // 省部级（rank10-11）：省直属厅/委正职
-  if (rankLevel >= 10 && rankLevel <= 11) {
-    return [
-      { deptKey: 'organization', deptName: '组织部',   icon: '🏛️', headTitle: '省委组织部部长', desc: '省级干部人事管理',     pathType: 'dept' },
-      { deptKey: 'propaganda',   deptName: '宣传部',   icon: '📢', headTitle: '省委宣传部部长', desc: '省级意识形态工作',     pathType: 'dept' },
-      { deptKey: 'discipline',   deptName: '纪检委',   icon: '⚖️', headTitle: '省纪检委书记',   desc: '省级党纪监督',         pathType: 'dept' },
-      { deptKey: 'govoffice',    deptName: '政府办',   icon: '📋', headTitle: '省政府秘书长',   desc: '省级行政综合协调',     pathType: 'dept' },
-      { deptKey: 'ndrc',         deptName: '发改委',   icon: '📊', headTitle: '省发展改革委主任', desc: '省级经济规划',       pathType: 'dept' },
-      { deptKey: 'finance',      deptName: '财政厅',   icon: '💰', headTitle: '省财政厅厅长',   desc: '省级财政管理',         pathType: 'dept' },
-      { deptKey: 'police',       deptName: '公安厅',   icon: '🚔', headTitle: '省公安厅厅长',   desc: '省级公安工作',         pathType: 'dept' },
-      { deptKey: 'agriculture',  deptName: '农业农村厅', icon: '🌾', headTitle: '省农业农村厅厅长', desc: '省级农业农村工作', pathType: 'dept' },
-      { deptKey: 'education',    deptName: '教育厅',   icon: '🎓', headTitle: '省教育厅厅长',   desc: '省级教育工作',         pathType: 'dept' },
-      { deptKey: 'health2',      deptName: '卫健委',   icon: '🏥', headTitle: '省卫生健康委主任', desc: '省级卫生健康',       pathType: 'dept' },
-      { deptKey: 'industry',     deptName: '工信厅',   icon: '🏭', headTitle: '省工业和信息化厅厅长', desc: '省级工业信息化', pathType: 'dept' },
-      { deptKey: 'naturalres',   deptName: '自然资源厅', icon: '🌿', headTitle: '省自然资源厅厅长', desc: '省级自然资源管理', pathType: 'dept' },
-      { deptKey: 'construction', deptName: '住建厅',   icon: '🏗️', headTitle: '省住房城乡建设厅厅长', desc: '省级住建工作',   pathType: 'dept' },
-      { deptKey: 'transport',    deptName: '交通运输厅', icon: '🚗', headTitle: '省交通运输厅厅长', desc: '省级交通管理',   pathType: 'dept' },
-      // 线上路径：直接升副省长/省委常委
-      { deptKey: 'linecadre_deputy_prov',  deptName: '副省长',   icon: '🏛️', headTitle: '副省长（综合线）',   desc: '进入省政府领导班子，分管重大经济社会工作', pathType: 'linecadre' },
-      { deptKey: 'linecadre_prov_standing',deptName: '省委常委', icon: '🎖️', headTitle: '省委常委（党务线）', desc: '进入省委常委班子，负责省级重大事务决策', pathType: 'linecadre' },
-    ];
-  }
-  return [];
-}
 
 /** 相亲NPC */
 export interface BlindDateNpc {
@@ -1918,20 +1790,6 @@ export interface Enterprise {
   createdAt: string;
 }
 
-export const INDUSTRY_TYPES = [
-  '制造业', '信息技术', '新能源', '生物医药', '高端装备',
-  '商贸零售', '农业产业化', '文化旅游', '现代物流', '金融服务',
-];
-
-export const ENTERPRISE_NAME_PREFIXES = [
-  '华盛', '鼎兴', '腾远', '宏达', '聚力', '鑫源', '瑞丰', '卓越', '恒信', '晨阳',
-  '盛世', '创合', '博远', '同兴', '智汇', '龙腾', '福瑞', '康泰', '永业', '嘉和',
-];
-export const ENTERPRISE_NAME_SUFFIXES = [
-  '科技有限公司', '实业有限公司', '投资集团', '新材料有限公司', '装备制造有限公司',
-  '生物科技有限公司', '能源科技有限公司', '集团有限公司', '产业有限公司', '发展有限公司',
-];
-
 // ============ 招募候选人 ============
 export interface RecruitCandidate {
   id: string;
@@ -2118,7 +1976,7 @@ export interface BuildProjectTemplate {
 // 数值参照现实：乡镇5-80万 / 县级200-4000万 / 市级5000-80000万 / 省级50000-600000万
 // 每个项目全局只能建设一次（已建或在建名称均屏蔽）
 // ────────────────────────────────────────────────────────
-export const BUILD_TEMPLATES: BuildProjectTemplate[] = [
+const BUILD_TEMPLATES: BuildProjectTemplate[] = [
 
   // ══════════════════ 乡镇级（rank 2-3）══════════════════
 
@@ -2314,11 +2172,6 @@ export function gameDaysToDate(days: number): string {
   return `${year}年${month}月${day}日`;
 }
 
-// 根据出生日（游戏天数）和当前天数计算年龄
-export function calcAge(birthDay: number, currentDay: number): number {
-  return 22 + Math.floor((currentDay - birthDay) / 365);
-}
-
 // ============ 月度工作会议 ============
 export type KpiType = 'gdp' | 'livelihood' | 'ecology' | 'business';
 export const KPI_LABELS: Record<KpiType, string> = {
@@ -2404,13 +2257,6 @@ export interface LoanTemplate {
   durationDays: number;
   desc: string;
 }
-export const LOAN_TEMPLATES: LoanTemplate[] = [
-  { name: '小额政策贷款',       amount: 50,     rateYearly: 0.038, durationDays: 365,  desc: '乡镇专用，小额短期政策性贷款，支持乡镇基础设施建设与民生项目' },
-  { name: '县域发展专项贷款',   amount: 1000,   rateYearly: 0.042, durationDays: 730,  desc: '县级专用，县域经济发展专项贷款，支持工业园区和民生工程' },
-  { name: '城市建设债券',       amount: 10000,  rateYearly: 0.035, durationDays: 1825, desc: '地级市专用，城投债，用于市政基础设施和重大工程建设' },
-  { name: '省级重点项目贷款',   amount: 100000, rateYearly: 0.030, durationDays: 3650, desc: '省级专用，国家政策性银行低息贷款，支持省级重大产业和基础设施项目' },
-];
-
 // 招商引资项目模板
 export interface InvestTemplate {
   name: string;
@@ -2535,13 +2381,6 @@ export const RETIREMENT_CONFIG: Record<number, RetirementConfig> = {
 /** 获取指定职级的退休配置 */
 export function getRetirementConfig(rankLevel: number): RetirementConfig {
   return RETIREMENT_CONFIG[rankLevel] ?? RETIREMENT_CONFIG[1];
-}
-
-/** 获取有效退休年龄（计入已批准的延迟年数） */
-export function getEffectiveRetirementAge(rankLevel: number, delayYearsGranted: number): number | null {
-  const cfg = getRetirementConfig(rankLevel);
-  if (cfg.baseAge === null) return null; // 正国家级无强制退休年龄
-  return cfg.baseAge + Math.min(delayYearsGranted, cfg.maxDelayYears);
 }
 
 /**

@@ -641,16 +641,4 @@ export function getRandomEvent(rankLevel = 1): EventTemplate {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-/** 按职级随机获取一个重大事件（isMajor=true） */
-export function getRandomMajorEvent(rankLevel = 1): EventTemplate {
-  const pool = getPoolForRank(rankLevel).filter(e => e.isMajor);
-  if (pool.length === 0) return getRandomEvent(rankLevel);
-  return pool[Math.floor(Math.random() * pool.length)];
-}
 
-/** 按职级随机获取一个普通事件（isMajor=false 或未设置） */
-export function getRandomMinorEvent(rankLevel = 1): EventTemplate {
-  const pool = getPoolForRank(rankLevel).filter(e => !e.isMajor);
-  if (pool.length === 0) return getRandomEvent(rankLevel);
-  return pool[Math.floor(Math.random() * pool.length)];
-}

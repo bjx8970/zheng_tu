@@ -4,7 +4,7 @@
  * 每次推进时间时按概率触发
  */
 
-export type CompetitionEventType = '排挤' | '拉拢' | '跳槽';
+type CompetitionEventType = '排挤' | '拉拢' | '跳槽';
 export type CareerLineName = '党务线' | '行政线' | '纪检线' | '团派线';
 
 export interface CompetitionChoice {
@@ -229,7 +229,7 @@ export const ALL_COMPETITION_EVENTS: CompetitionEvent[] = [
 ];
 
 /** 触发概率配置 */
-export const COMPETITION_TRIGGER_RATES: Record<CompetitionEventType, number> = {
+const COMPETITION_TRIGGER_RATES: Record<CompetitionEventType, number> = {
   排挤: 0.10,
   拉拢: 0.08,
   跳槽: 0.04,
