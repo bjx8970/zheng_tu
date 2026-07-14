@@ -1395,7 +1395,7 @@ const SUBORDINATE_NAMES_FEMALE = [
 ];
 const POSITIONS = ['副科长', '科员', '主任科员', '副主任', '主任', '办公室主任', '专员'];
 
-export async function initSubordinates(saveId: string, userId: string, rankLevel = 3) {
+async function initSubordinates(saveId: string, userId: string, rankLevel = 3) {
   // 12个部门每个分配正职+副职，共24人 + 2名待命下属
   // 正副职 sub_level 按现实职级体系计算（公安等强力部门高配）
 
@@ -1996,7 +1996,7 @@ const CASE_TEMPLATES = [
   { title: '寻衅滋事团伙处置', description: '辖区内一帮社会闲散人员多次寻衅滋事，严重影响社会秩序。', caseType: 'criminal' as const, difficulty: 35, requiredPolice: 12, rewardMerit: 10, securityChange: 7 },
 ];
 
-export async function initPoliceCases(saveId: string, userId: string, gameDays: number) {
+async function initPoliceCases(saveId: string, userId: string, gameDays: number) {
   const cases = CASE_TEMPLATES.slice(0, 4).map(c => ({
     save_id: saveId,
     user_id: userId,
@@ -2344,9 +2344,7 @@ export async function visitArea(areaId: string, visitDay: number, favorDelta: nu
   return !error;
 }
 
-export async function updateAreaDevIndex(areaId: string, gameDays: number): Promise<void> {
-  await supabase.from('governing_areas').update({ last_invested_day: gameDays }).eq('id', areaId);
-}
+
 
 // ============ 补充下属至职级上限 ============
 export async function supplementSubordinates(
@@ -2443,7 +2441,7 @@ function rowToRecruit(row: Record<string, unknown>): RecruitCandidate {
 const RECRUIT_NAMES_MALE = ['刘海', '陈磊', '王建国', '赵兴', '孙鹏', '李博', '张浩', '周翔', '吴杰', '郑刚', '钱志远', '冯磊'];
 const RECRUIT_NAMES_FEMALE = ['刘慧', '陈雪', '王晓燕', '赵婷', '孙丽', '李萍', '张婧', '周雅', '吴敏', '郑静'];
 
-export async function getOrCreateRecruitCandidates(
+async function getOrCreateRecruitCandidates(
   saveId: string, userId: string, yearKey: number
 ): Promise<RecruitCandidate[]> {
   // 查询当年候选人
@@ -2482,7 +2480,7 @@ export async function getOrCreateRecruitCandidates(
   return (created as Record<string, unknown>[]).map(rowToRecruit);
 }
 
-export async function selectRecruit(candidateId: string, rankOrder: number): Promise<boolean> {
+async function selectRecruit(candidateId: string, rankOrder: number): Promise<boolean> {
   const { error } = await supabase
     .from('recruit_candidates')
     .update({ status: 'selected', rank_order: rankOrder })
@@ -2490,7 +2488,7 @@ export async function selectRecruit(candidateId: string, rankOrder: number): Pro
   return !error;
 }
 
-export async function dismissRecruit(candidateId: string): Promise<boolean> {
+async function dismissRecruit(candidateId: string): Promise<boolean> {
   const { error } = await supabase
     .from('recruit_candidates')
     .update({ status: 'dismissed', rank_order: null })
@@ -2499,7 +2497,7 @@ export async function dismissRecruit(candidateId: string): Promise<boolean> {
 }
 
 // 确认招募：将选中的候选人加入下属列表，最多3名，自动分配到编制空缺部门
-export async function confirmRecruits(
+async function confirmRecruits(
   saveId: string, userId: string, yearKey: number
 ): Promise<{ count: number; assignments: { name: string; dept: string; position: string }[] }> {
   const { data } = await supabase
@@ -2833,15 +2831,6 @@ export async function updateSecretaryAbility(secretaryId: string, newAbility: nu
   return !error;
 }
 
-export async function restoreSecretaryAbility(secretaryId: string): Promise<void> {
-  const { data } = await supabase.from('secretary').select('ability').eq('id', secretaryId).maybeSingle();
-  if (!data) return;
-  const ability = (data as Record<string, unknown>).ability as number;
-  if (ability < 100) {
-    await supabase.from('secretary').update({ ability: Math.min(100, ability + 5) }).eq('id', secretaryId);
-  }
-}
-
 // ============ 城市金融 ============
 function rowToFinance(row: Record<string, unknown>): CityFinance {
   return {
@@ -2873,191 +2862,6 @@ export async function getOrCreateFinance(saveId: string, userId: string): Promis
     .single();
   if (error || !data) return null;
   return rowToFinance(data as Record<string, unknown>);
-}
-
-/** 直接扣减城市财政余额（万元单位，delta 为负数表示扣减）
- *  player_saves.fund_balance 是月度结算的唯一权威来源，此处直接更新该表。
- */
-export async function updateCityFinanceFund(saveId: string, deltaWan: number): Promise<boolean> {
-  const { data: row } = await supabase.from('player_saves').select('fund_balance').eq('id', saveId).maybeSingle();
-  if (!row) return false;
-  const current = (row.fund_balance as number) ?? 0;
-  const next = Math.max(0, current + deltaWan);
-  const { error } = await supabase.from('player_saves')
-    .update({ fund_balance: next, updated_at: new Date().toISOString() })
-    .eq('id', saveId);
-  return !error;
-}
-
-export async function applyLoan(saveId: string, loan: LoanRecord): Promise<boolean> {
-  const finance = await getOrCreateFinance(saveId, '');
-  if (!finance) return false;
-  const { data: row } = await supabase.from('city_finance').select('*').eq('save_id', saveId).maybeSingle();
-  if (!row) return false;
-  const current = rowToFinance(row as Record<string, unknown>);
-  // ★ 贷款限制：同一档贷款只有在「已还清 paid 且 到期日已过」时才可重借
-  const sameNameActive = current.loans.find(l => l.amount === loan.amount && l.status === 'active');
-  if (sameNameActive) return false;
-  const newLoans = [...current.loans, loan];
-  const newBalance = current.fundBalance + loan.amount;
-  const newDebt = current.debtTotal + loan.amount;
-  const { error } = await supabase.from('city_finance').update({ loans: newLoans, fund_balance: newBalance, debt_total: newDebt, updated_at: new Date().toISOString() }).eq('save_id', saveId);
-  return !error;
-}
-
-/**
- * 提前全额偿还指定贷款（一次性还清剩余本金+当期利息）
- * 提前还款金额 = 贷款总额（简化：用总本金，不计剩余月供分期）
- */
-export async function repayLoanEarly(saveId: string, loanId: string): Promise<{ ok: boolean; cost: number }> {
-  const { data: row } = await supabase.from('city_finance').select('*').eq('save_id', saveId).maybeSingle();
-  if (!row) return { ok: false, cost: 0 };
-  const finance = rowToFinance(row as Record<string, unknown>);
-  const loan = finance.loans.find(l => l.id === loanId && l.status === 'active');
-  if (!loan) return { ok: false, cost: 0 };
-  // 提前还款金额 = 贷款本金（已按月偿还的月供部分已扣减债务，此处简化为全额本金）
-  const cost = loan.amount;
-  if (finance.fundBalance < cost) return { ok: false, cost };
-  const updatedLoans = finance.loans.map(l =>
-    l.id === loanId ? { ...l, status: 'paid' as const } : l,
-  );
-  const newBalance = finance.fundBalance - cost;
-  const newDebt = Math.max(0, finance.debtTotal - cost);
-  const { error } = await supabase.from('city_finance').update({
-    loans: updatedLoans, fund_balance: newBalance, debt_total: newDebt,
-    updated_at: new Date().toISOString(),
-  }).eq('save_id', saveId);
-  if (error) return { ok: false, cost };
-  await supabase.from('player_saves').update({ fund_balance: newBalance }).eq('id', saveId);
-  return { ok: true, cost };
-}
-
-export async function startInvestment(saveId: string, inv: InvestmentRecord): Promise<boolean> {
-  const { data: row } = await supabase.from('city_finance').select('*').eq('save_id', saveId).maybeSingle();
-  if (!row) return false;
-  const current = rowToFinance(row as Record<string, unknown>);
-
-  // ★ 修复：使用 player_saves.fund_balance 作为余额权威来源
-  //   city_finance.fund_balance 初始为0且未与玩家账户同步，直接用其校验会导致省级以上玩家无法投资下级项目
-  const { data: saveRow } = await supabase.from('player_saves').select('fund_balance').eq('id', saveId).maybeSingle();
-  const playerBalance = saveRow ? ((saveRow.fund_balance as number) ?? 0) : 0;
-  if (playerBalance < inv.amount) return false;
-
-  const newInvs = [...current.investments, inv];
-  const newBalance = Math.max(0, playerBalance - inv.amount);
-
-  // 同步更新 city_finance（投资列表 + 同步余额）
-  const { error } = await supabase.from('city_finance').update({
-    investments: newInvs,
-    fund_balance: newBalance,
-    updated_at: new Date().toISOString(),
-  }).eq('save_id', saveId);
-  if (error) return false;
-  // ★ 同步扣减 player_saves.fund_balance，保证 UI 刷新后余额正确
-  await supabase.from('player_saves').update({ fund_balance: newBalance }).eq('id', saveId);
-  return true;
-}
-
-export async function establishInvestGroup(saveId: string, gameDays: number): Promise<boolean> {
-  const { error } = await supabase.from('city_finance').update({ invest_group_est_day: gameDays, updated_at: new Date().toISOString() }).eq('save_id', saveId);
-  return !error;
-}
-
-// 每月处理贷款还款和到期投资（时间推进时调用）
-export async function processFinanceMonth(saveId: string, userId: string, gameDays: number): Promise<{ meritBonus: number; gdpBonus: number; bizBonus: number; liveBonus: number; ecoBonus: number; penaltyMerit: number }> {
-  const result = { meritBonus: 0, gdpBonus: 0, bizBonus: 0, liveBonus: 0, ecoBonus: 0, penaltyMerit: 0 };
-  const { data: row } = await supabase.from('city_finance').select('*').eq('save_id', saveId).maybeSingle();
-  if (!row) return result;
-  const finance = rowToFinance(row as Record<string, unknown>);
-
-  let newBalance = finance.fundBalance;
-  let newDebt = finance.debtTotal;
-  const updatedLoans = finance.loans.map(l => {
-    if (l.status !== 'active') return l;
-    if (gameDays >= l.dueDay) {
-      if (newBalance >= l.monthlyPay) {
-        newBalance -= l.monthlyPay;
-        newDebt = Math.max(0, newDebt - l.monthlyPay);
-        return { ...l, status: 'paid' as const };
-      } else {
-        result.penaltyMerit += 20; // 逾期罚款
-        return l;
-      }
-    }
-    // 正常月供
-    if (newBalance >= l.monthlyPay) {
-      newBalance -= l.monthlyPay;
-      newDebt = Math.max(0, newDebt - l.monthlyPay);
-    } else {
-      result.penaltyMerit += 5;
-    }
-    return l;
-  });
-
-  const updatedInvs = finance.investments.map(inv => {
-    if (inv.status !== 'running') return inv;
-    if (gameDays >= inv.endDay) {
-      result.meritBonus += 30;
-      if (inv.effectType === 'gdp') result.gdpBonus += inv.effectValue;
-      if (inv.effectType === 'business') result.bizBonus += inv.effectValue;
-      if (inv.effectType === 'livelihood') result.liveBonus += inv.effectValue;
-      if (inv.effectType === 'ecology') result.ecoBonus += inv.effectValue;
-      return { ...inv, status: 'done' as const };
-    }
-    return inv;
-  });
-
-  await supabase.from('city_finance').update({
-    fund_balance: newBalance, debt_total: newDebt,
-    loans: updatedLoans, investments: updatedInvs,
-    updated_at: new Date().toISOString(),
-  }).eq('save_id', saveId);
-  // 同步player_saves资金余额
-  await supabase.from('player_saves').update({ fund_balance: newBalance }).eq('id', saveId);
-  return result;
-}
-
-// ============ 民生操作 ============
-export async function doWelfareAction(
-  saveId: string, userId: string,
-  actionType: 'welfare' | 'education' | 'healthcare' | 'housing',
-  costMerit: number, effectValue: number, gameDays: number,
-  costFund = 0
-): Promise<boolean> {
-  const { error } = await supabase.from('welfare_actions').insert({
-    save_id: saveId, user_id: userId,
-    action_type: actionType, cost_merit: costMerit,
-    effect_value: effectValue, done_day: gameDays,
-    cost_fund: costFund,
-  });
-  return !error;
-}
-
-export interface WelfareRecord {
-  id: string;
-  actionType: string;
-  costMerit: number;
-  costFund: number;
-  effectValue: number;
-  doneDay: number;
-}
-
-export async function getWelfareHistory(saveId: string, limit = 5): Promise<WelfareRecord[]> {
-  const { data, error } = await supabase
-    .from('welfare_actions')
-    .select('*')
-    .eq('save_id', saveId)
-    .order('done_day', { ascending: false })
-    .limit(limit);
-  if (error || !data) return [];
-  return (data as Record<string, unknown>[]).map(r => ({
-    id: r.id as string,
-    actionType: r.action_type as string,
-    costMerit: r.cost_merit as number,
-    costFund: (r.cost_fund as number) ?? 0,
-    effectValue: r.effect_value as number,
-    doneDay: r.done_day as number,
-  }));
 }
 
 // ============ 年度招募（每年2次：春招约第90天/国考批次 & 秋招约第270天/省考批次）============
@@ -3294,7 +3098,7 @@ export async function triggerAutoRecruit(
 /** 招募完成后自动将新录用干部分配到编制最空缺的部门
  *  isNationalExam=true 时：前1名（选调生）优先分配到重要岗位
  */
-export async function autoAssignNewRecruits(
+async function autoAssignNewRecruits(
   saveId: string,
   newSubIds: string[],
   isNationalExam = false,
@@ -3627,7 +3431,7 @@ export async function getSubResumes(subId: string): Promise<SubResume[]> {
   return (data as Record<string, unknown>[]).map(rowToSubResume);
 }
 
-export async function addSubResume(
+async function addSubResume(
   saveId: string, subId: string, position: string,
   deptName: string, startDay: number, note = ''
 ): Promise<void> {
@@ -3638,59 +3442,12 @@ export async function addSubResume(
   });
 }
 
-export async function closeSubResume(subId: string, endDay: number): Promise<void> {
+async function closeSubResume(subId: string, endDay: number): Promise<void> {
   // 关闭当前在职履历
   await supabase.from('subordinate_resumes')
     .update({ end_day: endDay })
     .eq('sub_id', subId)
     .is('end_day', null);
-}
-
-// ============ 年度晋升候选人查询 ============
-/** 每年初查询符合晋升条件的下属，同时遵守金字塔职级人数上限 */
-export async function getAnnualPromoEligible(saveId: string, currentDay: number, playerRankLevel: number): Promise<{
-  id: string; name: string; subLevel: number; ability: number; experience: number;
-  appointedDept: string | null; deptPosition: string; reason: string;
-}[]> {
-  const { SUB_LEVEL_MAX_COUNT } = await import('@/types/game');
-
-  const { data } = await supabase
-    .from('subordinates')
-    .select('id, name, sub_level, ability, experience, last_assessed_day, appointed_dept, dept_position')
-    .eq('save_id', saveId)
-    .is('transferred_city', null);
-  if (!data) return [];
-
-  const rows = data as { id: string; name: string; sub_level: number; ability: number; experience: number; last_assessed_day: number; appointed_dept: string | null; dept_position: string }[];
-
-  // 统计当前各职级人数
-  const levelCount: Record<number, number> = {};
-  for (const s of rows) levelCount[s.sub_level] = (levelCount[s.sub_level] ?? 0) + 1;
-
-  const maxSubLevel = Math.min(12, playerRankLevel - 1); // 下属最多比玩家低一级
-  return rows
-    .filter(s => s.sub_level < maxSubLevel)
-    .map(s => {
-      const daysInPost = currentDay - (s.last_assessed_day ?? 0);
-      // 越高职级任职年限要求越长
-      const yearThreshold = s.sub_level <= 3 ? 365 * 2 : s.sub_level <= 6 ? 365 * 3 : 365 * 4;
-      const tenureReached = daysInPost >= yearThreshold;
-      // KPI 标准随职级提高而更严格
-      const kpiAbility = s.sub_level <= 3 ? 72 : s.sub_level <= 6 ? 76 : 80;
-      const kpiExp    = s.sub_level <= 3 ? 55 : s.sub_level <= 6 ? 65 : 75;
-      const kpiReached = s.ability >= kpiAbility && s.experience >= kpiExp;
-      if (!tenureReached && !kpiReached) return null;
-
-      // 检查目标职级是否已达金字塔上限
-      const targetLevel = s.sub_level + 1;
-      const cap = SUB_LEVEL_MAX_COUNT[targetLevel] ?? 999;
-      const currentAtTarget = levelCount[targetLevel] ?? 0;
-      if (currentAtTarget >= cap) return null; // 名额已满，此轮不推荐晋升
-
-      const reason = tenureReached && kpiReached ? '年限到达 + KPI优秀' : tenureReached ? '在职年限已满' : 'KPI考核优秀';
-      return { id: s.id, name: s.name, subLevel: s.sub_level, ability: s.ability, experience: s.experience, appointedDept: s.appointed_dept, deptPosition: s.dept_position, reason };
-    })
-    .filter((s): s is NonNullable<typeof s> => s !== null);
 }
 
 // ============ 下属晋升/降级 ============
@@ -4254,7 +4011,7 @@ function rankLevelToTier(rankLevel: number): 'province' | 'city' | 'county' | 't
   return 'town';
 }
 
-export interface AnnualRankEntry {
+interface AnnualRankEntry {
   id: string;
   saveId: string;
   yearKey: number;
@@ -5611,38 +5368,6 @@ export async function ensurePlayerHealth(saveId: string): Promise<PlayerHealth> 
   return { id: '', saveId, health: 80, energy: 100, isOnLeave: false, leaveEndDay: null, lastMonthlyCareDay: 0 };
 }
 
-/** 消耗精力（高强度工作调用）。返回是否触发因病休假 */
-export async function consumeEnergy(saveId: string, energyCost: number, healthCost: number, currentGameDay: number): Promise<{ forcedLeave: boolean }> {
-  const ph = await ensurePlayerHealth(saveId);
-  if (ph.isOnLeave) return { forcedLeave: true };
-
-  let newEnergy = Math.max(0, ph.energy - energyCost);
-  let newHealth = ph.health;
-  // 精力耗尽时额外扣健康
-  if (newEnergy === 0 && energyCost > 0) newHealth = Math.max(0, newHealth - healthCost);
-
-  let forcedLeave = false;
-  let isOnLeave: boolean = ph.isOnLeave;
-  let leaveEndDay = ph.leaveEndDay;
-
-  if (newHealth < 20 && !isOnLeave) {
-    // 触发因病休假
-    forcedLeave = true;
-    isOnLeave = true;
-    leaveEndDay = currentGameDay + 7;
-    newHealth = 50; // 休假后回复
-    newEnergy = 60;
-  }
-
-  await supabase.from('player_health').update({
-    health: newHealth, energy: newEnergy,
-    is_on_leave: isOnLeave, leave_end_day: leaveEndDay,
-    updated_at: new Date().toISOString(),
-  }).eq('save_id', saveId);
-
-  return { forcedLeave };
-}
-
 /** 恢复健康/精力（休假/锻炼/疗养） */
 export async function restoreHealth(saveId: string, type: 'rest' | 'exercise' | 'sanatorium', currentGameDay: number): Promise<boolean> {
   const ph = await ensurePlayerHealth(saveId);
@@ -6004,43 +5729,6 @@ export async function getCityMetrics(saveId: string): Promise<CityMetrics | null
     investBonus:        data.invest_bonus as number,
     petitionReduction:  data.petition_reduction as number,
     talentPool:         data.talent_pool as number,
-  };
-}
-
-/** 更新某项阳市指标，并自动重算联动值 */
-export async function updateCityMetric(saveId: string, field: 'gdp' | 'finance' | 'ecology' | 'stability' | 'education' | 'healthcare', delta: number): Promise<CityMetrics | null> {
-  const cur = await getCityMetrics(saveId);
-  if (!cur) {
-    await supabase.from('city_metrics').insert({ save_id: saveId, gdp: 60, finance: 60, ecology: 60, stability: 60, education: 60, healthcare: 60 });
-    return null;
-  }
-
-  const updates: Record<string, number | string> = {};
-  updates[field] = Math.max(0, Math.min(100, (cur[field] as number) + delta));
-
-  // GDP→财政联动
-  if (field === 'gdp') updates['finance'] = Math.min(100, cur.finance + Math.floor(delta * 0.5));
-  // 环境→招商加成
-  const newEcology = field === 'ecology' ? (updates['ecology'] as number) : cur.ecology;
-  updates['invest_bonus'] = Math.floor(newEcology / 10) * 5;
-  // 稳定→信访减少
-  const newStability = field === 'stability' ? (updates['stability'] as number) : cur.stability;
-  updates['petition_reduction'] = Math.floor(newStability / 10) * 10;
-  // 教育→人才积累（缓慢增长）
-  const newEdu = field === 'education' ? (updates['education'] as number) : cur.education;
-  updates['talent_pool'] = Math.min(200, cur.talentPool + (newEdu > 70 ? 2 : 0));
-
-  updates['updated_at'] = new Date().toISOString();
-  const { data, error } = await supabase.from('city_metrics').update(updates).eq('save_id', saveId).select().maybeSingle();
-  if (error || !data) return null;
-  return {
-    id: data.id as string, saveId: data.save_id as string,
-    gdp: data.gdp as number, finance: data.finance as number,
-    ecology: data.ecology as number, stability: data.stability as number,
-    education: data.education as number, healthcare: data.healthcare as number,
-    investBonus: data.invest_bonus as number,
-    petitionReduction: data.petition_reduction as number,
-    talentPool: data.talent_pool as number,
   };
 }
 
@@ -6534,153 +6222,7 @@ export async function fillAllDeptsStaff(saveId: string, userId: string): Promise
 // ★ 月度施政行动（一键施政 / 单部门施政）
 // =====================================================================
 
-/**
- * 查询本月（monthKey = floor(gameDays/30)）已执行施政的部门 key 集合。
- */
-export async function getDeptActionLog(
-  saveId: string,
-  monthKey: number,
-): Promise<Set<string>> {
-  const { data } = await supabase
-    .from('dept_gov_actions')
-    .select('dept_key')
-    .eq('save_id', saveId)
-    .eq('month_key', monthKey);
-  const used = new Set<string>();
-  for (const row of (data ?? [])) used.add(row.dept_key as string);
-  return used;
-}
 
-/**
- * 对单个部门执行本月施政行动。
- * - 返回 null 表示本月已施政或部门无正职；
- * - 返回效果对象表示施政成功，调用方需自行写入 player_saves。
- */
-export async function execSingleDeptAction(
-  saveId: string,
-  deptKey: DeptKey,
-  monthKey: number,
-): Promise<{
-  cityGdp: number; cityLivelihood: number; cityEcology: number;
-  cityBusiness: number; securityIndex: number; meritPoints: number;
-  bossFavor: number; fundBalance: number; taxRevenue: number;
-  log: string;
-} | null> {
-  // 防重：本月已施政
-  const { data: existing } = await supabase
-    .from('dept_gov_actions')
-    .select('id')
-    .eq('save_id', saveId)
-    .eq('dept_key', deptKey)
-    .eq('month_key', monthKey)
-    .maybeSingle();
-  if (existing) return null;
-
-  // 查找该部门正职
-  const { data: headRow } = await supabase
-    .from('subordinates')
-    .select('name, ability')
-    .eq('save_id', saveId)
-    .eq('appointed_dept', deptKey)
-    .eq('dept_position', 'head')
-    .eq('is_appointed', true)
-    .maybeSingle();
-
-  const cfg = DEPT_CONFIG[deptKey];
-  if (!cfg?.autoEffect) return null;
-
-  // 能力系数（有正职用其能力，无正职保底30%）
-  const ability = headRow ? (headRow.ability as number) ?? 50 : 30;
-  const factor = Math.max(0.3, Math.min(1.0, ability / 100));
-  const fx = cfg.autoEffect;
-  const apply = (v?: number) => v ? Math.round(v * factor * 10) / 10 : 0;
-
-  const result = {
-    cityGdp: apply(fx.cityGdp), cityLivelihood: apply(fx.cityLivelihood),
-    cityEcology: apply(fx.cityEcology), cityBusiness: apply(fx.cityBusiness),
-    securityIndex: apply(fx.securityIndex), meritPoints: apply(fx.meritPoints),
-    bossFavor: apply(fx.bossFavor), fundBalance: apply(fx.fundBalance),
-    taxRevenue: apply(fx.taxRevenue),
-    log: headRow
-      ? `${cfg.name}[${headRow.name as string}]执行了【${cfg.autoActionName}】`
-      : `${cfg.name}【${cfg.autoActionName}】（暂无一把手，效能折减）`,
-  };
-
-  // 记录施政日志（upsert 防并发重复）
-  await supabase.from('dept_gov_actions').upsert({
-    save_id: saveId, dept_key: deptKey, month_key: monthKey,
-    merit_gain: result.meritPoints,
-  }, { onConflict: 'save_id,dept_key,month_key' });
-
-  return result;
-}
-
-/**
- * 一键施政：对本月所有尚未施政的部门批量执行，汇总效果后写入 player_saves。
- * 返回汇总效果和各部门日志。
- */
-export async function execAllDeptActionsManual(
-  saveId: string,
-  gameDays: number,
-): Promise<{
-  actioned: number;
-  alreadyDone: number;
-  totalMerit: number;
-  logs: string[];
-}> {
-  const monthKey = Math.floor(gameDays / 30);
-  const deptKeys = Object.keys(DEPT_CONFIG) as DeptKey[];
-  const done = await getDeptActionLog(saveId, monthKey);
-
-  const totals = {
-    cityGdp: 0, cityLivelihood: 0, cityEcology: 0,
-    cityBusiness: 0, securityIndex: 0, meritPoints: 0,
-    bossFavor: 0, fundBalance: 0, taxRevenue: 0,
-  };
-  const logs: string[] = [];
-  let actioned = 0;
-
-  for (const deptKey of deptKeys) {
-    if (done.has(deptKey)) continue;
-    const r = await execSingleDeptAction(saveId, deptKey, monthKey);
-    if (!r) continue;
-    totals.cityGdp        += r.cityGdp;
-    totals.cityLivelihood += r.cityLivelihood;
-    totals.cityEcology    += r.cityEcology;
-    totals.cityBusiness   += r.cityBusiness;
-    totals.securityIndex  += r.securityIndex;
-    totals.meritPoints    += r.meritPoints;
-    totals.bossFavor      += r.bossFavor;
-    totals.fundBalance    += r.fundBalance;
-    totals.taxRevenue     += r.taxRevenue;
-    logs.push(r.log);
-    actioned++;
-  }
-
-  // 写入 player_saves
-  if (actioned > 0) {
-    const { data: cur } = await supabase
-      .from('player_saves')
-      .select('merit_points, city_gdp, city_livelihood, city_ecology, city_business, security_index, boss_favor, fund_balance, tax_revenue')
-      .eq('id', saveId).maybeSingle();
-    if (cur) {
-      const c = cur as Record<string, number>;
-      await supabase.from('player_saves').update({
-        merit_points:    (c.merit_points    ?? 0) + totals.meritPoints,
-        city_gdp:        Math.min(100, (c.city_gdp        ?? 50) + totals.cityGdp),
-        city_livelihood: Math.min(100, (c.city_livelihood ?? 50) + totals.cityLivelihood),
-        city_ecology:    Math.min(100, (c.city_ecology    ?? 50) + totals.cityEcology),
-        city_business:   Math.min(100, (c.city_business   ?? 50) + totals.cityBusiness),
-        security_index:  Math.min(100, (c.security_index  ?? 50) + totals.securityIndex),
-        boss_favor:      Math.min(100, (c.boss_favor      ?? 50) + totals.bossFavor),
-        fund_balance:    Math.max(0,   (c.fund_balance    ?? 0)  + totals.fundBalance),
-        tax_revenue:     Math.max(0,   (c.tax_revenue     ?? 0)  + totals.taxRevenue),
-      }).eq('id', saveId);
-    }
-  }
-
-  return { actioned, alreadyDone: done.size, totalMerit: Math.round(totals.meritPoints * 10) / 10, logs };
-}
 
 // =====================================================================
 // ★ AI 治理：每月自动推进辖区 devIndex / favorIndex
@@ -6718,22 +6260,6 @@ export async function aiGoverningAreasMonthly(saveId: string): Promise<void> {
       favor_index: Math.min(100, area.favor_index + favGain),
       dev_history: JSON.stringify(history),
     }).eq('id', area.id);
-  }
-}
-
-/**
- * 晋升/平调时：批量确保所有部门正副职满员（调用 fillAllDeptsStaff）。
- * 同时保留已在岗（is_appointed=true）下属不被清空。
- */
-export async function ensureAllDeptsFullOnTransfer(saveId: string, userId: string, rankLevel: number): Promise<void> {
-  await fillAllDeptsStaff(saveId, userId);
-  // 未任命下属补充（确保总量充足）
-  const { data: existing } = await supabase.from('subordinates').select('id').eq('save_id', saveId).is('transferred_city', null);
-  const { SUBORDINATE_LIMIT } = await import('@/types/game');
-  const target = SUBORDINATE_LIMIT[rankLevel] ?? 10;
-  const current = (existing ?? []).length;
-  if (current < target) {
-    await import('@/db/gameApi').then(m => m.supplementSubordinates(saveId, userId, rankLevel, current));
   }
 }
 

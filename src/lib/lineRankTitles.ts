@@ -165,27 +165,6 @@ export function getLineRankTitle(line: CareerLineName, rankLevel: number): LineR
 }
 
 /**
- * 获取某条线所有职级称谓列表
- */
-export function getAllLineTitles(line: CareerLineName): LineRankTitle[] {
-  return LINE_TITLE_MAP[line];
-}
-
-/**
- * 晋升历史显示格式
- * 返回形如 "【行政线】乡镇长（乡镇政府）" 的字符串
- */
-export function formatPromotionHistory(
-  line: CareerLineName,
-  rankLevel: number,
-  cityName?: string,
-): string {
-  const t = getLineRankTitle(line, rankLevel);
-  const place = cityName ? `${cityName}·` : '';
-  return `${place}${t.unitType} ${t.title}`;
-}
-
-/**
  * 按 careerPath 键名获取路线名
  */
 export function getLineNameByPath(careerPath: string): CareerLineName {

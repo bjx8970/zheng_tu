@@ -40,6 +40,6 @@ export interface PlanProjectConfig {
   };
 }
 
-export interface CityPlanConfig {
+interface CityPlanConfig {
   PLAN_PROJECTS: PlanProjectConfig[];
 }

@@ -4,7 +4,7 @@
  */
 
 /** 房产配置 */
-export interface HouseItemConfig {
+interface HouseItemConfig {
   /** 资产唯一 key，存储在 save.personalAssets 数组中 */
   key: string;
   /** 显示名称 */
@@ -28,7 +28,7 @@ export interface HouseItemConfig {
 }
 
 /** 股权配置 */
-export interface StockItemConfig {
+interface StockItemConfig {
   key: string;
   name: string;
   /** 股权类型（固定收益/股票市场/非上市股权/间接持股） */
@@ -45,7 +45,7 @@ export interface StockItemConfig {
 }
 
 /** 境外资产配置 */
-export interface OverseasItemConfig {
+interface OverseasItemConfig {
   key: string;
   name: string;
   /** 所在国家/地区 */
@@ -62,7 +62,7 @@ export interface OverseasItemConfig {
   legalWarning: string;
 }
 
-export interface PersonalAssetsConfig {
+interface PersonalAssetsConfig {
   HOUSES: HouseItemConfig[];
   STOCKS: StockItemConfig[];
   OVERSEAS: OverseasItemConfig[];
