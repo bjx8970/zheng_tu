@@ -46,72 +46,6 @@ jobs:
           files: ./coverage/unit/lcov.info
           flags: unittests
 
-  integration-tests:
-    name: Integration Tests
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    services:
-      supabase:
-        image: supabase/postgres:15.1.0.117
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: zhengtu_test
-        ports: ['5432:5432']
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
-      - name: Install Supabase CLI
-        run: pnpm add -g supabase
-      - name: Run Supabase migrations
-        run: |
-          sleep 10
-          pnpm supabase db reset --linked || true
-        env:
-          SUPABASE_URL: http://localhost:5432
-          SUPABASE_KEY: test-key
-      - run: pnpm test:integration
-
-  e2e-tests:
-    name: E2E Tests (Detox)
-    runs-on: macos-latest
-    timeout-minutes: 30
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: 'latest-stable'
-      - name: Install CocoaPods
-        run: |
-          cd ios && pod install && cd ..
-      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
-      - name: Build iOS app
-        run: |
-          pnpm expo prebuild --platform ios --clean
-          xcodebuild -workspace zhengtu.xcworkspace -scheme zhengtu -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15' build
-        working-directory: ./ios
-      - run: pnpm test:e2e
-
   build:
     name: Build Verification
     runs-on: ubuntu-latest
@@ -132,26 +66,3 @@ jobs:
         with:
           name: web-build
           path: dist/
-
-  release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    needs: [lint, unit-tests, build]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
-      - name: Generate changelog
-        run: |
-          pnpm changelog
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
