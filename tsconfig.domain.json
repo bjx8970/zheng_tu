@@ -1,37 +1,21 @@
 {
-  "extends": "miaoda-expo-devkit/tsconfig-base",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "baseUrl": ".",
-    "rootDir": ".",
-    "composite": false,
-    "noEmit": true
+    "noEmit": true,
+    "skipLibCheck": true
   },
   "include": [
-    "src/domains/**/*",
-    "src/infrastructure/persistence/supabase/repositories/**/*",
-    "src/infrastructure/persistence/supabase/mappers/**/*",
-    "src/infrastructure/networking/**/*",
-    "src/infrastructure/state/zustand/**/*",
-    "src/infrastructure/eventBus.ts",
-    "src/infrastructure/time/**/*",
-    "src/infrastructure/config/**/*"
+    "src/domains/**/*"
   ],
   "exclude": [
+    "node_modules",
+    "dist",
     "src/app/**/*",
-    "src/components/**/*",
-    "src/features/**/*",
-    "src/hooks/**/*",
     "src/lib/**/*",
+    "src/components/**/*",
     "src/ctx/**/*",
-    "src/client/**/*",
-    "src/test/**/*",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/**/__tests__/**/*"
+    "src/hooks/**/*",
+    "src/types/**/*",
+    "tests/**/*"
   ]
 }
