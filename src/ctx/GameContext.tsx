@@ -999,6 +999,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           cityName: latest.cityName,
           isPromotionAvailable: latest.isPromotionAvailable,
         });
+      } else if (latest && pendingWritesRef.current > 0) {
+        // 有正在飞行中的 updateGameSave 写入（用户按钮点击后的乐观更新尚未持久化），
+        // 跳过 setSave(updated)，避免覆盖 React 状态中的乐观更新。
+        // saveRef.current 已包含乐观操作的最新状态，下次 advanceTime 或 refreshSave 会自动同步。
       } else {
         setSave(updated);
       }

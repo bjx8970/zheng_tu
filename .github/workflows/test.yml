@@ -2,7 +2,7 @@ name: 测试分支验证
 
 on:
   push:
-    branches: ['test/**']
+    branches: ['dev']
 
 jobs:
   test:

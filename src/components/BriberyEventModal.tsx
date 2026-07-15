@@ -6,7 +6,6 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, Pressable, ActivityIndicator } from 'react-native';
 import { useGame } from '@/ctx/GameContext';
-import { updateSave } from '@/db/gameApi';
 
 const C = {
   overlay: 'rgba(0,0,0,0.55)',
@@ -23,7 +22,7 @@ interface Props {
 }
 
 export default function BriberyEventModal({ visible, onClose }: Props) {
-  const { save, refreshSave } = useGame();
+  const { save, updateGameSave } = useGame();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ choice: 'accept' | 'reject'; text: string } | null>(null);
 
@@ -43,7 +42,7 @@ export default function BriberyEventModal({ visible, onClose }: Props) {
       const newSavings = save.personalSavings + evt.amount;
       const newMoral = Math.max(0, save.moralValue - 5);
       const newRisk = Math.min(100, save.inspectionRisk + 10);
-      await updateSave(save.id, {
+      await updateGameSave({
         personalSavings: newSavings,
         moralValue: newMoral,
         inspectionRisk: newRisk,
@@ -53,7 +52,7 @@ export default function BriberyEventModal({ visible, onClose }: Props) {
       setResult({ choice: 'accept', text: `收受 ${amountWan} 万元。个人资产 +${amountWan}万，廉洁度 -5，巡视风险 +10。` });
     } else {
       const newMoral = Math.min(100, save.moralValue + 3);
-      await updateSave(save.id, {
+      await updateGameSave({
         moralValue: newMoral,
         meritPoints: save.meritPoints + 2,
         briberyRejected: save.briberyRejected + 1,
@@ -61,7 +60,6 @@ export default function BriberyEventModal({ visible, onClose }: Props) {
       });
       setResult({ choice: 'reject', text: `严词拒绝。廉洁度 +3，政绩 +2，briberyRejected +1。` });
     }
-    await refreshSave();
     setLoading(false);
   }
 
