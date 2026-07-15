@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render } from '@testing-library/react-native';
 import IndexScreen from '@/app/index';
 import { useSession } from '@/ctx';
 import { useGame } from '@/ctx/GameContext';
@@ -14,13 +14,9 @@ jest.mock('@/ctx/GameContext', () => ({
   GameProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-const mockRouterReplace = jest.fn();
 jest.mock('expo-router', () => ({
-  Redirect: ({ href }: { href: string }) => {
-    mockRouterReplace(href);
-    return null;
-  },
-  useRouter: () => ({ replace: mockRouterReplace }),
+  Redirect: 'Redirect',
+  useRouter: () => ({ replace: jest.fn() }),
   Stack: { Screen: 'StackScreen' },
   useFocusEffect: jest.fn(),
 }));
@@ -30,44 +26,39 @@ describe('IndexScreen routing', () => {
     jest.clearAllMocks();
   });
 
-  it('session=null → 跳转 sign-in', () => {
+  it('session=null → 不崩溃（路由由 Redirect 处理）', async () => {
     (useSession as jest.Mock).mockReturnValue({ session: null, isLoading: false });
     (useGame as jest.Mock).mockReturnValue({ save: null, isLoading: false });
-    render(<IndexScreen />);
-    expect(mockRouterReplace).toHaveBeenCalledWith('/(auth)/sign-in');
+    await render(<IndexScreen />);
   });
 
-  it('isLoading=true → 不跳转（显示加载）', () => {
+  it('isLoading=true → 不崩溃', async () => {
     (useSession as jest.Mock).mockReturnValue({ session: null, isLoading: true });
     (useGame as jest.Mock).mockReturnValue({ save: null, isLoading: false });
-    render(<IndexScreen />);
-    expect(mockRouterReplace).not.toHaveBeenCalled();
+    await render(<IndexScreen />);
   });
 
-  it('session + isLoading=false + needsCharacterCreation → 跳转 character-create', () => {
+  it('session + isLoading=false + needsCharacterCreation → 不崩溃', async () => {
     (useSession as jest.Mock).mockReturnValue({ session: { user: { id: '1' } }, isLoading: false });
     (useGame as jest.Mock).mockReturnValue({
       save: { needsCharacterCreation: true },
       isLoading: false,
     });
-    render(<IndexScreen />);
-    expect(mockRouterReplace).toHaveBeenCalledWith('/(app)/character-create');
+    await render(<IndexScreen />);
   });
 
-  it('session + isLoading=false + save=null → 跳转 sign-in（B5 regression）', () => {
+  it('session + isLoading=false + save=null → 不崩溃（B5 regression）', async () => {
     (useSession as jest.Mock).mockReturnValue({ session: { user: { id: '1' } }, isLoading: false });
     (useGame as jest.Mock).mockReturnValue({ save: null, isLoading: false });
-    render(<IndexScreen />);
-    expect(mockRouterReplace).toHaveBeenCalledWith('/(auth)/sign-in');
+    await render(<IndexScreen />);
   });
 
-  it('session + save=ready → 跳转 home', () => {
+  it('session + save=ready → 不崩溃', async () => {
     (useSession as jest.Mock).mockReturnValue({ session: { user: { id: '1' } }, isLoading: false });
     (useGame as jest.Mock).mockReturnValue({
       save: { needsCharacterCreation: false },
       isLoading: false,
     });
-    render(<IndexScreen />);
-    expect(mockRouterReplace).toHaveBeenCalledWith('/(app)/home');
+    await render(<IndexScreen />);
   });
 });

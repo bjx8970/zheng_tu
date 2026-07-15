@@ -13,8 +13,8 @@ describe('positions.json', () => {
     expect(new Set(keys).size).toBe(keys.length);
   });
 
-  it('所有 DEPARTMENTS 岗位 key 不重复', () => {
-    const keys = positionsData.DEPARTMENT_OFFICIAL_POSITIONS.map(p => p.key);
+  it('所有 CITY 岗位 key 不重复', () => {
+    const keys = positionsData.CITY_OFFICIAL_POSITIONS.map(p => p.key);
     expect(new Set(keys).size).toBe(keys.length);
   });
 });

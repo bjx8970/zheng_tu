@@ -55,8 +55,9 @@ describe('computeKpi', () => {
   describe('eligibility', () => {
     it('高指标应通过晋升门槛', () => {
       const result = computeKpi(baseSnapshot({
-        cityGdp: 90, cityLivelihood: 85, cityEcology: 80, cityBusiness: 88,
-        moralValue: 85, bossFavor: 80,
+        cityGdp: 90, cityLivelihood: 90, cityEcology: 90, cityBusiness: 90,
+        moralValue: 90, bossFavor: 90, boss2Favor: 90, boss3Favor: 90,
+        securityIndex: 90,
       }));
       expect(result.eligible).toBe(true);
     });
@@ -96,14 +97,14 @@ describe('computeKpi', () => {
   });
 
   describe('veto rules', () => {
-    it('廉洁度低于 15 触发廉洁否决', () => {
+    it('道德值低于 20 触发道德违纪否决', () => {
       const result = computeKpi(baseSnapshot({ moralValue: 10 }));
-      expect(result.vetoItems.some(v => v.triggered && v.label.includes('廉洁'))).toBe(true);
+      expect(result.vetoItems.some(v => v.triggered && v.label.includes('道德违纪'))).toBe(true);
     });
 
-    it('廉洁度高于 30 不触发廉洁否决', () => {
+    it('道德值高于 30 不触发道德违纪否决', () => {
       const result = computeKpi(baseSnapshot({ moralValue: 50 }));
-      expect(result.vetoItems.some(v => v.triggered && v.label.includes('廉洁'))).toBe(false);
+      expect(result.vetoItems.some(v => v.triggered && v.label.includes('道德违纪'))).toBe(false);
     });
   });
 
@@ -113,10 +114,11 @@ describe('computeKpi', () => {
       expect(result.dimensions.some(d => d.key === 'stability')).toBe(false);
     });
 
-    it('极端异常值不会导致崩溃', () => {
+    it('极端异常值不会导致 NaN 或崩溃', () => {
       const result = computeKpi(baseSnapshot({
         cityGdp: -1, cityLivelihood: 999, moralValue: -5, bossFavor: NaN,
       }));
+      expect(Number.isNaN(result.totalScore)).toBe(false);
       expect(result.totalScore).toBeGreaterThanOrEqual(0);
     });
   });
