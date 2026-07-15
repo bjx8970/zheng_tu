@@ -13,7 +13,7 @@ Sentry.init({
 });
 
 function RootLayoutNav() {
-  const { session, isLoading } = useSession();
+  const { isLoading } = useSession();
 
   if (isLoading) {
     return (
@@ -25,13 +25,9 @@ function RootLayoutNav() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={!session}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(auth)" />
-      </Stack.Protected>
-      <Stack.Protected guard={!!session}>
-        <Stack.Screen name="(app)" />
-      </Stack.Protected>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(app)" />
     </Stack>
   );
 }

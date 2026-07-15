@@ -356,6 +356,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => { disciplineWarnRef.current = disciplineWarnEvent; }, [disciplineWarnEvent]);
   // 路线KPI低分警告
   const [lineKpiWarnEvent, setLineKpiWarnEvent] = useState<LineKpiWarnEvent | null>(null);
+  const lineKpiWarnRef = useRef<LineKpiWarnEvent | null>(null);
+  useEffect(() => { lineKpiWarnRef.current = lineKpiWarnEvent; }, [lineKpiWarnEvent]);
   // Game Over结局
   const [gameOverTrigger, setGameOverTrigger] = useState<PlayerSave['gameOverType']>(null);
   const gameOverRef = useRef<PlayerSave['gameOverType']>(null);
@@ -684,7 +686,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (current.needsCharacterCreation) return;
 
     isAdvancingRef.current = true;
-    const gran = granularityRef.current;
+    try {
+      const gran = granularityRef.current;
     const daysToAdvance = gran === '天' ? 1 : gran === '周' ? 7 : 30;
 
     let cumMerit = current.meritPoints;
@@ -821,7 +824,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       })();
 
       // ── 年度新系统：NPC老化 + 政策运动触发 + 关系积分更新 ────────────
-      void Promise.all([
+      void Promise.allSettled([
         agingLeadershipBand(current.id, newGameDays, current.rankLevel, current.cityName, current.birthProvince, current.birthCity),
         tryTriggerNationalPolicy(current.id, newGameDays),
         // 年度关系积分：扫描npc_band中同校/同派系部级及以上老学长，每人+1，上限100
@@ -863,6 +866,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     // 构建当前时间点的快照（使用本轮最新累计值）
     const kpiSnapshot = {
       rankLevel:      current.rankLevel,
+      careerPath:     current.careerPath,
       moralValue:     current.moralValue,
       securityIndex:  current.securityIndex,
       cityGdp:        current.cityGdp,
@@ -876,6 +880,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       taxRevenue:     current.taxRevenue ?? 0,
       tenureYears:    newTenureYears,
       meritPoints:    cumMerit + (0), // bonusMerit 在后面计算，此处用当前值兜底
+      lineKpiScore:   current.lineKpiScore ?? 0,
+      inspectionRisk: current.inspectionRisk ?? 10,
+      publicOpinionIndex: current.publicOpinionIndex ?? 60,
     };
     const kpiResult = computeKpi(kpiSnapshot);
 
@@ -1081,7 +1088,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       }
 
       // 后台异步任务（不阻塞主流程）
-      void Promise.all([
+      void Promise.allSettled([
         Math.random() < 0.30 ? generatePetitionEvent(updated.id, updated.userId, newGameDays) : Promise.resolve(),
         growPopulation(updated.id),
         autoGrowSecretaryAbility(updated.id),
@@ -1227,9 +1234,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         cityEcology:    Math.min(100, Math.max(0, base.cityEcology    + (Math.random() * 15 - 10) + secAutoGovBonus.eco)),
         cityBusiness:   Math.min(100, Math.max(0, base.cityBusiness   + (Math.random() * 15 - 10) + secAutoGovBonus.bus)),
         securityIndex:  Math.min(100, Math.max(0, base.securityIndex  + (Math.random() * 15 - 10) + secAutoGovBonus.sec)),
-        meritPoints:    inspectEvent
-          ? Math.max(0, Math.round((base.meritPoints + autoResult.meritPoints + inspectEvent.meritDelta + meetingMeritBonus + secAutoGovBonus.merit) * 10) / 10)
-          : Math.round((base.meritPoints + autoResult.meritPoints + meetingMeritBonus + secAutoGovBonus.merit) * 10) / 10,
+        meritPoints:    base.digitalGovBuilt
+          ? Math.min(999, ((base.meritPoints ?? 0) + 5))
+          : inspectEvent
+            ? Math.max(0, Math.round((base.meritPoints + autoResult.meritPoints + inspectEvent.meritDelta + meetingMeritBonus + secAutoGovBonus.merit) * 10) / 10)
+            : Math.round((base.meritPoints + autoResult.meritPoints + meetingMeritBonus + secAutoGovBonus.merit) * 10) / 10,
         bossFavor: inspectEvent
           ? Math.min(100, Math.max(0, base.bossFavor + autoResult.bossFavor + inspectEvent.favorDelta))
           : Math.min(100, Math.max(0, base.bossFavor + autoResult.bossFavor)),
@@ -1237,11 +1246,13 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         ...(secAutoConsecUpdate !== null ? { secAutoConsecutiveMonths: secAutoConsecUpdate } : {}),
         // ── 新系统：月度自动更新 ──────────────────────────────────────────
         // 舆情指数：每月自然衰减2~4（长期不处置会缓慢降低），若有群体性事件待处理则额外-3
+        // 城治经费耗尽时额外-8（合并至此，避免被后续展开覆盖）
         publicOpinionIndex: Math.min(100, Math.max(0,
           (base.publicOpinionIndex ?? 60)
           - (2 + Math.floor(Math.random() * 3))
           - ((base.massIncidentPending ?? 0) > 0 ? 3 : 0)
           + secAutoGovBonus.liv * 0.5  // 民生施政自动缓解舆情
+          - (monthlyFundBalance <= 0 ? 8 : 0)  // 城治经费耗尽惩罚
         )),
         // 巡视风险：每月随机积累1~4（收受贿赂越多积累越快），保护伞等级降低风险
         inspectionRisk: Math.min(100, Math.max(0,
@@ -1274,15 +1285,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           ];
           return { pendingBriberyEvent: npcs[Math.floor(Math.random() * npcs.length)]! };
         })() : {}),
-        // 数字政府建成后每月自动+5政绩
-        ...(base.digitalGovBuilt ? {
-          meritPoints: Math.min(999, ((base.meritPoints ?? 0) + 5)),
-        } : {}),
         // 上级月度拨款：按职级随机50~500万，月度维护随机扣减100~400万
         cityGovFund: monthlyFundBalance,
-        // 城治经费耗尽惩罚：每月自动扣减舆情和线路积分（拨款后再判断）
+        // 城治经费耗尽惩罚：每月自动扣减线路积分（舆情惩罚已合并到上方计算中）
         ...(monthlyFundBalance <= 0 ? {
-          publicOpinionIndex: Math.max(0, (base.publicOpinionIndex ?? 60) - 8),
           lineKpiScore: Math.max(0, (base.lineKpiScore ?? 0) - 10),
         } : {}),
       };
@@ -1621,6 +1627,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         const rankCfg = RANK_CONFIG[checkSave.rankLevel];
         const kpiSnap = {
           rankLevel: checkSave.rankLevel,
+          careerPath: checkSave.careerPath,
           moralValue: checkSave.moralValue,
           securityIndex: checkSave.securityIndex,
           cityGdp: checkSave.cityGdp,
@@ -1634,6 +1641,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           taxRevenue: checkSave.taxRevenue ?? 0,
           tenureYears: newTenureYears,
           meritPoints: checkSave.meritPoints,
+          lineKpiScore: checkSave.lineKpiScore ?? 0,
+          inspectionRisk: checkSave.inspectionRisk ?? 10,
+          publicOpinionIndex: checkSave.publicOpinionIndex ?? 60,
         };
         const kpiResult = computeKpi(kpiSnap);
 
@@ -1884,7 +1894,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     } // if (newMonth > prevMonth && updated)
 
     // ── 路线KPI低分警告（月度，非行政线）─────────────────────────────────────
-    if (newMonth > prevMonth && updated && !lineKpiWarnEvent) {
+    if (newMonth > prevMonth && updated && !lineKpiWarnRef.current) {
       const lineKey = updated.careerPathLine ?? '';
       const lineDeptKey =
         lineKey === '党务线' ? 'party' :
@@ -2007,17 +2017,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    // ── 底稿 flush + 锁释放（finally 保证即使 advance 中途抛错也一定解锁）──
-    try {
-      // 推进期间被暂存的玩家操作，在此以底稿（推进结束后的 DB 状态）为基准逐一写入
-      const pending = pendingPlayerOpsRef.current.splice(0);
-      if (pending.length > 0 && saveRef.current) {
-        let latest: PlayerSave | null = saveRef.current;
-        for (const ops of pending) {
-          const result = await updateSave(latest.id, ops);
-          if (result) { latest = result; setSave(result); }
-        }
+    // ── 推进期间被暂存的玩家操作，在此以底稿（推进结束后的 DB 状态）为基准逐一写入 ──
+    const pending = pendingPlayerOpsRef.current.splice(0);
+    if (pending.length > 0 && saveRef.current) {
+      let latest: PlayerSave | null = saveRef.current;
+      for (const ops of pending) {
+        const result = await updateSave(latest.id, ops);
+        if (result) { latest = result; setSave(result); }
       }
+    }
     } finally {
       isAdvancingRef.current = false;
     }
