@@ -147,9 +147,15 @@ export default function SignIn() {
     setLoading(true);
     setError('');
     const email = username.trim() + '@miaoda.com';
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-    if (signInError) {
-      setError('账号或密码错误，请重试');
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        setError('账号或密码错误，请重试');
+        setLoading(false);
+        return;
+      }
+    } catch {
+      setError('网络异常，请稍后重试');
       setLoading(false);
       return;
     }

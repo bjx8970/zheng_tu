@@ -9,6 +9,9 @@ Expo SDK 55 (React Native 0.83.2) career-simulation game. 108 screens in `src/ap
 ```sh
 pnpm start              # expo dev server
 pnpm android/ios/web    # target-specific start
+pnpm test               # jest (existing tests in src/*/__tests__/)
+pnpm test:watch         # jest --watch
+pnpm test:coverage      # jest --coverage
 pnpm lint               # devkit-lint: Biome + oxlint + tsc (must pass)
 ```
 

@@ -90,7 +90,7 @@ export function useDeepAction({ cooldownsField, resultsField }: UseDeepActionOpt
       };
       // 城市治理经费消耗与回流
       if (cost > 0) updates.cityGovFund = Math.max(0, balance - cost);
-      if (outcome.fundDelta) {
+      if (outcome.fundDelta !== undefined) {
         updates.cityGovFund = Math.max(0, (updates.cityGovFund ?? balance) + outcome.fundDelta);
       }
       if (outcome.bossFavor     !== undefined) updates.bossFavor        = Math.min(100, Math.max(0, (save.bossFavor ?? 60) + outcome.bossFavor));

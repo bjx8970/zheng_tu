@@ -6453,7 +6453,7 @@ export async function processNpcPersonnelEvents(
 
 function getLevelLabel(subLevel: number): string {
   const labels: Record<number, string> = {
-    1: '科员', 2: '副科', 3: '正科', 4: '副处', 5: '正处', 6: '副处',
+    1: '科员', 2: '副科', 3: '正科', 4: '副处', 5: '正处', 6: '副厅',
     7: '副厅', 8: '正厅', 9: '副部', 10: '正部', 11: '副省', 12: '正省',
   };
   return labels[subLevel] ?? `${subLevel}级`;
