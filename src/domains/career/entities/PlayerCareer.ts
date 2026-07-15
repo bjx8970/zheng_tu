@@ -1,6 +1,6 @@
-import { AggregateRoot, ValueObject, Result, ok, err } from '../../../shared/kernel';
-import type { RankLevel, CareerLine, CareerPath, Player, PromotionReadiness, PromotionResult } from '../../../shared/types';
-import type { LeadershipBand } from '../../../personnel/entities/LeadershipBand';
+import { AggregateRoot, ValueObject, Result, ok, err } from '../../shared/kernel';
+import type { RankLevel, CareerLine, CareerPath, Player, PromotionReadiness, PromotionResult } from '../../shared/types';
+import type { LeadershipBand } from '../../personnel/entities/LeadershipBand';
 
 // ===== 值对象 =====
 

@@ -1,7 +1,7 @@
-import { Result, ok, err } from '../shared/kernel';
-import type { Player, PromotionReadiness, PromotionResult, CareerPath } from '../shared/types';
-import type { LeadershipBandRepository } from '../../personnel/repositories/LeadershipBandRepository';
-import type { FactionRepository } from '../../politics/repositories/FactionRepository';
+import { Result, ok, err } from '../../shared/kernel';
+import type { Player, PromotionReadiness, PromotionResult, CareerPath } from '../../shared/types';
+import type { LeadershipBandRepository } from '../../../personnel/repositories/LeadershipBandRepository';
+import type { FactionRepository } from '../../../politics/repositories/FactionRepository';
 import { KPIEngine } from './KPIEngine';
 import { FormulaRegistry } from './FormulaRegistry';
 

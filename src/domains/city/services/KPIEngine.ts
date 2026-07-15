@@ -1,5 +1,5 @@
-import { Result, ok, err } from '../shared/kernel';
-import type { Player, CityGovernance, DailyDelta, MonthlyDelta, KPIResult, DeptAutoResult, DeptKpiResult } from '../shared/types';
+import { Result, ok, err } from '../../shared/kernel';
+import type { Player, CityGovernance, DailyDelta, MonthlyDelta, KPIResult, DeptAutoResult, DeptKpiResult } from '../../shared/types';
 
 export class KPIEngine {
   constructor(
