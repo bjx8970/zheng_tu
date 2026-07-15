@@ -11,7 +11,11 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "lint": "devkit-lint"
+    "test:unit": "jest --config=jest.unit.config.js",
+    "test:integration": "jest --config=jest.integration.config.js",
+    "test:e2e": "jest --config=jest.e2e.config.js",
+    "lint": "biome check --apply-unsafe src",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",

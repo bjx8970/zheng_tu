@@ -72,6 +72,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
       - run: pnpm install --no-frozen-lockfile --shamefully-hoist
+      - name: Install Supabase CLI
+        run: pnpm add -g supabase
       - name: Run Supabase migrations
         run: |
           sleep 10
