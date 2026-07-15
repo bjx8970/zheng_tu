@@ -1221,7 +1221,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       // 城市治理经费月度计算（放在 monthlyUpdates 外部）
       const monthlyGrant = Math.floor(50 + Math.random() * Math.min(450, base.rankLevel * 40));
       const monthlyMaintenance = Math.floor(100 + Math.random() * 300);
-      const monthlyFundBalance = Math.max(0, (base.cityGovFund ?? 0) + monthlyGrant - monthlyMaintenance);
+      const currentFund = saveRef.current?.cityGovFund ?? base.cityGovFund ?? 0;
+      const monthlyFundBalance = Math.max(0, currentFund + monthlyGrant - monthlyMaintenance);
 
       const monthlyUpdates: Parameters<typeof updateSave>[1] = {
         lastMonthDay: newGameDays,
@@ -1297,7 +1298,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         } : {}),
       };
       const withMonthly = await updateSave(updated.id, monthlyUpdates);
-      if (withMonthly) setSave(withMonthly);
+      if (withMonthly) {
+        const hasPending = pendingWritesRef.current > 0 || pendingPlayerOpsRef.current.length > 0;
+        if (hasPending && saveRef.current) {
+          setSave({ ...withMonthly, cityGovFund: saveRef.current.cityGovFund });
+        } else {
+          setSave(withMonthly);
+        }
+      }
       if (inspectEvent) setUpperInspectEvent(inspectEvent);
       if (pendingSecAutoEvent) setSecAutoGovTrigger(pendingSecAutoEvent);
 
