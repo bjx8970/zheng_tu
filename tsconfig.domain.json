@@ -1,0 +1,37 @@
+{
+  "extends": "miaoda-expo-devkit/tsconfig-base",
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "baseUrl": ".",
+    "rootDir": ".",
+    "composite": false,
+    "noEmit": true
+  },
+  "include": [
+    "src/domains/**/*",
+    "src/infrastructure/persistence/supabase/repositories/**/*",
+    "src/infrastructure/persistence/supabase/mappers/**/*",
+    "src/infrastructure/networking/**/*",
+    "src/infrastructure/state/zustand/**/*",
+    "src/infrastructure/eventBus.ts",
+    "src/infrastructure/time/**/*",
+    "src/infrastructure/config/**/*"
+  ],
+  "exclude": [
+    "src/app/**/*",
+    "src/components/**/*",
+    "src/features/**/*",
+    "src/hooks/**/*",
+    "src/lib/**/*",
+    "src/ctx/**/*",
+    "src/client/**/*",
+    "src/test/**/*",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/__tests__/**/*"
+  ]
+}
