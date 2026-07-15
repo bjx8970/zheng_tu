@@ -197,6 +197,9 @@ export default function PromotionScreen() {
   const [bribeUsed, setBribeUsed] = useState(false);
   const [step, setStep] = useState(0);
   const goToStep = useCallback((n: number) => { setStep(n); }, []);
+  const [msg, setMsg] = useState('');
+  const [msgOk, setMsgOk] = useState(true);
+  const showMsg = (text: string, ok = true) => { setMsg(text); setMsgOk(ok); setTimeout(() => setMsg(''), 4000); };
   // 东窗事发弹窗（三档：warning/suspend/case）
   const [exposedAlert, setExposedAlert] = useState(false);
   const [exposedLevel, setExposedLevel] = useState<'warning' | 'suspend' | 'case'>('warning');
@@ -542,7 +545,7 @@ export default function PromotionScreen() {
   const handleConfirmPromotion = async () => {
     if (!canPromoteFinal || isProcessing) return;
     // 能力值门槛硬检查（UI已展示提示，此处兜底阻断）
-    if (!abilityGatePass) return;
+    if (!abilityGatePass) { showMsg(`能力值不足（当前 ${abilityValue}，需要 ≥ ${abilityMin}）`, false); return; }
     // 保存喜好路线到 DB（每次进晋升页且选了才保存）
     if (preferredLine && preferredLine !== save.preferredCareerLine) {
       await updateGameSave({ preferredCareerLine: preferredLine });
@@ -589,6 +592,7 @@ export default function PromotionScreen() {
     if (!ageGatePass) {
       const roll = Math.random();
       if (roll > exceptionalChance) {
+        showMsg(`年龄未达标（当前 ${playerRealAge} 岁，需 ≥ ${minAgeForNextRank} 岁），破格概率 ${Math.round(exceptionalChance * 100)}% 未触发`, false);
         return;
       }
       await updateGameSave({ exceptionalAgeOverrideCount: exceptionalUsed + 1 });
@@ -1643,6 +1647,15 @@ export default function PromotionScreen() {
                 <Pressable onPress={() => { setExposedAlert(false); }} style={{ backgroundColor: exposedLevel === 'case' ? 'rgba(231,76,60,0.2)' : 'rgba(255,184,0,0.15)', borderWidth: 1, borderColor: exposedLevel === 'case' ? 'rgba(231,76,60,0.5)' : 'rgba(255,184,0,0.4)', borderRadius: 10, paddingVertical: 12, alignItems: 'center' }}>
                   <Text style={{ color: exposedLevel === 'case' ? '#E74C3C' : '#FFB800', fontWeight: '800', fontSize: 14 }}>知道了</Text>
                 </Pressable>
+              </View>
+            </View>
+          )}
+
+          {/* ── 提示消息 Toast ── */}
+          {!!msg && (
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 120, paddingHorizontal: 24, pointerEvents: 'none' }}>
+              <View style={{ backgroundColor: msgOk ? 'rgba(34,197,94,0.95)' : 'rgba(231,76,60,0.95)', borderRadius: 14, paddingVertical: 14, paddingHorizontal: 20, maxWidth: '100%', shadowColor: msgOk ? '#22C55E' : '#E74C3C', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12, elevation: 8 }}>
+                <Text style={{ color: '#fff', fontSize: 14, fontWeight: '700', textAlign: 'center' }}>{msg}</Text>
               </View>
             </View>
           )}
