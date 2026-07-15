@@ -14,7 +14,7 @@
     "test:unit": "jest --config=jest.unit.config.js",
     "test:integration": "jest --config=jest.integration.config.js",
     "test:e2e": "jest --config=jest.e2e.config.js",
-    "lint": "biome check --apply-unsafe src",
+    "lint": "biome check --write src",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
