@@ -99,7 +99,7 @@
     { "id": "discipline-work", "label": "⚖️ 肃宪督察",    "ids": ["dw1","dw2","dw3","dw4","dw5","dw6"] },
     { "id": "party-work",      "label": "🎖️ 党务执政",    "ids": ["pw1","pw2","pw3","pw4","pw5","pw6"] },
     { "id": "league-work",     "label": "🏛️ 国会政务",    "ids": ["lw1","lw2","lw3","lw4","lw5","lw6"] },
-    { "id": "r15-exclusive",   "label": "⭐ 路线专权",    "ids": [] },
+    { "id": "r15-exclusive",   "label": "⭐ 路线专权",    "ids": ["r15p1","r15p2","r15p3","r15g1","r15g2","r15g3","r15l1","r15l2","r15l3","r15d1","r15d2","r15d3"] },
     { "id": "debrief",         "label": "📋 述职",        "ids": [] },
     { "id": "kpi",             "label": "📊 KPI",         "ids": [] },
     { "id": "promote",         "label": "🚀 晋升",        "ids": [] },
