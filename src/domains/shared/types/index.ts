@@ -1,5 +1,3 @@
-import type { PlayerSave } from '@/types/game';
-
 // ===== 基础类型 =====
 
 export type AdminLevel =

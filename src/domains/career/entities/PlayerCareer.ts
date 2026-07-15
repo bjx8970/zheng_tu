@@ -1,6 +1,6 @@
-import { AggregateRoot, ValueObject, Result, ok, err } from '../shared/kernel';
-import type { RankLevel, CareerLine, CareerPath, Player, PromotionReadiness, PromotionResult } from '../shared/types';
-import type { LeadershipBand } from '../../personnel/entities/LeadershipBand';
+import { AggregateRoot, ValueObject, Result, ok, err } from '../../../shared/kernel';
+import type { RankLevel, CareerLine, CareerPath, Player, PromotionReadiness, PromotionResult } from '../../../shared/types';
+import type { LeadershipBand } from '../../../personnel/entities/LeadershipBand';
 
 // ===== 值对象 =====
 
@@ -15,6 +15,7 @@ export class Tenure extends ValueObject<TenureProps> {
   get maxYears(): number { return this.props.maxYears; }
   get isExpired(): boolean { return this.props.years >= this.props.maxYears; }
   get progress(): number { return Math.min(1, this.props.years / this.props.maxYears); }
+  get startDay(): number { return this.props.startDay; }
 
   static create(years: number, maxYears: number, startDay: number): Tenure {
     return new Tenure({ years, maxYears, startDay });
@@ -200,7 +201,7 @@ export class PlayerCareer extends AggregateRoot<CareerStateProps & { id: string;
     this.props.cityName = newCity;
     this.props.playerPosition = newPosition;
     this.props.careerPath = chosenPath;
-    this.props.tenure = Tenure.create(0, this.getMaxTenureForRank(newRank), this.props.tenure.props.startDay + 365);
+    this.props.tenure = Tenure.create(0, this.getMaxTenureForRank(newRank), this.props.tenure.startDay + 365);
     this.props.isPromotionAvailable = false;
     this.incrementVersion();
 
