@@ -1,5 +1,23 @@
 {
   "positions": {
+    "1": {
+      "party":      { "name": "乡镇科员",   "partyType": "党务",  "bossTitle": "乡镇党委书记",  "bossTitle2": "县委组织部长", "bossTitle3": "县委书记" },
+      "government": { "name": "乡镇科员",   "partyType": "行政",  "bossTitle": "乡镇长",        "bossTitle2": "县委书记",     "bossTitle3": "县委书记" },
+      "discipline": { "name": "乡镇科员",   "partyType": "纪检",  "bossTitle": "乡镇纪委书记",  "bossTitle2": "县纪委书记",   "bossTitle3": "县委书记" },
+      "league":     { "name": "乡镇科员",   "partyType": "团派",  "bossTitle": "乡镇团委书记",  "bossTitle2": "团县委书记",   "bossTitle3": "县委书记" }
+    },
+    "2": {
+      "party":      { "name": "副乡镇长",   "partyType": "党务",  "bossTitle": "乡镇党委书记",  "bossTitle2": "县委组织部长", "bossTitle3": "县委书记" },
+      "government": { "name": "副乡镇长",   "partyType": "行政",  "bossTitle": "乡镇长",        "bossTitle2": "县委书记",     "bossTitle3": "县委书记" },
+      "discipline": { "name": "副乡镇长",   "partyType": "纪检",  "bossTitle": "乡镇纪委书记",  "bossTitle2": "县纪委书记",   "bossTitle3": "县委书记" },
+      "league":     { "name": "副乡镇长",   "partyType": "团派",  "bossTitle": "乡镇团委书记",  "bossTitle2": "团县委书记",   "bossTitle3": "县委书记" }
+    },
+    "3": {
+      "party":      { "name": "乡镇党委书记", "partyType": "党务",  "bossTitle": "县委书记",    "bossTitle2": "县委组织部长", "bossTitle3": "县委书记" },
+      "government": { "name": "乡镇长",       "partyType": "行政",  "bossTitle": "县委书记",    "bossTitle2": "县委书记",     "bossTitle3": "县委书记" },
+      "discipline": { "name": "乡镇纪检委员", "partyType": "纪检",  "bossTitle": "县纪委书记",  "bossTitle2": "县纪委书记",   "bossTitle3": "县委书记" },
+      "league":     { "name": "乡镇团委书记", "partyType": "团派",  "bossTitle": "团县委书记",  "bossTitle2": "团县委书记",   "bossTitle3": "县委书记" }
+    },
     "4": {
       "party":      { "name": "县委常委（分管组织/宣传）",  "partyType": "党务",  "bossTitle": "县委书记",        "bossTitle2": "县委党政人事院院长",   "bossTitle3": "市委党政人事院院长" },
       "government": { "name": "县委常委/副县长",            "partyType": "行政",  "bossTitle": "县长",            "bossTitle2": "县委书记",             "bossTitle3": "市委党政人事院院长" },
@@ -12,6 +30,12 @@
       "discipline": { "name": "县纪委书记",                  "partyType": "纪检",  "bossTitle": "县肃宪院长",      "bossTitle2": "市肃宪院长",           "bossTitle3": "县委书记" },
       "league":     { "name": "挂职副县长/团市委副书记",     "partyType": "团派",  "bossTitle": "团市委书记",      "bossTitle2": "县委书记",             "bossTitle3": "市委党政人事院院长" }
     },
+    "6": {
+      "party":      { "name": "县委书记",         "partyType": "党务",  "bossTitle": "市委书记",    "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "省执政委书记" },
+      "government": { "name": "县委书记",         "partyType": "行政",  "bossTitle": "市委书记",    "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "省执政委书记" },
+      "discipline": { "name": "县委书记",         "partyType": "纪检",  "bossTitle": "市委书记",    "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "省执政委书记" },
+      "league":     { "name": "县委书记",         "partyType": "团派",  "bossTitle": "市委书记",    "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "省执政委书记" }
+    },
     "7": {
       "party":      { "name": "市委常委（分管组织/宣传/统战）", "partyType": "党务", "bossTitle": "市委书记",       "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "省执政委书记" },
       "government": { "name": "副市长",                     "partyType": "行政",  "bossTitle": "市长",            "bossTitle2": "市委书记",             "bossTitle3": "省执政委党政人事院院长" },
@@ -23,6 +47,12 @@
       "government": { "name": "市长",                        "partyType": "行政",  "bossTitle": "省执政委书记",    "bossTitle2": "省长",                 "bossTitle3": "市委书记" },
       "discipline": { "name": "市肃宪院长/市委常委",          "partyType": "纪检",  "bossTitle": "省肃宪院长",      "bossTitle2": "市委书记",             "bossTitle3": "肃宪督察院委员" },
       "league":     { "name": "团省执政委书记/省执政委常委",   "partyType": "团派",  "bossTitle": "省执政委书记",    "bossTitle2": "省执政委党政人事院院长", "bossTitle3": "团党务总枢府书记" }
+    },
+    "9": {
+      "party":      { "name": "市委书记",         "partyType": "党务",  "bossTitle": "省执政委书记",   "bossTitle2": "党政人事院副院长",    "bossTitle3": "联邦政务委员" },
+      "government": { "name": "市委书记",         "partyType": "行政",  "bossTitle": "省执政委书记",   "bossTitle2": "省长",              "bossTitle3": "联邦副总统" },
+      "discipline": { "name": "市委书记",         "partyType": "纪检",  "bossTitle": "省执政委书记",   "bossTitle2": "肃宪督察院副书记",  "bossTitle3": "联邦政务常委" },
+      "league":     { "name": "市委书记",         "partyType": "团派",  "bossTitle": "省执政委书记",   "bossTitle2": "党政人事院院长",    "bossTitle3": "团中央第一书记" }
     },
     "10": {
       "party":      { "name": "省执政委常委（分管组织/宣传/政法）", "partyType": "党务", "bossTitle": "省执政委书记", "bossTitle2": "党政人事院副院长",    "bossTitle3": "联邦政务委员" },

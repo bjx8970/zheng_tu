@@ -76,6 +76,7 @@ export interface KpiResult {
 
 // ─── 辅助：将0-100原始值线性映射，支持反向（值越低越好） ──────────────────
 function clamp(v: number): number {
+  if (isNaN(v)) return 0;
   return Math.max(0, Math.min(100, v));
 }
 
