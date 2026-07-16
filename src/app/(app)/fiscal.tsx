@@ -62,7 +62,7 @@ export default function FiscalScreen() {
 
   useFocusEffect(useCallback(() => { void load(); }, [load]));
 
-  if (!save) return null;
+  if (!save) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F4F1' }}><ActivityIndicator testID="activity-indicator" size="large" color="#C82829" /></View>;
 
   const netColor = !fs ? '#444' : fs.monthlyNetFlow >= 0 ? '#1a6a30' : '#C82829';
   const balanceColor = (fs?.mainBalance ?? 0) > 0 ? '#fff' : '#FF8A80';

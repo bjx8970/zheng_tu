@@ -498,7 +498,7 @@ export default function PromotionSystemPage() {
             <View style={{ backgroundColor: theme.cardBg, borderWidth: 1, borderColor: theme.cardBorder, borderRadius: 12, padding: 14 }}>
               <Text style={{ fontSize: 12, color: theme.mutedText, fontWeight: '700', marginBottom: 10 }}>全职级年限要求一览</Text>
               {([1,2,3,4,5,6,7,8,9,10,11,12,13,14] as const).map(lvl => {
-                const cfg = RANK_CONFIG[lvl];
+                const cfg = RANK_CONFIG[lvl] ?? RANK_CONFIG[1];
                 const isNow = lvl === rankLevel;
                 return (
                   <View key={lvl} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 6, borderBottomWidth: 0.5, borderBottomColor: theme.cardBorder + '60', backgroundColor: isNow ? theme.primary + '10' : 'transparent', borderRadius: isNow ? 6 : 0, paddingHorizontal: isNow ? 6 : 0 }}>

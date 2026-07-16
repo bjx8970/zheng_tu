@@ -383,7 +383,7 @@ export default function HomeScreen() {
     return null;
   }
 
-  const rankConfig = RANK_CONFIG[save.rankLevel];
+  const rankConfig = RANK_CONFIG[save.rankLevel] ?? RANK_CONFIG[1];
   // 任职年限要求（不再受优秀排名影响，固定为职级标准年限）
   const effectiveTenureRequired = rankConfig.requiredTenureYears;
   const tenureProgress = Math.min(100, (save.tenureYears / Math.max(1, effectiveTenureRequired)) * 100);
@@ -996,7 +996,7 @@ export default function HomeScreen() {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
                   <Text style={{ fontSize: 10, color: theme.labelText }}>政绩积累</Text>
                   <Text style={{ fontSize: 10, color: meritProgress >= 100 ? theme.statHigh : theme.primary, fontVariant: ['tabular-nums'] }}>
-                    {save.meritPoints.toFixed(0)} / {rankConfig.requiredMerit}
+                    {save.meritPoints.toFixed(0)} / {rankConfig?.requiredMerit ?? 100}
                     {meritProgress >= 100 ? ' ✓' : ''}
                   </Text>
                 </View>

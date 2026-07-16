@@ -315,7 +315,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         if (stored === '2' || stored === '4' || stored === '8') {
           setSpeedMultiplier(Number(stored) as 2 | 4 | 8);
         }
-      } catch { /* 读取失败静默忽略 */ }
+      } catch (e) { console.error('speedMultiplier read failed', e); }
     })();
   }, []);
 
@@ -325,7 +325,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       try {
         const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
         await AsyncStorage.setItem('speedMultiplier', String(speedMultiplier));
-      } catch { /* 写入失败静默忽略 */ }
+      } catch (e) { console.error('speedMultiplier write failed', e); }
     })();
   }, [speedMultiplier]);
   const [unreadReports, setUnreadReports] = useState<MonthlyReport[]>([]);
@@ -820,7 +820,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             kpiBusinessTarget: targets.business,
             kpiYear: newYear,
           });
-        } catch {}
+        } catch (e) { console.error('bossKpiTargets generation failed', e); }
       })();
 
       // ── 年度新系统：NPC老化 + 政策运动触发 + 关系积分更新 ────────────
@@ -845,7 +845,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
               const newScore = Math.min(100, (current.alumniScore ?? 0) + gained);
               await updateSave(current.id, { alumniScore: newScore });
             }
-          } catch {}
+        } catch (e) { console.error('exceptionalPromoBonus calc failed', e); }
         })(),
       ]);
     }
@@ -859,7 +859,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (shouldTriggerEvent) newEventsThisYear++;
 
     // 计算晋升条件：不再根据优秀排名缩短任期要求（废除减半机制）
-    const rankConfig = RANK_CONFIG[current.rankLevel];
+    const rankConfig = RANK_CONFIG[current.rankLevel] ?? RANK_CONFIG[1];
     const effectiveTenureRequired: number = rankConfig.requiredTenureYears;
 
     // ── 分层级 KPI 考核评估（替代单一政绩门槛） ──────────────────────────────
@@ -1137,7 +1137,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             }
           }
         }
-      } catch { /* 秘书查询失败不影响主流程 */ }
+      } catch (e) { console.error('secretary query failed', e); }
 
       // ── 秘书自动招募（每季度触发一次，能力≥60 且开关已开启）────────────────────
       if (
@@ -1154,7 +1154,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
               void triggerAutoRecruit(updated.id, updated.userId, currentRecruitKey, updated.rankLevel)
                 .then(() => updateSave(updated.id, { lastRecruitQuarter: currentRecruitKey }));
             }
-          } catch { /* 招募失败不阻塞主流程 */ }
+          } catch (e) { console.error('autoRecruit failed', e); }
         }
       }
 
@@ -1171,7 +1171,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             const newScore = Math.min(100, (updated.alumniScore ?? 0) + 20);
             await updateSave(updated.id, { alumniScore: newScore });
           }
-        } catch {}
+        } catch (e) { console.error('factionSenior alumniScore failed', e); }
       })();
 
       // 合并月度所有更新，单次写库 + 单次 setSave
@@ -1585,7 +1585,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       // ③ 上司换届检测（串行，每次只换一个，避免信息轰炸）
       if (!bossChangeRef.current && !gameOverRef.current) {
         const s = latestSave;
-        const rankCfg = RANK_CONFIG[s.rankLevel];
+        const rankCfg = RANK_CONFIG[s.rankLevel] ?? RANK_CONFIG[1];
         const FACTIONS: PlayerSave['bossFaction'][] = ['改革派', '实干派', '保守派'];
         const pickFaction = () => FACTIONS[Math.floor(Math.random() * FACTIONS.length)];
         // 检测上司1
@@ -1644,7 +1644,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         latestSave.rankLevel < 14
       ) {
         const checkSave = latestSave;
-        const rankCfg = RANK_CONFIG[checkSave.rankLevel];
+        const rankCfg = RANK_CONFIG[checkSave.rankLevel] ?? RANK_CONFIG[1];
         const kpiSnap = {
           rankLevel: checkSave.rankLevel,
           careerPath: checkSave.careerPath,
@@ -1977,7 +1977,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           if (!existing || existing.length === 0) {
             await initBossTasks(updated.id, updated.userId, updated.careerPathLine ?? '行政线', newGameDays);
           }
-        } catch { /* 首月发任务失败不影响主流程 */ }
+        } catch (e) { console.error('initBossTasks failed', e); }
       })();
     }
 

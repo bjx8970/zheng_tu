@@ -6,6 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { SessionProvider, useSession } from '@/ctx';
 import { GameProvider } from '@/ctx/GameContext';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import "../global.css";
 
 Sentry.init({
@@ -37,7 +38,9 @@ const RootLayout: React.FC = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SessionProvider>
         <GameProvider>
-          <RootLayoutNav />
+          <ErrorBoundary>
+            <RootLayoutNav />
+          </ErrorBoundary>
           <PortalHost />
         </GameProvider>
       </SessionProvider>

@@ -71,7 +71,7 @@ export default function DiplomacyScreen() {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState<{ text: string; type: 'success' | 'warn' | 'error' } | null>(null);
 
-  if (!save) return <ActivityIndicator style={{ flex: 1 }} color={C.blue} />;
+  if (!save) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: C.bg }}><ActivityIndicator testID="activity-indicator" color={C.blue} /></View>;
 
   const rank = save.rankLevel;
   const isLocked = rank < 6;

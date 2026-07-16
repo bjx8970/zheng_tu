@@ -262,9 +262,9 @@ export default function PromotionScreen() {
   const finalChosenPath = playerChosenPath ?? assignedPath;
 
   const theme = getRankThemeWithLine(save.rankLevel, (save.careerPathLine as import('@/lib/lineGameplay').CareerLine | undefined));
-  const currentRankConfig = RANK_CONFIG[save.rankLevel];
+  const currentRankConfig = RANK_CONFIG[save.rankLevel] ?? RANK_CONFIG[1];
   const nextRankLevel = Math.min(15, save.rankLevel + 1);
-  const nextRankConfig = RANK_CONFIG[nextRankLevel];
+  const nextRankConfig = RANK_CONFIG[nextRankLevel] ?? RANK_CONFIG[1];
   // 跨城市层级晋升（如乡镇→县、县→市）也必须调任新城市，不能沿用旧层级地名
   const cityTypeChanged = currentRankConfig.cityType !== nextRankConfig.cityType;
   const willChangeCity = nextRankConfig.randomCity || cityTypeChanged;

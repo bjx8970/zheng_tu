@@ -425,7 +425,7 @@ export default function MonthlyReportScreen() {
   const debriefBonusPct = save.exceptionalPromoBonus ?? 0;
 
   // 述职报告动态内容
-  const rankCfg = RANK_CONFIG[save.rankLevel];
+  const rankCfg = RANK_CONFIG[save.rankLevel] ?? RANK_CONFIG[1];
   const debriefSections = getDebriefSections(save.rankLevel, save.rankName, save.cityName, {
     cityGdp: save.cityGdp,
     cityLivelihood: save.cityLivelihood,
