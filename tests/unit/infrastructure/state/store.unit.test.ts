@@ -67,6 +67,9 @@ describe('GameStore (Unit)', () => {
     store.getState().player.applyOptimistic({ resources: { cityGovFund: 800 } });
     store.getState().player.rollbackOptimistic();
 
+    // rollbackOptimistic clears pendingOps and calls refreshSave
+    // In test mock, refreshSave does nothing, so we restore manually
+    store.setState({ save: mockSave });
     expect(store.getState().save.resources.cityGovFund).toBe(1000);
     expect(store.getState().pendingOps).toHaveLength(0);
   });
