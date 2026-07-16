@@ -24,3 +24,21 @@ describe('advanceTime — no save guard', () => {
     expect(result.current.save).toBeNull();
   });
 });
+
+describe('advanceTime — cityGovFund 月度增量不覆盖用户扣款', () => {
+  it('优先使用 saveRef.current.cityGovFund 叠加月度净增量', async () => {
+    const { result } = await renderGameProvider();
+    await act(async () => { await new Promise(r => setTimeout(r, 100)); });
+    if (!result.current.save) return;
+
+    await act(async () => {
+      await result.current.updateGameSave({ cityGovFund: 300 });
+    });
+    const saveAfterDeduction = result.current.save;
+    expect(saveAfterDeduction?.cityGovFund).toBe(300);
+
+    await act(async () => { await result.current.advanceTime(); });
+    const saveAfterAdvance = result.current.save;
+    expect(saveAfterAdvance?.cityGovFund).toBeGreaterThanOrEqual(0);
+  });
+});
