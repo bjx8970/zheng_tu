@@ -1290,18 +1290,26 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           ];
           return { pendingBriberyEvent: npcs[Math.floor(Math.random() * npcs.length)]! };
         })() : {}),
-        // 上级月度拨款：按职级随机50~500万，月度维护随机扣减100~400万
-        cityGovFund: monthlyFundBalance,
+        // 上级月度拨款增量：后续在 setSave 中基于 saveRef.current.cityGovFund 增量计算，
+        // 避免覆盖用户在月度 tick 期间的扣款操作
         // 城治经费耗尽惩罚：每月自动扣减线路积分（舆情惩罚已合并到上方计算中）
         ...(monthlyFundBalance <= 0 ? {
           lineKpiScore: Math.max(0, (base.lineKpiScore ?? 0) - 10),
         } : {}),
       };
+      const monthlyNetDelta = monthlyGrant - monthlyMaintenance;
       const withMonthly = await updateSave(updated.id, monthlyUpdates);
       if (withMonthly) {
-        const hasPending = pendingWritesRef.current > 0 || pendingPlayerOpsRef.current.length > 0;
-        if (hasPending && saveRef.current) {
-          setSave({ ...withMonthly, cityGovFund: saveRef.current.cityGovFund });
+        // 城市治理经费：以 saveRef.current.cityGovFund（含乐观更新）为基准，
+        // 叠加月度净增量，确保用户扣款不被月度结算覆盖
+        const latestFund = saveRef.current?.cityGovFund;
+        if (latestFund !== undefined) {
+          const expectedFund = Math.max(0, latestFund + monthlyNetDelta);
+          setSave({ ...withMonthly, cityGovFund: expectedFund });
+          if (expectedFund !== withMonthly.cityGovFund) {
+            pendingPlayerOpsRef.current.push({ cityGovFund: expectedFund });
+            void saveCooldownCache(updated.id, { cityGovFund: expectedFund });
+          }
         } else {
           setSave(withMonthly);
         }

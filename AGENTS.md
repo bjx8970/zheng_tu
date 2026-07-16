@@ -46,3 +46,6 @@ Hardcoded data blocks are being extracted to `src/config/*.json`. When adding da
 - No comments in code (follow existing style).
 - ESLint: `eslint-config-expo/flat`. Ignores `dist/`.
 - pnpm catalog versions pinned in `pnpm-workspace.yaml`.
+- **Branch protection**: The `main` branch must never be modified directly. All changes must be developed in dedicated feature branches. Before merging into `main`, the project must pass all tests (`pnpm test` and `pnpm lint`). Only after successful verification can the branch be merged into `main` via pull request.
+- **Testing requirement**: All code modifications must include corresponding automated tests. New features require new test cases; bug fixes require regression tests. Tests should cover the modified code paths and follow the existing test patterns in the project.
+- **PR rules**: Only create PRs and review PR content. Never directly approve or merge PRs — approval and merging must be done manually by a human.
