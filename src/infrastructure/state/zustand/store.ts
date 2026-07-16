@@ -323,7 +323,7 @@ export function createGameStore() {
           ...createPoliticalSlice(set, get),
           ...createSystemSlice(set, get),
           ...createUISlice(set, get),
-        }),
+        } as GameStoreState),
         {
           name: 'zhengtu-game-store',
           partialize: (state) => ({ save: state.save, lastSyncedAt: state.lastSyncedAt }),
