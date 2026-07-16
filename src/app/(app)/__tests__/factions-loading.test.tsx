@@ -53,25 +53,25 @@ describe('FactionsScreen — save=null loading state', () => {
     jest.clearAllMocks();
   });
 
-  it('save=null → 渲染 ActivityIndicator', () => {
+  it('save=null → 渲染 ActivityIndicator', async () => {
     (useGame as jest.Mock).mockReturnValue({
       save: null,
       isLoading: false,
       updateGameSave: jest.fn(),
       refreshSave: jest.fn(),
     });
-    const { getByTestId } = render(<FactionsScreen />);
+    const { getByTestId } = await render(<FactionsScreen />);
     expect(getByTestId('activity-indicator')).toBeTruthy();
   });
 
-  it('save=null → 不崩溃或返回 null', () => {
+  it('save=null → 不崩溃或返回 null', async () => {
     (useGame as jest.Mock).mockReturnValue({
       save: null,
       isLoading: false,
       updateGameSave: jest.fn(),
       refreshSave: jest.fn(),
     });
-    const { toJSON } = render(<FactionsScreen />);
+    const { toJSON } = await render(<FactionsScreen />);
     expect(toJSON()).not.toBeNull();
   });
 });

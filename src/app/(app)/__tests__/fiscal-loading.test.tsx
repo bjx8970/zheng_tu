@@ -53,21 +53,21 @@ describe('FiscalScreen — save=null loading state', () => {
     jest.clearAllMocks();
   });
 
-  it('save=null → 渲染 ActivityIndicator', () => {
+  it('save=null → 渲染 ActivityIndicator', async () => {
     (useGame as jest.Mock).mockReturnValue({
       save: null,
       isLoading: false,
     });
-    const { getByTestId } = render(<FiscalScreen />);
+    const { getByTestId } = await render(<FiscalScreen />);
     expect(getByTestId('activity-indicator')).toBeTruthy();
   });
 
-  it('save=null → 不崩溃或返回 null', () => {
+  it('save=null → 不崩溃或返回 null', async () => {
     (useGame as jest.Mock).mockReturnValue({
       save: null,
       isLoading: false,
     });
-    const { toJSON } = render(<FiscalScreen />);
+    const { toJSON } = await render(<FiscalScreen />);
     expect(toJSON()).not.toBeNull();
   });
 });

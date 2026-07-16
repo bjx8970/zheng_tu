@@ -20,8 +20,8 @@ describe('ErrorBoundary', () => {
     jest.restoreAllMocks();
   });
 
-  it('正常渲染 children', () => {
-    const { getByText } = render(
+  it('正常渲染 children', async () => {
+    const { getByText } = await render(
       <ErrorBoundary>
         <Bomb shouldThrow={false} />
       </ErrorBoundary>
@@ -29,8 +29,8 @@ describe('ErrorBoundary', () => {
     expect(getByText('正常内容')).toBeTruthy();
   });
 
-  it('子组件抛错后显示错误回退页面', () => {
-    const { getByText } = render(
+  it('子组件抛错后显示错误回退页面', async () => {
+    const { getByText } = await render(
       <ErrorBoundary>
         <Bomb shouldThrow={true} />
       </ErrorBoundary>
@@ -39,8 +39,8 @@ describe('ErrorBoundary', () => {
     expect(getByText('发生了未知错误')).toBeTruthy();
   });
 
-  it('点击重试后恢复正常渲染', () => {
-    const { getByText, rerender } = render(
+  it('点击重试后恢复正常渲染', async () => {
+    const { getByText, rerender } = await render(
       <ErrorBoundary>
         <Bomb shouldThrow={true} />
       </ErrorBoundary>
@@ -57,15 +57,15 @@ describe('ErrorBoundary', () => {
     expect(getByText('正常内容')).toBeTruthy();
   });
 
-  it('未知错误显示默认文案', () => {
+  it('未知错误显示默认文案', async () => {
     function SilentBomb() {
       React.useEffect(() => {
-        throw undefined as unknown as Error;
+        throw undefined;
       }, []);
       return null;
     }
 
-    const { getByText } = render(
+    const { getByText } = await render(
       <ErrorBoundary>
         <SilentBomb />
       </ErrorBoundary>

@@ -2,7 +2,7 @@
 // 五大阵营：改革开放系 / 稳健国家系 / 共青团/民生系 / 技术官僚系 / 纪检法治系
 // 功能：格局总览（多轴路线张力+关系矩阵）/ 关系经营 / 政见表态（10议题）/ 上司经营 / NPC派系图谱
 import { useState, useCallback } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter, useFocusEffect } from 'expo-router';

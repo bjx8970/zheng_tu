@@ -6,7 +6,6 @@ import DisciplineDeep from '../discipline-deep';
 import PartyDeep from '../party-deep';
 import LeagueDeep from '../league-deep';
 
-// ── reanimated mock ──
 jest.mock('react-native-reanimated', () => {
   const AnimatedView = ({ children, ...props }: any) => <>{children}</>;
   return {
@@ -87,51 +86,51 @@ beforeEach(() => {
 });
 
 describe('deep screens — save=null loading state', () => {
-  it('admin-deep save=null → 渲染 ActivityIndicator', () => {
+  it('admin-deep save=null → 渲染 ActivityIndicator', async () => {
     mockDeepActionNoSave();
-    const { getByTestId } = render(<AdminDeep />);
+    const { getByTestId } = await render(<AdminDeep />);
     expect(getByTestId('activity-indicator')).toBeTruthy();
   });
 
-  it('admin-deep save=null → 不崩溃或 null', () => {
+  it('admin-deep save=null → 不崩溃或 null', async () => {
     mockDeepActionNoSave();
-    const { toJSON } = render(<AdminDeep />);
+    const { toJSON } = await render(<AdminDeep />);
     expect(toJSON()).not.toBeNull();
   });
 
-  it('discipline-deep save=null → 渲染 ActivityIndicator', () => {
+  it('discipline-deep save=null → 渲染 ActivityIndicator', async () => {
     mockDeepActionNoSave();
-    const { getByTestId } = render(<DisciplineDeep />);
+    const { getByTestId } = await render(<DisciplineDeep />);
     expect(getByTestId('activity-indicator')).toBeTruthy();
   });
 
-  it('discipline-deep save=null → 不崩溃或 null', () => {
+  it('discipline-deep save=null → 不崩溃或 null', async () => {
     mockDeepActionNoSave();
-    const { toJSON } = render(<DisciplineDeep />);
+    const { toJSON } = await render(<DisciplineDeep />);
     expect(toJSON()).not.toBeNull();
   });
 
-  it('party-deep save=null → 渲染 ActivityIndicator', () => {
+  it('party-deep save=null → 渲染 ActivityIndicator', async () => {
     mockDeepActionNoSave();
-    const { getByTestId } = render(<PartyDeep />);
+    const { getByTestId } = await render(<PartyDeep />);
     expect(getByTestId('activity-indicator')).toBeTruthy();
   });
 
-  it('party-deep save=null → 不崩溃或 null', () => {
+  it('party-deep save=null → 不崩溃或 null', async () => {
     mockDeepActionNoSave();
-    const { toJSON } = render(<PartyDeep />);
+    const { toJSON } = await render(<PartyDeep />);
     expect(toJSON()).not.toBeNull();
   });
 
-  it('league-deep save=null → 渲染 ActivityIndicator', () => {
+  it('league-deep save=null → 渲染 ActivityIndicator', async () => {
     mockDeepActionNoSave();
-    const { getByTestId } = render(<LeagueDeep />);
+    const { getByTestId } = await render(<LeagueDeep />);
     expect(getByTestId('activity-indicator')).toBeTruthy();
   });
 
-  it('league-deep save=null → 不崩溃或 null', () => {
+  it('league-deep save=null → 不崩溃或 null', async () => {
     mockDeepActionNoSave();
-    const { toJSON } = render(<LeagueDeep />);
+    const { toJSON } = await render(<LeagueDeep />);
     expect(toJSON()).not.toBeNull();
   });
 });
