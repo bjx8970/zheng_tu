@@ -1,21 +1,26 @@
 // tests/setup/jest.unit.ts
 
 jest.mock('zustand', () => {
-  let storeState: any = {};
-  const mockSet = (partial: any) => {
-    if (typeof partial === 'function') {
-      storeState = { ...storeState, ...partial(storeState) };
-    } else {
-      storeState = { ...storeState, ...partial };
-    }
+  const createMockStore = () => {
+    let storeState: any = {};
+    const mockSet = (partial: any, replace?: boolean) => {
+      if (typeof partial === 'function') {
+        storeState = replace ? partial(storeState) : { ...storeState, ...partial(storeState) };
+      } else {
+        storeState = replace ? partial : { ...storeState, ...partial };
+      }
+    };
+    const mockGet = () => storeState;
+    const result = (selector?: any) => selector ? selector(storeState) : mockGet();
+    (result as any).setState = mockSet;
+    (result as any).getState = mockGet;
+    return result;
   };
-  const mockGet = () => storeState;
-  const mockApi = {};
 
   return {
     create: () => (fn: any) => {
-      storeState = fn(mockSet, mockGet, mockApi);
-      return (selector?: any) => selector ? selector(storeState) : mockGet();
+      const store = createMockStore();
+      return store;
     },
   };
 });
