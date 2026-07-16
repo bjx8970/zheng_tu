@@ -1,29 +1,25 @@
 // tests/setup/jest.unit.ts
 
-jest.mock('zustand', () => {
-  const createMockStore = () => {
+jest.mock('zustand', () => ({
+  create: () => (fn: any) => {
     let storeState: any = {};
-    const mockSet = (partial: any, replace?: boolean) => {
+    const set: any = (partial: any, replace?: boolean) => {
       if (typeof partial === 'function') {
         storeState = replace ? partial(storeState) : { ...storeState, ...partial(storeState) };
       } else {
         storeState = replace ? partial : { ...storeState, ...partial };
       }
     };
-    const mockGet = () => storeState;
-    const result = (selector?: any) => selector ? selector(storeState) : mockGet();
-    (result as any).setState = mockSet;
-    (result as any).getState = mockGet;
-    return result;
-  };
-
-  return {
-    create: () => (fn: any) => {
-      const store = createMockStore();
-      return store;
-    },
-  };
-});
+    const get = () => storeState;
+    const api = {};
+    const result = fn(set, get, api);
+    storeState = { ...storeState, ...result };
+    const store: any = (selector?: any) => selector ? selector(storeState) : storeState;
+    store.setState = set;
+    store.getState = get;
+    return store;
+  },
+}));
 
 jest.mock('zustand/middleware', () => ({
   devtools: (fn: any, _opts?: any) => fn,
