@@ -1,0 +1,35 @@
+name: opencode-review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+      issues: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: anomalyco/opencode/github@latest
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          model: opencode/big-pickle
+          use_github_token: true
+          prompt: |
+            Review this pull request following the project's AGENTS.md conventions:
+            - Check for code quality and potential bugs
+            - Verify import alias usage (@/ → ./src/*)
+            - Ensure NativeWind v4 / Tailwind classes are valid
+            - Follow Biome + oxlint + tsc rules (must pass pnpm lint)
+            - Ensure tests are included per the testing requirement
+            - Ensure main branch is not directly modified
+
+            If issues are found, leave detailed review comments.
