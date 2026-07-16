@@ -2,6 +2,10 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
+jest.mock('@sentry/react-native', () => ({
+  captureException: jest.fn(),
+}));
+
 function Bomb({ shouldThrow }: { shouldThrow: boolean }) {
   if (shouldThrow) throw new Error('test error');
   return <>{'正常内容'}</>;

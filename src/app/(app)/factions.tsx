@@ -1182,8 +1182,8 @@ export default function FactionsScreen() {
                   <Text style={{ fontSize: 22 }}>👔</Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>直属上司 · {rankConfig?.bossTitle ?? ''}</Text>
-                  <Text style={{ fontSize: 15, fontWeight: '700', color: '#111', marginTop: 2 }}>{save.bossName || (rankConfig?.bossTitle ?? '')}</Text>
+                  <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>直属上司 · {rankConfig.bossTitle}</Text>
+                  <Text style={{ fontSize: 15, fontWeight: '700', color: '#111', marginTop: 2 }}>{save.bossName || (rankConfig.bossTitle)}</Text>
                 </View>
                 <View style={{ alignItems: 'flex-end', gap: 2 }}>
                   <Text style={{ fontSize: 22, fontWeight: '700', fontVariant: ['tabular-nums'], color: save.bossFavor >= 60 ? '#2E7D32' : save.bossFavor >= 25 ? '#E65100' : '#B71C1C' }}>
@@ -1230,7 +1230,7 @@ export default function FactionsScreen() {
                     <Text style={{ fontSize: 20 }}>🤝</Text>
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>二级上司 · {rankConfig?.bossTitle2 ?? ''}</Text>
+                    <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>二级上司 · {rankConfig.bossTitle2}</Text>
                     <Text style={{ fontSize: 14, fontWeight: '700', color: '#222', marginTop: 2 }}>{save.boss2Name}</Text>
                   </View>
                   <Text style={{ fontSize: 18, fontWeight: '700', fontVariant: ['tabular-nums'], color: save.boss2Favor >= 60 ? '#2E7D32' : save.boss2Favor >= 25 ? '#E65100' : '#B71C1C' }}>
@@ -1276,7 +1276,7 @@ export default function FactionsScreen() {
                     <Text style={{ fontSize: 18 }}>🎩</Text>
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>三级上司 · {rankConfig?.bossTitle3 ?? '上级领导'}</Text>
+                    <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>三级上司 · {rankConfig.bossTitle3}</Text>
                     <Text style={{ fontSize: 13, fontWeight: '700', color: '#333', marginTop: 2 }}>{save.boss3Name}</Text>
                   </View>
                   <Text style={{ fontSize: 16, fontWeight: '700', fontVariant: ['tabular-nums'], color: save.boss3Favor >= 60 ? '#2E7D32' : save.boss3Favor >= 25 ? '#E65100' : '#B71C1C' }}>

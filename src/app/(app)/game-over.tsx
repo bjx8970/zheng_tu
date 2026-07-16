@@ -182,8 +182,8 @@ export default function GameOverScreen() {
             </View>
 
             {/* 仕途数据 */}
-            <StatRow label="最终职级" value={rankConfig?.name ?? ''} color={cfg.accentColor} />
-            <StatRow label="最终职位" value={save.playerPosition || (rankConfig?.name ?? '')} />
+            <StatRow label="最终职级" value={rankConfig.name} color={cfg.accentColor} />
+            <StatRow label="最终职位" value={save.playerPosition || (rankConfig.name)} />
             <StatRow label="任职城市" value={save.cityName} />
             <StatRow label="仕途年数" value={`${careerYears} 年`} />
             <StatRow label="政绩积分" value={`${Math.round(save.meritPoints).toLocaleString()} 分`} />

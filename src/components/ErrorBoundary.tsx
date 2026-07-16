@@ -36,7 +36,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F4F1', padding: 24 }}>
           <Text style={{ fontSize: 18, fontWeight: '700', color: '#C82829', marginBottom: 12 }}>页面加载出错</Text>
           <Text style={{ fontSize: 13, color: '#666', textAlign: 'center', marginBottom: 20 }}>
-            {this.state.error || '发生了未知错误'}
+            {__DEV__ ? (this.state.error || '发生了未知错误') : '发生了未知错误'}
           </Text>
           <Pressable
             onPress={this.handleReset}

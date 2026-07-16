@@ -805,7 +805,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
               annualDebriefTargetValue: nextTarget.value,
             });
           }
-        } catch {}
+        } catch (e) { console.error('exceptionalPromoBonus calc failed', e); }
       })();
 
       // ── 上司年度KPI下达（fire-and-forget）────────────────────────────────
@@ -845,7 +845,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
               const newScore = Math.min(100, (current.alumniScore ?? 0) + gained);
               await updateSave(current.id, { alumniScore: newScore });
             }
-        } catch (e) { console.error('exceptionalPromoBonus calc failed', e); }
+          } catch (e) { console.error('alumniScore yearly update failed', e); }
         })(),
       ]);
     }
@@ -1337,7 +1337,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
               await createMeeting((withMonthly ?? updated).id, (withMonthly ?? updated).userId, monthKey, newGameDays, npcTasks);
             }
           }
-        } catch {}
+        } catch (e) { console.error('meeting creation failed', e); }
       })();
 
       // ── 部门月度事件 + 军转剧情（每月最多触发1次，不阻塞主流程）────────────────

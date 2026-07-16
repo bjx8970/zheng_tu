@@ -996,7 +996,7 @@ export default function HomeScreen() {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
                   <Text style={{ fontSize: 10, color: theme.labelText }}>政绩积累</Text>
                   <Text style={{ fontSize: 10, color: meritProgress >= 100 ? theme.statHigh : theme.primary, fontVariant: ['tabular-nums'] }}>
-                    {save.meritPoints.toFixed(0)} / {rankConfig?.requiredMerit ?? 100}
+                    {save.meritPoints.toFixed(0)} / {rankConfig.requiredMerit}
                     {meritProgress >= 100 ? ' ✓' : ''}
                   </Text>
                 </View>
