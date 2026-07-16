@@ -4,6 +4,9 @@ export default {
   roots: ['<rootDir>/tests/unit'],
   testMatch: ['**/*.test.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(zustand|zod|@supabase)/)',
+  ],
   collectCoverageFrom: [
     'src/domains/**/*.ts',
     'src/infrastructure/**/*.ts',
