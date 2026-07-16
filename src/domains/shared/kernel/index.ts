@@ -64,3 +64,11 @@ export function ok<T>(value: T): Result<T, never> {
 export function err<E>(error: E): Result<never, E> {
   return { ok: false, error };
 }
+
+// ===== 领域服务接口 =====
+
+export interface RandomService {
+  next(): number;
+  nextInt(max: number): number;
+  nextRange(min: number, max: number): number;
+}

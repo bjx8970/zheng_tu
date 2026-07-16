@@ -95,6 +95,7 @@ export const IndicatorDriftFormulaInput = z.object({
   hasActivePolicy: z.boolean(),
   policyBonus: z.number().default(0),
   granularity: z.enum(['daily', 'monthly']),
+  random: z.number().min(0).max(1),
 });
 
 export const IndicatorDriftFormulaOutput = z.object({
@@ -111,7 +112,7 @@ export function createIndicatorDriftFormula(): FormulaDefinition<z.infer<typeof 
     description: '城市指标自然漂移计算',
     fn: (input) => {
       const factor = input.granularity === 'daily' ? 1/30 : 1;
-      const baseDrift = (Math.random() * 15 - 10) * factor; // -10 到 +5
+      const baseDrift = (input.random * 15 - 10) * factor;
       const policyEffect = input.hasActivePolicy ? input.policyBonus * factor : 0;
       const drift = Math.max(-5, Math.min(5, baseDrift + policyEffect));
       const newValue = Math.max(0, Math.min(100, input.currentValue + drift));
@@ -148,6 +149,7 @@ export function createExceptionalPromoFormula(): FormulaDefinition<z.infer<typeo
 
 export const BriberyExposureInput = z.object({
   inspectionRisk: z.number().min(0).max(100),
+  random: z.number().min(0).max(1),
 });
 
 export const BriberyExposureOutput = z.object({
@@ -165,7 +167,7 @@ export function createBriberyExposureFormula(): FormulaDefinition<z.infer<typeof
     description: '行贿东窗事发判定',
     fn: (input) => {
       const chance = Math.min(0.85, (input.inspectionRisk / 100) * 0.65);
-      const exposed = Math.random() < chance;
+      const exposed = input.random < chance;
       let level: 'warning' | 'suspend' | 'case' = 'warning';
       if (exposed) {
         if (input.inspectionRisk >= 70) level = 'case';

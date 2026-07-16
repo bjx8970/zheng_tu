@@ -1,11 +1,12 @@
-import { Result, ok, err } from '../../shared/kernel';
+import { Result, ok, err, RandomService } from '../../shared/kernel';
 import type { Player, CityGovernance, DailyDelta, MonthlyDelta, KPIResult, DeptAutoResult, DeptKpiResult, CityIndicators } from '../../shared/types';
 import { FormulaRegistry } from '../formulas/FormulaRegistry';
 
 export class KPIEngine {
   constructor(
     private readonly deptConfigs: Map<string, DeptConfig>,
-    private readonly formulaRegistry: FormulaRegistry
+    private readonly formulaRegistry: FormulaRegistry,
+    private readonly random: RandomService
   ) {}
 
   calculateDailyDelta(city: CityGovernance, player: Player): DailyDelta {
@@ -35,10 +36,7 @@ export class KPIEngine {
 
     const deptFund = deptResults.reduce((sum, r) => sum + r.fundBalance, 0);
     const deptMerit = deptResults.reduce((sum, r) => sum + r.meritPoints, 0);
-    const provincialRemittance = this.calculateProvincialRemittance(player);
-    const nationalBuildRevenue = this.calculateNationalBuildRevenue(player);
 
-    // 城建经费月度计算
     const cityGovFund = this.calculateCityGovFundMonthly(city, player);
 
     return {
@@ -49,7 +47,7 @@ export class KPIEngine {
       cityGovFundChange: cityGovFund.netChange,
       cityGovFundBalance: cityGovFund.newBalance,
       fundBalanceChange: deptFund,
-      taxRevenueChange: deptResults.reduce((s, r) => s + r.taxRevenue, 0),
+      taxRevenueChange: deptResults.reduce((s: number, r: { taxRevenue: number }) => s + r.taxRevenue, 0),
       indicatorDrifts: this.calculateIndicatorDrifts(city, player, 'monthly'),
       bossFavorChange: this.calculateBossFavorMonthly(player),
       securityIndexChange: this.calculateSecurityMonthly(city),
@@ -71,7 +69,7 @@ export class KPIEngine {
     };
 
     const weightedScore = Object.entries(scores).reduce(
-      (sum, [k, v]) => sum + v * weights[k as keyof typeof weights], 0
+      (sum: number, [k, v]) => sum + v * weights[k as keyof typeof weights], 0
     );
 
     const eligible = weightedScore >= 60;
@@ -92,8 +90,8 @@ export class KPIEngine {
     const factor = granularity === 'daily' ? 1/30 : 1;
     const drifts: Record<string, number> = {};
     
-    for (const [key, indicator] of Object.entries(city.indicators) as [keyof CityIndicators, number][]) {
-      const drift = (Math.random() * 15 - 10) * factor; // -10 到 +5
+    for (const [key] of Object.entries(city.indicators) as [keyof CityIndicators, number][]) {
+      const drift = (this.random.next() * 15 - 10) * factor;
       drifts[key] = Math.max(-5, Math.min(5, Math.round(drift * 10) / 10));
     }
     return drifts;
@@ -134,24 +132,14 @@ export class KPIEngine {
   }
 
   private getRankFundMultiplier(rank: number): number {
-    const mult = { 1: 0.5, 2: 0.6, 3: 0.7, 4: 0.8, 5: 1.0, 6: 1.2, 7: 1.5, 8: 2.0, 9: 2.5, 10: 3.0, 11: 4.0, 12: 5.0, 13: 6.0, 14: 8.0, 15: 10.0 };
-    return mult[rank as keyof typeof mult] ?? 1.0;
-  }
-
-  private calculateProvincialRemittance(player: Player): number {
-    if (player.career.rankLevel < 9) return 0;
-    return Math.floor(player.career.rankLevel * 50000 * (0.8 + Math.random() * 0.4));
-  }
-
-  private calculateNationalBuildRevenue(player: Player): number {
-    if (player.career.rankLevel < 12) return 0;
-    return Math.floor(player.career.rankLevel * 100000 * (0.7 + Math.random() * 0.6));
+    const mult: Record<number, number> = { 1: 0.5, 2: 0.6, 3: 0.7, 4: 0.8, 5: 1.0, 6: 1.2, 7: 1.5, 8: 2.0, 9: 2.5, 10: 3.0, 11: 4.0, 12: 5.0, 13: 6.0, 14: 8.0, 15: 10.0 };
+    return mult[rank] ?? 1.0;
   }
 
   private calculateCityGovFundMonthly(city: CityGovernance, player: Player) {
     const base = city.fundAccount.cityGovFund;
-    const grant = Math.floor(50 + Math.random() * Math.min(450, player.career.rankLevel * 40));
-    const maintenance = Math.floor(100 + Math.random() * 300);
+    const grant = Math.floor(50 + this.random.next() * Math.min(450, player.career.rankLevel * 40));
+    const maintenance = Math.floor(100 + this.random.next() * 300);
     const netChange = grant - maintenance;
     return {
       grant,
@@ -162,29 +150,29 @@ export class KPIEngine {
   }
 
   private calculateBossFavorDaily(player: Player): number {
-    return Math.random() > 0.7 ? 1 : 0;
+    return this.random.next() > 0.7 ? 1 : 0;
   }
 
   private calculateBossFavorMonthly(player: Player): number {
-    return Math.floor(Math.random() * 3) - 1; // -1 到 +1
+    return Math.floor(this.random.next() * 3) - 1;
   }
 
-  private calculateSecurityDaily(city: CityGovernance): number {
-    return (Math.random() - 0.5) * 0.5;
+  private calculateSecurityDaily(_city: CityGovernance): number {
+    return (this.random.next() - 0.5) * 0.5;
   }
 
-  private calculateSecurityMonthly(city: CityGovernance): number {
-    return Math.floor(Math.random() * 5) - 2;
+  private calculateSecurityMonthly(_city: CityGovernance): number {
+    return Math.floor(this.random.next() * 5) - 2;
   }
 
   private calculatePublicOpinionMonthly(city: CityGovernance): number {
-    const base = -(2 + Math.floor(Math.random() * 3));
+    const base = -(2 + Math.floor(this.random.next() * 3));
     const massIncidentPenalty = (city.massIncidentPending ?? 0) > 0 ? -3 : 0;
     return Math.min(0, base + massIncidentPenalty);
   }
 
   private calculateInspectionRiskMonthly(player: Player): number {
-    let risk = 1 + Math.floor(Math.random() * 4);
+    let risk = 1 + Math.floor(this.random.next() * 4);
     if ((player.political.briberyAccepted ?? 0) > 5) risk += 3;
     risk -= (player.political.protectionUmbrellaLevel ?? 0) * 2;
     if (player.political.factionInternalRank === 'leader') risk -= 5;
@@ -193,14 +181,14 @@ export class KPIEngine {
   }
 
   private checkMassIncidentTrigger(): boolean {
-    return Math.random() < 0.10;
+    return this.random.next() < 0.10;
   }
 
   private checkBriberyEventTrigger(player: Player): boolean {
-    return !player.political.pendingBriberyEvent && Math.random() < 0.15;
+    return !player.political.pendingBriberyEvent && this.random.next() < 0.15;
   }
 
-  private generateKPIDetails(city: CityGovernance, player: Player, scores: KPIResult['breakdown']): string[] {
+  private generateKPIDetails(_city: CityGovernance, _player: Player, scores: KPIResult['breakdown']): string[] {
     return Object.entries(scores).map(([k, v]) => 
       `${k}: ${v}分 ${v >= 60 ? '✓' : '✗'}`
     );

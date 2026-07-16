@@ -1,6 +1,8 @@
-import type { Player } from '@/domains/shared/types';
+import type { Player, PlayerPatches } from '@/domains/shared/types';
 
 // ===== Repository 接口（领域层依赖，基建层实现）=====
+
+export type { PlayerPatches };
 
 export interface PlayerRepository {
   findById(id: string): Promise<Player | null>;
@@ -8,57 +10,6 @@ export interface PlayerRepository {
   save(player: Player): Promise<void>;
   savePartial(id: string, patches: PlayerPatches): Promise<void>;
   delete(id: string): Promise<void>;
-}
-
-export interface PlayerPatches {
-  // 职业生涯
-  rankLevel?: number;
-  rankName?: string;
-  careerPath?: string;
-  careerPathLine?: string;
-  playerPosition?: string;
-  cityName?: string;
-  tenureYears?: number;
-  isPromotionAvailable?: boolean;
-  preferredCareerLine?: string | null;
-  certificates?: Array<{ partySchoolLevel: number; requiredLevel: number; obtainedAt: number | null }>;
-
-  // 属性
-  abilityValue?: number;
-  moralValue?: number;
-  healthValue?: number;
-  meritPoints?: number;
-  bossFavor?: number;
-  boss2Favor?: number;
-  boss3Favor?: number;
-
-  // 资源
-  personalSavings?: number;
-  providentFundBalance?: number;
-  grayIncome?: number;
-  cityGovFund?: number;
-  fundBalance?: number;
-  taxRevenue?: number;
-
-  // 政治
-  primaryFaction?: string | null;
-  factionInternalRank?: string | null;
-  factionPoints?: number;
-  inspectionRisk?: number;
-  briberyAccepted?: number;
-  exceptionalAgeOverrideCount?: number;
-  partyCongressVote?: number;
-  voteSupport?: number;
-
-  // 时间线
-  gameDays?: number;
-  lastMonthDay?: number;
-  lastSalaryDay?: number;
-  lastAnnualBonusDay?: number;
-  isRetired?: boolean;
-
-  // 版本（乐观锁）
-  version?: number;
 }
 
 export interface CityGovernanceRepository {
