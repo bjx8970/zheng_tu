@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { PlayerSave } from '@/types/game';
 
 // ── 冷却相关字段列表（Record<string,number> 或 JSON string 类型）────────────
-const COOLDOWN_FIELDS = [
+export const COOLDOWN_FIELDS = [
   'careerPathCooldowns',
   'adminGovCooldowns',
   'judicialExtraCooldowns',
@@ -30,6 +30,7 @@ const COOLDOWN_FIELDS = [
   'partyDeepResults',
   'leagueDeepResults',
   'adminDeepResults',
+  'cityGovFund',
 ] as const;
 
 type CooldownFields = Pick<PlayerSave, typeof COOLDOWN_FIELDS[number]>;
@@ -115,6 +116,9 @@ export async function clearOfflineQueue(saveId: string): Promise<void> {
   }
 }
 
+// ── 原子数字字段（非 Record 字典）：直接用 patch 值覆盖 ──────────────────────
+const PLAIN_NUMBER_FIELDS = new Set<string>(['cityGovFund']);
+
 // ── 合并冷却数据：对 Record<string,number> 类型的字段取最大值（更晚的冷却优先）
 // 对 JSON string 类型（results）取本地版本（本地比 DB 更新）────────────────────
 function mergeCooldowns(
@@ -130,6 +134,9 @@ function mergeCooldowns(
 
     if (key.endsWith('Results') || key === 'actionResultsLog') {
       // JSON string 类型：若 patch 有值则用 patch（本地比 DB 新）
+      (result as Record<string, unknown>)[key] = patchVal;
+    } else if (PLAIN_NUMBER_FIELDS.has(key)) {
+      // 原子数字字段：直接用 patch 值（本地比 DB 新）
       (result as Record<string, unknown>)[key] = patchVal;
     } else {
       // Record<string,number> 冷却字典：对每个 key 取较大的 gameDays 值
