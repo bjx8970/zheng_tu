@@ -1,13 +1,13 @@
 // ===== 基础类型 =====
 
 export type AdminLevel =
-  | 'township'    // 乡镇/街道
-  | 'county'      // 县/区
-  | 'city'        // 地级市
-  | 'subProvince' // 副省级城市
-  | 'province'    // 省/直辖市
-  | 'ministry'    // 部委
-  | 'central';    // 中央/国家级
+  | 'township'
+  | 'county'
+  | 'city'
+  | 'subProvince'
+  | 'province'
+  | 'ministry'
+  | 'central';
 
 export type CareerLine = 'party' | 'government' | 'discipline' | 'league';
 
@@ -32,7 +32,7 @@ export interface RankConfig {
   department: string;
 }
 
-// ===== 核心聚合类型（领域层使用，比 game.ts 更精简）=====
+// ===== 核心聚合类型 =====
 
 export interface PlayerProfile {
   playerName: string;
@@ -45,6 +45,12 @@ export interface PlayerProfile {
   universityName: string;
 }
 
+export interface CertificateInfo {
+  partySchoolLevel: number;
+  requiredLevel: number;
+  obtainedAt: number | null;
+}
+
 export interface CareerState {
   rankLevel: RankLevel;
   rankName: string;
@@ -54,6 +60,9 @@ export interface CareerState {
   cityName: string;
   cityType: string;
   tenureYears: number;
+  tenureMaxYears: number;
+  tenureStartDay: number;
+  certificates: CertificateInfo[];
   isPromotionAvailable: boolean;
   promotionReadyAt: string | null;
   preferredCareerLine: CareerLine | null;
@@ -87,6 +96,9 @@ export interface PoliticalState {
   exceptionalAgeOverrideCount: number;
   partyCongressVote: number;
   voteSupport: number;
+  protectionUmbrellaLevel?: number;
+  pendingBriberyEvent?: unknown;
+  massIncidentCount?: number;
 }
 
 export interface GameTimeline {
@@ -96,9 +108,12 @@ export interface GameTimeline {
   lastAnnualBonusDay: number;
   retirementAge: number;
   isRetired: boolean;
+  massIncidentCount?: number;
 }
 
-export interface Player extends Omit<PlayerSave, 'id' | 'userId' | 'createdAt' | 'updatedAt'> {
+// ===== Player 聚合 =====
+
+export interface Player {
   id: string;
   userId: string;
   version: number;
@@ -110,10 +125,131 @@ export interface Player extends Omit<PlayerSave, 'id' | 'userId' | 'createdAt' |
   timeline: GameTimeline;
 }
 
+// ===== Player Patches（部分更新） =====
+
+export interface PlayerPatches {
+  career?: Partial<CareerState>;
+  attributes?: Partial<Attributes>;
+  resources?: Partial<Resources>;
+  political?: Partial<PoliticalState>;
+  timeline?: Partial<GameTimeline>;
+  profile?: Partial<PlayerProfile>;
+}
+
+// ===== 城市治理类型 =====
+
+export interface CityIndicators {
+  gdp: number;
+  livelihood: number;
+  ecology: number;
+  business: number;
+  security: number;
+}
+
+export interface CityGovernance {
+  cityId: string;
+  playerId: string;
+  level: string;
+  indicators: CityIndicators;
+  departments: Department[];
+  activePolicies: Policy[];
+  projects: Project[];
+  fundAccount: FundAccount;
+  massIncidentPending?: number;
+}
+
+export interface Department {
+  key: string;
+  name: string;
+  level: number;
+  staff: number;
+  baseFund: number;
+  baseTax: number;
+  baseMerit: number;
+}
+
+export interface Policy {
+  id: string;
+  type: string;
+  config: unknown;
+  startDay: number;
+  endDay: number;
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  cost: number;
+  progress: number;
+  effects: unknown;
+}
+
+export interface FundAccount {
+  cityGovFund: number;
+  fundBalance: number;
+  taxRevenue: number;
+  personalSavings?: number;
+  providentFundBalance?: number;
+}
+
+// ===== KPI 类型 =====
+
+export interface DailyDelta {
+  gameDays: number;
+  meritGain: number;
+  fundBalanceChange: number;
+  taxRevenueChange: number;
+  indicatorDrifts: Record<string, number>;
+  bossFavorChange: number;
+  securityIndexChange: number;
+}
+
+export interface MonthlyDelta {
+  gameDays: number;
+  personalSavingsChange: number;
+  providentFundChange: number;
+  meritGain: number;
+  cityGovFundChange: number;
+  cityGovFundBalance: number;
+  fundBalanceChange: number;
+  taxRevenueChange: number;
+  indicatorDrifts: Record<string, number>;
+  bossFavorChange: number;
+  securityIndexChange: number;
+  publicOpinionChange: number;
+  inspectionRiskChange: number;
+  massIncidentTriggered: boolean;
+  briberyEventTriggered: boolean;
+}
+
+export interface KPIResult {
+  eligible: boolean;
+  overall: number;
+  breakdown: Record<string, number>;
+  grade: string;
+  details: string[];
+}
+
+export interface DeptAutoResult {
+  fundBalance: number;
+  taxRevenue: number;
+  meritPoints: number;
+}
+
+export interface DeptKpiResult {
+  [key: string]: unknown;
+}
+
+export interface KpiSaveSnapshot {
+  [key: string]: unknown;
+}
+
 // ===== 领域事件 =====
 
 export interface PlayerPromotedEvent {
   type: 'PLAYER_PROMOTED';
+  occurredAt: Date;
+  eventId: string;
   payload: {
     playerId: string;
     oldRank: RankLevel;
@@ -128,6 +264,8 @@ export interface PlayerPromotedEvent {
 
 export interface CityFundConsumedEvent {
   type: 'CITY_FUND_CONSUMED';
+  occurredAt: Date;
+  eventId: string;
   payload: {
     playerId: string;
     amount: number;
@@ -139,6 +277,8 @@ export interface CityFundConsumedEvent {
 
 export interface MassIncidentTriggeredEvent {
   type: 'MASS_INCIDENT_TRIGGERED';
+  occurredAt: Date;
+  eventId: string;
   payload: {
     playerId: string;
     incidentId: string;
@@ -149,6 +289,8 @@ export interface MassIncidentTriggeredEvent {
 
 export interface BriberyExposedEvent {
   type: 'BRIBERY_EXPOSED';
+  occurredAt: Date;
+  eventId: string;
   payload: {
     playerId: string;
     level: 'warning' | 'suspend' | 'case';
@@ -158,6 +300,8 @@ export interface BriberyExposedEvent {
 
 export interface MonthlySettlementEvent {
   type: 'MONTHLY_SETTLEMENT_COMPLETED';
+  occurredAt: Date;
+  eventId: string;
   payload: {
     playerId: string;
     month: number;

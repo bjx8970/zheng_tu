@@ -6,8 +6,8 @@ export interface FormulaFn<TInput, TOutput> {
 
 export interface FormulaDefinition<TInput, TOutput> {
   name: string;
-  inputSchema: z.ZodSchema<TInput>;
-  outputSchema: z.ZodSchema<TOutput>;
+  inputSchema: z.ZodType<TInput, z.ZodTypeDef, any>;
+  outputSchema: z.ZodType<TOutput>;
   fn: FormulaFn<TInput, TOutput>;
   description?: string;
   version: string;

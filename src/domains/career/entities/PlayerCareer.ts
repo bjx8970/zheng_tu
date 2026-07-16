@@ -1,5 +1,5 @@
 import { AggregateRoot, ValueObject, Result, ok, err } from '../../shared/kernel';
-import type { RankLevel, CareerLine, CareerPath, Player, PromotionReadiness, PromotionResult } from '../../shared/types';
+import type { RankLevel, CareerLine, CareerPath, Player, PromotionReadiness, PromotionResult, PlayerPromotedEvent } from '../../shared/types';
 import type { LeadershipBand } from '../../personnel/entities/LeadershipBand';
 
 // ===== 值对象 =====
@@ -112,10 +112,10 @@ export class PlayerCareer extends AggregateRoot<CareerStateProps & { id: string;
     const kpiOk = kpiScore.eligible;
     if (!kpiOk) reasons.push(`KPI不达标（综合${kpiScore.overall.toFixed(1)}分，需≥60）`);
 
-    const certOk = this.props.certificates.some(c => c.isQualified);
+    const certOk = this.props.certificates.some((c: PartySchoolCertificate) => c.isQualified);
     if (!certOk) reasons.push('党校证书等级不足');
 
-    // 年龄门槛（简化，实际从配置读取）
+    // 年龄门槛
     const minAgeForRank = this.getMinAgeForNextRank();
     const ageOk = age >= minAgeForRank;
     if (!ageOk) reasons.push(`年龄未达标（当前${age}岁，需≥${minAgeForRank}岁）`);
@@ -149,7 +149,7 @@ export class PlayerCareer extends AggregateRoot<CareerStateProps & { id: string;
   }
 
   private getMinAgeForNextRank(): number {
-    const ages: Record<RankLevel, number> = {
+    const ages: Record<number, number> = {
       1: 22, 2: 22, 3: 25, 4: 27, 5: 30, 6: 32, 7: 35, 8: 40,
       9: 42, 10: 45, 11: 48, 12: 50, 13: 52, 14: 55, 15: 58,
     };
@@ -157,7 +157,7 @@ export class PlayerCareer extends AggregateRoot<CareerStateProps & { id: string;
   }
 
   private getRequiredAbility(): number {
-    const abilities: Record<RankLevel, number> = {
+    const abilities: Record<number, number> = {
       1: 30, 2: 35, 3: 35, 4: 40, 5: 40, 6: 45, 7: 50, 8: 55,
       9: 60, 10: 60, 11: 65, 12: 70, 13: 75, 14: 80, 15: 85,
     };
@@ -165,7 +165,7 @@ export class PlayerCareer extends AggregateRoot<CareerStateProps & { id: string;
   }
 
   private getRequiredIntegrity(): number {
-    const integrity: Record<CareerLine, Record<RankLevel, number>> = {
+    const integrity: Record<CareerLine, Record<number, number>> = {
       party:    { 1: 40, 2: 40, 3: 42, 4: 45, 5: 48, 6: 50, 7: 52, 8: 55, 9: 55, 10: 58, 11: 60, 12: 62, 13: 65, 14: 68, 15: 70 },
       government: { 1: 35, 2: 35, 3: 38, 4: 40, 5: 42, 6: 45, 7: 48, 8: 50, 9: 50, 10: 52, 11: 55, 12: 58, 13: 60, 14: 62, 15: 65 },
       discipline: { 1: 50, 2: 50, 3: 52, 4: 55, 5: 55, 6: 58, 7: 60, 8: 62, 9: 62, 10: 65, 11: 68, 12: 70, 13: 72, 14: 75, 15: 78 },
@@ -207,6 +207,8 @@ export class PlayerCareer extends AggregateRoot<CareerStateProps & { id: string;
 
     const event: PlayerPromotedEvent = {
       type: 'PLAYER_PROMOTED',
+      occurredAt: new Date(),
+      eventId: `${this.id}-${Date.now()}`,
       payload: {
         playerId: this.id,
         oldRank,
@@ -238,24 +240,10 @@ export class PlayerCareer extends AggregateRoot<CareerStateProps & { id: string;
   }
 
   private getMaxTenureForRank(rank: RankLevel): number {
-    const maxTenure: Record<RankLevel, number> = {
+    const maxTenure: Record<number, number> = {
       1: 3, 2: 3, 3: 4, 4: 5, 5: 5, 6: 5, 7: 5, 8: 5,
       9: 5, 10: 5, 11: 5, 12: 5, 13: 5, 14: 5, 15: 5,
     };
     return maxTenure[rank] ?? 5;
   }
-}
-
-export interface PlayerPromotedEvent {
-  type: 'PLAYER_PROMOTED';
-  payload: {
-    playerId: string;
-    oldRank: RankLevel;
-    newRank: RankLevel;
-    oldCity: string;
-    newCity: string;
-    chosenPath: CareerPath;
-    followCandidates: string[];
-    secretaryCandidates: string[];
-  };
 }

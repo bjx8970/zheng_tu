@@ -1,5 +1,6 @@
 import { Result, ok, err } from '../../shared/kernel';
-import type { Player, CityGovernance, DailyDelta, MonthlyDelta, KPIResult, DeptAutoResult, DeptKpiResult } from '../../shared/types';
+import type { Player, CityGovernance, DailyDelta, MonthlyDelta, KPIResult, DeptAutoResult, DeptKpiResult, CityIndicators } from '../../shared/types';
+import { FormulaRegistry } from '../formulas/FormulaRegistry';
 
 export class KPIEngine {
   constructor(

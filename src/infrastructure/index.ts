@@ -2,14 +2,7 @@ import { getSupabaseClient } from './networking/supabaseClient';
 import { SupabasePlayerRepository } from './persistence/supabase/repositories/SupabasePlayerRepository';
 import { PlayerMapper } from './persistence/supabase/mappers/PlayerMapper';
 import { domainEventBus } from './eventBus';
-import { createGameStore } from './state/zustand/createStore';
-import { createPlayerSlice } from './state/zustand/slices/playerSlice';
-import { createCareerSlice } from './state/zustand/slices/careerSlice';
-import { createGovernanceSlice } from './state/zustand/slices/governanceSlice';
-import { createPersonnelSlice } from './state/zustand/slices/personnelSlice';
-import { createFinanceSlice } from './state/zustand/slices/financeSlice';
-import { createPoliticalSlice } from './state/zustand/slices/politicalSlice';
-import { createSystemSlice } from './state/zustand/slices/systemSlice';
+import { createGameStore } from './state/zustand/store';
 
 // ===== Repository 单例 =====
 
@@ -22,7 +15,6 @@ export function getPlayerRepository(): SupabasePlayerRepository {
   return _playerRepo;
 }
 
-// 用于测试替换
 export function setPlayerRepository(repo: SupabasePlayerRepository): void {
   _playerRepo = repo;
 }
@@ -33,22 +25,7 @@ let _gameStore: ReturnType<typeof createGameStore> | null = null;
 
 export function getGameStore() {
   if (!_gameStore) {
-    _gameStore = createGameStore([
-      { name: 'player', slice: createPlayerSlice },
-      { name: 'career', slice: createCareerSlice },
-      { name: 'governance', slice: createGovernanceSlice },
-      { name: 'personnel', slice: createPersonnelSlice },
-      { name: 'finance', slice: createFinanceSlice },
-      { name: 'political', slice: createPoliticalSlice },
-      { name: 'system', slice: createSystemSlice },
-    ], {
-      name: 'ZhengTuGameStore',
-      persist: true,
-      partialize: (state) => ({
-        save: state.save,
-        lastSyncedAt: state.lastSyncedAt,
-      }),
-    });
+    _gameStore = createGameStore();
   }
   return _gameStore;
 }
@@ -64,20 +41,16 @@ export function resetGameStore(): void {
 // ===== 初始化入口 =====
 
 export async function initializeInfrastructure(): Promise<void> {
-  // 1. 验证 Supabase 连接
   const client = getSupabaseClient();
   const { error } = await client.from('player_saves').select('id').limit(1);
   if (error) {
     console.warn('[Infrastructure] Supabase connection check failed:', error.message);
   }
 
-  // 2. 初始化 Store（触发 persist hydrate）
   getGameStore();
 
-  // 3. 订阅领域事件 -> 同步到 Store / 埋点
   domainEventBus.subscribeAll((event) => {
-    console.log('[DomainEvent]', event.type, event.payload);
-    // 可在此接入 Sentry/Analytics
+    console.log('[DomainEvent]', event.type);
   });
 
   console.log('[Infrastructure] Initialized');

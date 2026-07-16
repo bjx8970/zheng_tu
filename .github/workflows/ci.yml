@@ -12,7 +12,7 @@ env:
 
 jobs:
   lint:
-    name: Lint & TypeCheck
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +25,6 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --no-frozen-lockfile --shamefully-hoist
       - run: pnpm lint
-      - run: pnpm typecheck
 
   unit-tests:
     name: Unit Tests

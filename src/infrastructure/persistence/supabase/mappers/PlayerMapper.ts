@@ -1,132 +1,75 @@
-import type { Player, PlayerProfile, CareerState, Attributes, Resources, PoliticalState, GameTimeline, PlayerPatches } from '@/domains/shared/types';
-import { PartySchoolCertificate, Tenure, KPIScore } from '@/domains/career/entities/PlayerCareer';
+import type { Player, PlayerPatches } from '@/domains/shared/types';
 
 export interface PlayerSaveDTO {
-  id: string;
-  user_id: string;
-  version: number;
-  // profile
-  player_name: string;
-  avatar_id: number;
-  avatar_url: string;
-  gender: 'male' | 'female';
-  birth_year: number;
-  birth_province: string;
-  birth_city: string;
-  university_name: string;
-  // career
-  rank_level: number;
-  rank_name: string;
-  career_path: string;
-  career_path_line: string;
-  player_position: string;
-  city_name: string;
-  tenure_years: number;
-  tenure_max_years: number;
-  tenure_start_day: number;
-  certificates: Array<{ party_school_level: number; required_level: number; obtained_at: number | null }>;
-  is_promotion_available: boolean;
-  preferred_career_line: string | null;
-  // attributes
-  ability_value: number;
-  moral_value: number;
-  health_value: number;
-  merit_points: number;
-  boss_favor: number;
-  boss2_favor: number;
-  boss3_favor: number;
-  // resources
-  personal_savings: number;
-  provident_fund_balance: number;
-  gray_income: number;
-  city_gov_fund: number;
-  fund_balance: number;
-  tax_revenue: number;
-  // political
-  primary_faction: string | null;
-  faction_internal_rank: string | null;
-  faction_points: number;
-  inspection_risk: number;
-  bribery_accepted: number;
-  exceptional_age_override_count: number;
-  party_congress_vote: number;
-  vote_support: number;
-  // timeline
-  game_days: number;
-  last_month_day: number;
-  last_salary_day: number;
-  last_annual_bonus_day: number;
-  retirement_age: number;
-  is_retired: boolean;
-  // metadata
-  created_at: string;
-  updated_at: string;
+  [key: string]: any;
 }
 
 export class PlayerMapper {
   toDomain(dto: PlayerSaveDTO): Player {
     return {
       id: dto.id,
-      userId: dto.user_id,
-      version: dto.version,
+      userId: dto.user_id ?? '',
+      version: dto.version ?? 1,
       profile: {
-        playerName: dto.player_name,
-        avatarId: dto.avatar_id,
-        avatarUrl: dto.avatar_url,
-        gender: dto.gender,
-        birthYear: dto.birth_year,
-        birthProvince: dto.birth_province,
-        birthCity: dto.birth_city,
-        universityName: dto.university_name,
+        playerName: dto.player_name ?? '',
+        avatarId: dto.avatar_id ?? 1,
+        avatarUrl: dto.avatar_url ?? '',
+        gender: dto.gender ?? 'male',
+        birthYear: dto.birth_year ?? 1990,
+        birthProvince: dto.birth_province ?? '',
+        birthCity: dto.birth_city ?? '',
+        universityName: dto.university_name ?? '',
       },
       career: {
         rankLevel: dto.rank_level as any,
-        rankName: dto.rank_name,
-        careerPath: dto.career_path as any,
-        careerPathLine: dto.career_path_line as any,
-        playerPosition: dto.player_position,
-        cityName: dto.city_name,
-        tenure: Tenure.create(dto.tenure_years, dto.tenure_max_years, dto.tenure_start_day),
-        certificates: dto.certificates.map(c => 
-          PartySchoolCertificate.create(c.party_school_level, c.required_level, c.obtained_at)
-        ),
-        isPromotionAvailable: dto.is_promotion_available,
-        preferredCareerLine: dto.preferred_career_line as any,
+        rankName: dto.rank_name ?? '',
+        careerPath: dto.career_path ?? 'government',
+        careerPathLine: dto.career_path_line ?? '行政线',
+        playerPosition: dto.player_position ?? '',
+        cityName: dto.city_name ?? '',
+        cityType: dto.city_type ?? '',
+        tenureYears: dto.tenure_years ?? 0,
+        tenureMaxYears: dto.tenure_max_years ?? 5,
+        tenureStartDay: dto.tenure_start_day ?? 0,
+        certificates: (dto.certificates ?? []) as any[],
+        isPromotionAvailable: dto.is_promotion_available ?? false,
+        promotionReadyAt: null,
+        preferredCareerLine: dto.preferred_career_line ?? null,
       },
       attributes: {
-        abilityValue: dto.ability_value,
-        moralValue: dto.moral_value,
-        healthValue: dto.health_value,
-        meritPoints: dto.merit_points,
-        bossFavor: dto.boss_favor,
-        boss2Favor: dto.boss2_favor,
-        boss3Favor: dto.boss3_favor,
+        abilityValue: dto.ability_value ?? 40,
+        moralValue: dto.moral_value ?? 50,
+        healthValue: dto.health_value ?? 100,
+        meritPoints: dto.merit_points ?? 0,
+        bossFavor: dto.boss_favor ?? 50,
+        boss2Favor: dto.boss2_favor ?? 45,
+        boss3Favor: dto.boss3_favor ?? 40,
       },
       resources: {
-        personalSavings: dto.personal_savings,
-        providentFundBalance: dto.provident_fund_balance,
-        grayIncome: dto.gray_income,
-        cityGovFund: dto.city_gov_fund,
-        fundBalance: dto.fund_balance,
-        taxRevenue: dto.tax_revenue,
+        personalSavings: dto.personal_savings ?? 0,
+        providentFundBalance: dto.provident_fund_balance ?? 0,
+        grayIncome: dto.gray_income ?? 0,
+        cityGovFund: dto.city_gov_fund ?? 0,
+        fundBalance: dto.fund_balance ?? 0,
+        taxRevenue: dto.tax_revenue ?? 0,
       },
       political: {
-        primaryFaction: dto.primary_faction,
-        factionInternalRank: dto.faction_internal_rank as any,
-        factionPoints: dto.faction_points,
-        inspectionRisk: dto.inspection_risk,
-        briberyAccepted: dto.bribery_accepted,
-        exceptionalAgeOverrideCount: dto.exceptional_age_override_count,
-        partyCongressVote: dto.party_congress_vote,
-        voteSupport: dto.vote_support,
+        primaryFaction: dto.primary_faction ?? null,
+        factionInternalRank: dto.faction_internal_rank ?? null,
+        factionPoints: dto.faction_points ?? 0,
+        inspectionRisk: dto.inspection_risk ?? 10,
+        briberyAccepted: dto.bribery_accepted ?? 0,
+        exceptionalAgeOverrideCount: dto.exceptional_age_override_count ?? 0,
+        partyCongressVote: dto.party_congress_vote ?? 0,
+        voteSupport: dto.vote_support ?? 0,
       },
       timeline: {
-        gameDays: dto.game_days,
-        lastMonthDay: dto.last_month_day,
-        lastSalaryDay: dto.last_salary_day,
-        lastAnnualBonusDay: dto.last_annual_bonus_day,
-        retirementAge: dto.retirement_age,
-        isRetired: dto.is_retired,
+        gameDays: dto.game_days ?? 0,
+        lastMonthDay: dto.last_month_day ?? 0,
+        lastSalaryDay: dto.last_salary_day ?? 0,
+        lastAnnualBonusDay: dto.last_annual_bonus_day ?? 0,
+        retirementAge: dto.retirement_age ?? 60,
+        isRetired: dto.is_retired ?? false,
       },
     };
   }
@@ -150,14 +93,10 @@ export class PlayerMapper {
       career_path_line: player.career.careerPathLine,
       player_position: player.career.playerPosition,
       city_name: player.career.cityName,
-      tenure_years: player.career.tenure.years,
-      tenure_max_years: player.career.tenure.maxYears,
-      tenure_start_day: player.career.tenure.props.startDay,
-      certificates: player.career.certificates.map(c => ({
-        party_school_level: c.props.partySchoolLevel,
-        required_level: c.props.requiredLevel,
-        obtained_at: c.props.obtainedAt,
-      })),
+      tenure_years: player.career.tenureYears,
+      tenure_max_years: player.career.tenureMaxYears,
+      tenure_start_day: player.career.tenureStartDay,
+      certificates: player.career.certificates,
       is_promotion_available: player.career.isPromotionAvailable,
       preferred_career_line: player.career.preferredCareerLine,
       ability_value: player.attributes.abilityValue,
@@ -206,18 +145,6 @@ export class PlayerMapper {
       if (c.tenureYears !== undefined) dto.tenure_years = c.tenureYears;
       if (c.isPromotionAvailable !== undefined) dto.is_promotion_available = c.isPromotionAvailable;
       if (c.preferredCareerLine !== undefined) dto.preferred_career_line = c.preferredCareerLine;
-      if (c.tenure) {
-        dto.tenure_years = c.tenure.years;
-        dto.tenure_max_years = c.tenure.maxYears;
-        dto.tenure_start_day = c.tenure.props.startDay;
-      }
-      if (c.certificates) {
-        dto.certificates = c.certificates.map(cert => ({
-          party_school_level: cert.props.partySchoolLevel,
-          required_level: cert.props.requiredLevel,
-          obtained_at: cert.props.obtainedAt,
-        }));
-      }
     }
 
     if (patches.attributes) {
@@ -239,7 +166,6 @@ export class PlayerMapper {
       if (r.cityGovFund !== undefined) dto.city_gov_fund = r.cityGovFund;
       if (r.fundBalance !== undefined) dto.fund_balance = r.fundBalance;
       if (r.taxRevenue !== undefined) dto.tax_revenue = r.taxRevenue;
-      if (r.grayIncome !== undefined) dto.gray_income = r.grayIncome;
     }
 
     if (patches.political) {

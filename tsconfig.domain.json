@@ -15,9 +15,6 @@
     "dist",
     "src/domains/career/services/PromotionService.ts",
     "src/domains/city/services/KPIEngine.ts",
-    "src/domains/city/formulas/FormulaRegistry.ts",
-    "src/domains/personnel/entities/LeadershipBand.ts",
-    "src/domains/personnel/entities/Subordinate.ts",
-    "src/domains/shared/types/index.ts"
+    "src/domains/city/formulas/FormulaRegistry.ts"
   ]
 }
