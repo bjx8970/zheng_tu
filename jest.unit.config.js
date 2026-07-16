@@ -18,6 +18,7 @@ export default {
     '^@/tests/(.*)$': '<rootDir>/tests/$1',
     '^@/components/(.*)$': '<rootDir>/src/shared/ui/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^src/(.*)$': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.unit.ts'],
   transform: {
