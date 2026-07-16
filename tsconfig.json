@@ -16,6 +16,9 @@
   "exclude": [
     "babel.config.js",
     "metro.config.js",
-    "tailwind.config.js"
+    "tailwind.config.js",
+    "src/lib/__tests__/**/*",
+    "src/test/**/*",
+    "tests/**/*"
   ]
 }
