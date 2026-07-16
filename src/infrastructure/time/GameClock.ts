@@ -1,6 +1,6 @@
-import { RandomService } from '../../shared/kernel';
-import type { Player, CityGovernance, MonthlyDelta, DeptAutoResult } from '../../shared/types';
-import { KPIEngine } from '../../city/services/KPIEngine';
+import { RandomService } from '../../../domains/shared/kernel';
+import type { Player, CityGovernance, MonthlyDelta, DeptAutoResult } from '../../../domains/shared/types';
+import { KPIEngine } from '../../../domains/city/services/KPIEngine';
 
 // ===== 计算结果类型 =====
 
