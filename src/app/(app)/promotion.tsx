@@ -22,9 +22,19 @@ const PROMOTION_AGE_LIMITS: Record<number, number> = careerPositionsData.promoti
 // 破格提升概率基础值（政绩越高、廉洁度越高，概率越大）
 function calcExceptionalPromoChance(meritPoints: number, moralValue: number, requiredMerit: number): number {
   const meritRatio = Math.min(1, meritPoints / Math.max(1, requiredMerit));
-  // 基础15% × 政绩系数 × 廉洁系数，最高30%
   return Math.min(0.30, 0.15 * meritRatio * (0.5 + moralValue / 200));
 }
+
+export function canAttemptExceptionalPromotion(
+  ageGatePass: boolean,
+  exceptionalChance: number,
+  exceptionalPromoFailed: boolean,
+): boolean {
+  if (ageGatePass) return true;
+  if (exceptionalChance === 0) return true;
+  return !exceptionalPromoFailed;
+}
+
 import { initBossTasks, getFollowCandidates, refreshSubordinatesForNewPost, initLeadershipBand, recordPlayerCareer, writeSaveSlot, recallSecretary, getOrCreateSecretary, getSubordinates } from '@/db/gameApi';
 import { computeKpi, getKpiPanel, getPromotionSummary, getDeptKpiResult } from '@/lib/kpiEngine';
 import type { DeptKpiResult } from '@/lib/kpiEngine';
@@ -203,6 +213,7 @@ export default function PromotionScreen() {
   // 东窗事发弹窗（三档：warning/suspend/case）
   const [exposedAlert, setExposedAlert] = useState(false);
   const [exposedLevel, setExposedLevel] = useState<'warning' | 'suspend' | 'case'>('warning');
+  const [exceptionalPromoFailed, setExceptionalPromoFailed] = useState(false);
   // 秘书下放 + 新岗位候选选择
   const [secretaryCandidates, setSecretaryCandidates] = useState<{ id: string; name: string; avatarId: number; ability: number; rankLevel: number }[]>([]);
   const [showSecretaryPick, setShowSecretaryPick] = useState(false);
@@ -270,7 +281,7 @@ export default function PromotionScreen() {
     save.rankLevel === 10 ? 2 :
     save.rankLevel >= 11 ? 3 : 0;
   const massIncidentReady = massIncidentRequired === 0 || (save.massIncidentCount ?? 0) >= massIncidentRequired;
-  const canPromoteFinal = canPromote && massIncidentReady;
+  const canPromoteFinal = canPromote && massIncidentReady && canAttemptExceptionalPromotion(ageGatePass, exceptionalChance, exceptionalPromoFailed);
 
   // ── 晋升年龄门槛检查 ────────────────────────────────────────────────────
   // 玩家年龄 = 出生年 + 游戏经过年数（gameDays/365向下取整）
@@ -285,6 +296,10 @@ export default function PromotionScreen() {
   );
   // 已使用破格次数（来自 exceptionalAgeOverrideCount 字段）
   const exceptionalUsed = save.exceptionalAgeOverrideCount ?? 0;
+
+  useEffect(() => {
+    setExceptionalPromoFailed(false);
+  }, [playerRealAge, save.tenureYears]);
 
   // 能力值晋升门槛检查
   const abilityMin = ABILITY_RANK_MIN[nextRankLevel] ?? 0;
@@ -592,6 +607,7 @@ export default function PromotionScreen() {
     if (!ageGatePass) {
       const roll = Math.random();
       if (roll > exceptionalChance) {
+        setExceptionalPromoFailed(true);
         showMsg(`年龄未达标（当前 ${playerRealAge} 岁，需 ≥ ${minAgeForNextRank} 岁），破格概率 ${Math.round(exceptionalChance * 100)}% 未触发`, false);
         return;
       }
@@ -999,7 +1015,8 @@ export default function PromotionScreen() {
             })()}
 
             <Pressable
-              onPress={() => {
+              onPress={async () => {
+                await new Promise(r => setTimeout(r, 150));
                 router.replace('/(app)/home');
               }}
               style={{ backgroundColor: '#FFB800', borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8 }}
@@ -1211,6 +1228,11 @@ export default function PromotionScreen() {
                       )}
                       {!canPromote ? '晋升条件未满足，请前往「积分」查看' : massIncidentReady ? '✅ 舆情门槛已达标，可申请晋升' : `还需处理 ${massIncidentRequired - (save.massIncidentCount ?? 0)} 起重大舆情事件`}
                     </Text>
+                    {!ageGatePass && exceptionalChance > 0 && exceptionalPromoFailed && (
+                      <Text style={{ color: '#FFB800', fontSize: 11, marginTop: 6, fontWeight: '600' }}>
+                        ⚠️ 破格晋升尝试失败，需等待年龄增长或新任期后重试
+                      </Text>
+                    )}
                   </View>
                 )}
 
