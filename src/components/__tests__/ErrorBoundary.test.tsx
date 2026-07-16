@@ -29,14 +29,14 @@ describe('ErrorBoundary', () => {
     expect(getByText('正常内容')).toBeTruthy();
   });
 
-  it('子组件抛错后显示错误信息', () => {
+  it('子组件抛错后显示错误回退页面', () => {
     const { getByText } = render(
       <ErrorBoundary>
         <Bomb shouldThrow={true} />
       </ErrorBoundary>
     );
     expect(getByText('页面加载出错')).toBeTruthy();
-    expect(getByText('test error')).toBeTruthy();
+    expect(getByText('发生了未知错误')).toBeTruthy();
   });
 
   it('点击重试后恢复正常渲染', () => {
