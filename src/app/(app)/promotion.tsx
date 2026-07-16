@@ -162,7 +162,7 @@ const LEAGUE_TRACK:     PathItem[] = careerPositionsData.tracks.league as PathIt
 export default function PromotionScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { save, updateGameSave, refreshSave, forceRefreshSave, waitForAdvance, lockAdvance, unlockAdvance, commitPromotion } = useGame();
+  const { save, isLoading, updateGameSave, refreshSave, forceRefreshSave, waitForAdvance, lockAdvance, unlockAdvance, commitPromotion } = useGame();
   const [confirmed, setConfirmed] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false); // 全屏庆祝动画
 
@@ -219,7 +219,25 @@ export default function PromotionScreen() {
   const [showSecretaryPick, setShowSecretaryPick] = useState(false);
   const [selectedSecretaryId, setSelectedSecretaryId] = useState<string | null>(null);
 
-  if (!save) return null;
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#080C18', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator testID="promotion-loading" size="large" color="#FFB800" />
+      </View>
+    );
+  }
+  if (!save) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#080C18', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+        <View style={{ alignItems: 'center', gap: 16 }}>
+          <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, textAlign: 'center' }}>加载存档失败，请返回重试</Text>
+          <Pressable onPress={() => router.back()} style={{ backgroundColor: 'rgba(255,184,0,0.15)', borderWidth: 1, borderColor: 'rgba(255,184,0,0.4)', borderRadius: 10, paddingVertical: 12, paddingHorizontal: 24 }}>
+            <Text style={{ color: '#FFB800', fontWeight: '700' }}>返回</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
 
   // 实际生效的喜好路线：优先使用本次会话选择，其次读存档
   const effectivePreferredLine: CareerLine =
