@@ -270,7 +270,6 @@ export default function PromotionScreen() {
     save.rankLevel === 10 ? 2 :
     save.rankLevel >= 11 ? 3 : 0;
   const massIncidentReady = massIncidentRequired === 0 || (save.massIncidentCount ?? 0) >= massIncidentRequired;
-  const canPromoteFinal = canPromote && massIncidentReady;
 
   // ── 晋升年龄门槛检查 ────────────────────────────────────────────────────
   // 玩家年龄 = 出生年 + 游戏经过年数（gameDays/365向下取整）
@@ -285,6 +284,16 @@ export default function PromotionScreen() {
   );
   // 已使用破格次数（来自 exceptionalAgeOverrideCount 字段）
   const exceptionalUsed = save.exceptionalAgeOverrideCount ?? 0;
+
+  // ── 破格晋升失败冷却（半年=180游戏天）─────────────────────────────────────
+  const EXCEPTIONAL_PROMO_COOLDOWN_DAYS = 180;
+  const lastFailedDay = save.careerPathCooldowns?.['exceptionalPromoFailed'] ?? 0;
+  const daysSinceFailed = (save.gameDays ?? 0) - lastFailedDay;
+  const canRetryExceptional = daysSinceFailed >= EXCEPTIONAL_PROMO_COOLDOWN_DAYS;
+  // 按钮最终可用：必须年龄达标 或 有破格概率且冷却结束可重试
+  const canPromoteFinal = canPromote && massIncidentReady && (
+    ageGatePass || exceptionalChance === 0 || canRetryExceptional
+  );
 
   // 能力值晋升门槛检查
   const abilityMin = ABILITY_RANK_MIN[nextRankLevel] ?? 0;
@@ -592,7 +601,11 @@ export default function PromotionScreen() {
     if (!ageGatePass) {
       const roll = Math.random();
       if (roll > exceptionalChance) {
-        showMsg(`年龄未达标（当前 ${playerRealAge} 岁，需 ≥ ${minAgeForNextRank} 岁），破格概率 ${Math.round(exceptionalChance * 100)}% 未触发`, false);
+        const cooldowns = save.careerPathCooldowns ?? {};
+        await updateGameSave({
+          careerPathCooldowns: { ...cooldowns, exceptionalPromoFailed: save.gameDays },
+        });
+        showMsg(`年龄未达标（当前 ${playerRealAge} 岁，需 ≥ ${minAgeForNextRank} 岁），破格概率 ${Math.round(exceptionalChance * 100)}% 未触发，需等待半年冷却`, false);
         return;
       }
       await updateGameSave({ exceptionalAgeOverrideCount: exceptionalUsed + 1 });
