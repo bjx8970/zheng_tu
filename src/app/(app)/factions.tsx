@@ -1183,7 +1183,7 @@ export default function FactionsScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>直属上司 · {rankConfig?.bossTitle ?? ''}</Text>
-                  <Text style={{ fontSize: 15, fontWeight: '700', color: '#111', marginTop: 2 }}>{save.bossName || rankConfig?.bossTitle ?? ''}</Text>
+                  <Text style={{ fontSize: 15, fontWeight: '700', color: '#111', marginTop: 2 }}>{save.bossName || (rankConfig?.bossTitle ?? '')}</Text>
                 </View>
                 <View style={{ alignItems: 'flex-end', gap: 2 }}>
                   <Text style={{ fontSize: 22, fontWeight: '700', fontVariant: ['tabular-nums'], color: save.bossFavor >= 60 ? '#2E7D32' : save.bossFavor >= 25 ? '#E65100' : '#B71C1C' }}>
