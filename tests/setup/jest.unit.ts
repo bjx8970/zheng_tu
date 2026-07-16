@@ -50,7 +50,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   },
 }));
 
-global.testUtils = {
+(globalThis as any).testUtils = {
   waitFor: (ms: number) => new Promise(r => setTimeout(r, ms)),
   mockRandom: (value: number) => {
     const original = Math.random;
