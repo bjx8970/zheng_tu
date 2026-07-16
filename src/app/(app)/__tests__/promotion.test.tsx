@@ -151,7 +151,7 @@ describe('canAttemptExceptionalPromotion', () => {
 describe('PromotionScreen component', () => {
   const mockSave = createMockSave();
 
-  it('isLoading=true → renders ActivityIndicator', async () => {
+  it('isLoading=true → renders ActivityIndicator', () => {
     (useGame as jest.Mock).mockReturnValue({
       save: null,
       isLoading: true,
@@ -167,7 +167,7 @@ describe('PromotionScreen component', () => {
     expect(getByTestId('promotion-loading')).toBeTruthy();
   });
 
-  it('save=null, isLoading=false → renders error message with back button', async () => {
+  it('save=null, isLoading=false → renders error message with back button', () => {
     (useGame as jest.Mock).mockReturnValue({
       save: null,
       isLoading: false,
@@ -184,7 +184,7 @@ describe('PromotionScreen component', () => {
     expect(getByText('返回')).toBeTruthy();
   });
 
-  it('save loaded, canPromote=false → renders promotion UI with locked state', async () => {
+  it('save loaded, canPromote=false → renders promotion UI with locked state', () => {
     (useGame as jest.Mock).mockReturnValue({
       save: { ...mockSave, isPromotionAvailable: false },
       isLoading: false,
@@ -201,7 +201,7 @@ describe('PromotionScreen component', () => {
     expect(getByText('条件待完善')).toBeTruthy();
   });
 
-  it('save loaded, canPromote=true → renders apply promotion button', async () => {
+  it('save loaded, canPromote=true → renders apply promotion button', () => {
     const save = createMockSave({
       isPromotionAvailable: true,
       tenureYears: 5,
