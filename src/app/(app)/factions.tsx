@@ -2,7 +2,7 @@
 // 五大阵营：改革开放系 / 稳健国家系 / 共青团/民生系 / 技术官僚系 / 纪检法治系
 // 功能：格局总览（多轴路线张力+关系矩阵）/ 关系经营 / 政见表态（10议题）/ 上司经营 / NPC派系图谱
 import { useState, useCallback } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -450,9 +450,9 @@ export default function FactionsScreen() {
 
   useFocusEffect(useCallback(() => { /* 刷新时不做额外操作 */ }, []));
 
-  if (!save) return null;
+  if (!save) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F4F1' }}><ActivityIndicator testID="activity-indicator" size="large" color="#C82829" /></View>;
 
-  const rankConfig = RANK_CONFIG[save.rankLevel];
+  const rankConfig = RANK_CONFIG[save.rankLevel] ?? RANK_CONFIG[1];
 
   // 当前各派关系值（统一接口）
   const relOf = (fkey: string): number => {
@@ -1183,7 +1183,7 @@ export default function FactionsScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>直属上司 · {rankConfig.bossTitle}</Text>
-                  <Text style={{ fontSize: 15, fontWeight: '700', color: '#111', marginTop: 2 }}>{save.bossName || rankConfig.bossTitle}</Text>
+                  <Text style={{ fontSize: 15, fontWeight: '700', color: '#111', marginTop: 2 }}>{save.bossName || (rankConfig.bossTitle)}</Text>
                 </View>
                 <View style={{ alignItems: 'flex-end', gap: 2 }}>
                   <Text style={{ fontSize: 22, fontWeight: '700', fontVariant: ['tabular-nums'], color: save.bossFavor >= 60 ? '#2E7D32' : save.bossFavor >= 25 ? '#E65100' : '#B71C1C' }}>
@@ -1276,7 +1276,7 @@ export default function FactionsScreen() {
                     <Text style={{ fontSize: 18 }}>🎩</Text>
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>三级上司 · {rankConfig.bossTitle3 ?? '上级领导'}</Text>
+                    <Text style={{ fontSize: 9, color: '#888', letterSpacing: 1 }}>三级上司 · {rankConfig.bossTitle3}</Text>
                     <Text style={{ fontSize: 13, fontWeight: '700', color: '#333', marginTop: 2 }}>{save.boss3Name}</Text>
                   </View>
                   <Text style={{ fontSize: 16, fontWeight: '700', fontVariant: ['tabular-nums'], color: save.boss3Favor >= 60 ? '#2E7D32' : save.boss3Favor >= 25 ? '#E65100' : '#B71C1C' }}>

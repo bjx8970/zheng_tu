@@ -25,7 +25,7 @@ export default function LeagueDeep() {
     rank, actionCost, isCool, cdLeft, handleAction,
   } = useDeepAction({ cooldownsField: 'leagueDeepCooldowns', resultsField: 'leagueDeepResults' });
 
-  if (!save) return null;
+  if (!save) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F4F1' }}><ActivityIndicator testID="activity-indicator" size="large" color="#C82829" /></View>;
 
   const theme      = getRankThemeWithLine(rank, '团派线');
   const catActions = LEAGUE_ACTIONS.filter(a => a.category === activeCategory);

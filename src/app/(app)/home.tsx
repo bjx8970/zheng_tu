@@ -383,7 +383,7 @@ export default function HomeScreen() {
     return null;
   }
 
-  const rankConfig = RANK_CONFIG[save.rankLevel];
+  const rankConfig = RANK_CONFIG[save.rankLevel] ?? RANK_CONFIG[1];
   // 任职年限要求（不再受优秀排名影响，固定为职级标准年限）
   const effectiveTenureRequired = rankConfig.requiredTenureYears;
   const tenureProgress = Math.min(100, (save.tenureYears / Math.max(1, effectiveTenureRequired)) * 100);

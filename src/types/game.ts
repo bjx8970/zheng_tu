@@ -66,7 +66,7 @@ export function getRandomCityForRank(rankLevel: number): string {
     const m = getRandomMinistry();
     return m.name;
   }
-  const config = RANK_CONFIG[rankLevel];
+  const config = RANK_CONFIG[rankLevel] ?? RANK_CONFIG[1];
   const pool = CITY_POOLS[config.cityType] ?? CITY_POOLS['地级市'];
   return pool[Math.floor(Math.random() * pool.length)];
 }

@@ -123,7 +123,7 @@ export default function GameOverScreen() {
     );
   }
 
-  const rankConfig = RANK_CONFIG[save.rankLevel];
+  const rankConfig = RANK_CONFIG[save.rankLevel] ?? RANK_CONFIG[1];
   const careerYears = Math.floor(save.gameDays / 365);
   const startDate = gameDaysToDate(0);
   const endDate = gameDaysToDate(save.gameDays);
@@ -183,7 +183,7 @@ export default function GameOverScreen() {
 
             {/* 仕途数据 */}
             <StatRow label="最终职级" value={rankConfig.name} color={cfg.accentColor} />
-            <StatRow label="最终职位" value={save.playerPosition || rankConfig.name} />
+            <StatRow label="最终职位" value={save.playerPosition || (rankConfig.name)} />
             <StatRow label="任职城市" value={save.cityName} />
             <StatRow label="仕途年数" value={`${careerYears} 年`} />
             <StatRow label="政绩积分" value={`${Math.round(save.meritPoints).toLocaleString()} 分`} />

@@ -25,7 +25,7 @@ export default function PartyDeep() {
     rank, actionCost, isCool, cdLeft, handleAction,
   } = useDeepAction({ cooldownsField: 'partyDeepCooldowns', resultsField: 'partyDeepResults' });
 
-  if (!save) return null;
+  if (!save) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F4F1' }}><ActivityIndicator testID="activity-indicator" size="large" color="#C82829" /></View>;
 
   const theme      = getRankThemeWithLine(rank, '党务线');
   const catActions = PARTY_ACTIONS.filter(a => a.category === activeCategory);
