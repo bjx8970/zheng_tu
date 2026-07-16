@@ -301,7 +301,7 @@ function createUISlice(set: any, get: any): Partial<GameStoreState> {
 // ===== Combined Store Factory =====
 
 export function createGameStore() {
-  const initialState: Partial<GameStoreState> = {
+  const initialState = {
     save: null,
     isLoading: true,
     lastSyncedAt: null,
