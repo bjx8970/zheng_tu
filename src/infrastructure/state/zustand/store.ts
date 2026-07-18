@@ -1,6 +1,20 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import type { StateCreator } from 'zustand';
+import { performMonthlySettlement, applyMonthlySettlement } from '../../time/GameClock';
+import { KPIEngine } from '../../../domains/city/services/KPIEngine';
+import { FormulaRegistry } from '../../../domains/city/formulas/FormulaRegistry';
+import type { RandomService } from '../../../domains/shared/kernel';
+
+// ===== Math.random 适配器 =====
+
+const defaultRandom: RandomService = {
+  next: () => Math.random(),
+  nextInt: (max: number) => Math.floor(Math.random() * max),
+  nextRange: (min: number, max: number) => min + Math.random() * (max - min),
+};
+
+const defaultKPIEngine = new KPIEngine(new Map(), new FormulaRegistry(), defaultRandom);
 
 // ===== Type Definitions =====
 
@@ -257,11 +271,42 @@ function createSystemSlice(set: any, get: any): Partial<GameStoreState> {
         if (!state.save || state.isAdvancing) return;
         set({ isAdvancing: true });
         try {
-          // TODO: 调用 GameClock.advance
+          const player = state.save;
+          const city: any = {
+            cityId: player.cityName,
+            indicators: {
+              gdp: (player as any).cityGdp ?? 60,
+              livelihood: (player as any).cityLivelihood ?? 55,
+              ecology: (player as any).cityEcology ?? 50,
+              business: (player as any).cityBusiness ?? 55,
+              security: state.save?.securityIndex ?? 60,
+            },
+            departments: [],
+            fundAccount: {
+              cityGovFund: state.save?.resources?.cityGovFund ?? 0,
+              fundBalance: state.save?.resources?.fundBalance ?? 0,
+              taxRevenue: state.save?.resources?.taxRevenue ?? 0,
+            },
+          };
+
+          const settlement = performMonthlySettlement(player, city, defaultKPIEngine);
+          const updates = applyMonthlySettlement(player, settlement);
+
+          set((s: GameStoreState) => ({
+            save: s.save ? { ...s.save, ...updates } : null,
+            isAdvancing: false,
+          }));
+
+          if (settlement.shouldCheckPromotion) {
+            const readiness = get().career.checkPromotionReady();
+            if (readiness.ready) {
+              get().ui.showToast('晋升条件已满足，前往晋升页面查看', 'info');
+            }
+          }
         } catch (e) {
           console.error('[SystemSlice] advanceTime failed:', e);
+          const state = get() as GameStoreState;
           state.ui.showToast('时间推进失败', 'error');
-        } finally {
           set({ isAdvancing: false });
         }
       },
